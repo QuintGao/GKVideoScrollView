@@ -1,0 +1,34 @@
+use_frameworks!
+
+platform :ios, '10.0'
+
+target 'Example' do
+  
+  pod 'GKVideoScrollView', :path => '../'
+
+  pod 'AFNetworking'
+  pod 'SDWebImage'
+  pod 'Masonry'
+  pod 'MJRefresh'
+  pod 'MJExtension'
+  pod 'ZFPlayer/AVPlayer'
+  pod 'SJVideoPlayer'
+  
+end
+
+post_install do |installer|
+  # 消除版本警告
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      if config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'].to_f < 11.0
+        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '11.0'
+      end
+    end
+  end
+  
+  installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+          config.build_settings["EXCLUDED_ARCHS[sdk=iphonesimulator*]"] = "arm64"
+      end
+  end
+end
