@@ -161,6 +161,7 @@ static SJControlLayerIdentifier GKControlLayerLandscapeIdentifier = 102;
     SJVideoPlayerURLAsset *asset = [[SJVideoPlayerURLAsset alloc] initWithURL:[NSURL URLWithString:model.play_url]];
     self.player.URLAsset = asset;
     [self.player play];
+    self.portraitView.playBtn.hidden = YES;
 }
 
 - (void)stopPlayWithCell:(GKVideoCell *)cell indexPath:(NSIndexPath *)indexPath {

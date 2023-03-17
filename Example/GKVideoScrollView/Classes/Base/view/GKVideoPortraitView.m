@@ -48,6 +48,7 @@
     if (!_playBtn) {
         _playBtn = [[UIButton alloc] init];
         [_playBtn setImage:[UIImage imageNamed:@"ss_icon_pause"] forState:UIControlStateNormal];
+        _playBtn.userInteractionEnabled = NO;
         _playBtn.hidden = YES;
     }
     return _playBtn;

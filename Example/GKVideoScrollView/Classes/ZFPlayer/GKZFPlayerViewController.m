@@ -140,6 +140,7 @@
     
     // 设置播放地址
     self.player.assetURL = [NSURL URLWithString:model.play_url];
+    self.portraitView.playBtn.hidden = YES;
 }
 
 - (void)stopPlayWithCell:(GKVideoCell *)cell indexPath:(NSIndexPath *)indexPath {
