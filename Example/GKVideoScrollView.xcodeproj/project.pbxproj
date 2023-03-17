@@ -120,7 +120,7 @@
 		793231DC29A7041D000A61ED /* GKSliderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GKSliderView.m; sourceTree = "<group>"; };
 		7F0618879C04E02E9493FE30 /* Pods-GKVideoScrollView_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GKVideoScrollView_Example.debug.xcconfig"; path = "Target Support Files/Pods-GKVideoScrollView_Example/Pods-GKVideoScrollView_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		873B8AEA1B1F5CCA007FD442 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
-		8FB265F428064BA85E807DD1 /* GKVideoScrollView.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = GKVideoScrollView.podspec; path = ../GKVideoScrollView.podspec; sourceTree = "<group>"; };
+		8FB265F428064BA85E807DD1 /* GKVideoScrollView.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = GKVideoScrollView.podspec; path = ../GKVideoScrollView.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		FCC59FA72D521B74EA49A5CD /* Pods-Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example.release.xcconfig"; path = "Target Support Files/Pods-Example/Pods-Example.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 

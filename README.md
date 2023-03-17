@@ -1,5 +1,5 @@
 # GKVideoScrollView
-===================
+
 GKVideoScrollView是基于UIScrollView写的仿抖音上下滑动切换视图的库，使用方便类似UITableView，支持不同cell切换
 
 - demo中有[ZFPlayer](https://github.com/renzifeng/ZFPlayer) 和[SJVideoPlayer](https://github.com/changsanjiang/SJVideoPlayer) 的使用示例，有需要的可下载查看
