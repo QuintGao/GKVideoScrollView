@@ -7,10 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "GKVideoPlayerStatusBar.h"
 #import <SJVideoPlayer/SJVideoPlayerControlMaskView.h>
+#import <GKSliderView/GKSliderView.h>
+#import "GKVideoPlayerStatusBar.h"
 #import "GKVideoModel.h"
-#import "GKSliderView.h"
 #import "GKDoubleLikeView.h"
 
 NS_ASSUME_NONNULL_BEGIN

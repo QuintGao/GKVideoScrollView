@@ -14,13 +14,14 @@ PODS:
   - AFNetworking/Serialization (4.0.1)
   - AFNetworking/UIKit (4.0.1):
     - AFNetworking/NSURLSession
+  - GKSliderView (1.0.8)
   - GKVideoScrollView (1.0.0)
   - Masonry (1.1.0)
   - MJExtension (3.4.1)
   - MJRefresh (3.7.5)
-  - SDWebImage (5.15.3):
-    - SDWebImage/Core (= 5.15.3)
-  - SDWebImage/Core (5.15.3)
+  - SDWebImage (5.15.5):
+    - SDWebImage/Core (= 5.15.5)
+  - SDWebImage/Core (5.15.5)
   - SJBaseVideoPlayer (3.7.6):
     - Masonry
     - SJBaseVideoPlayer/AVPlayer (= 3.7.6)
@@ -87,6 +88,7 @@ PODS:
 
 DEPENDENCIES:
   - AFNetworking
+  - GKSliderView
   - GKVideoScrollView (from `../`)
   - Masonry
   - MJExtension
@@ -98,6 +100,7 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - AFNetworking
+    - GKSliderView
     - Masonry
     - MJExtension
     - MJRefresh
@@ -114,17 +117,18 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   AFNetworking: 3bd23d814e976cd148d7d44c3ab78017b744cd58
+  GKSliderView: 3bd9bac3228a761dca494881fa27327d8ecd4629
   GKVideoScrollView: b5172ab20ea90094f0887fcf3d0e6858e92734b3
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   MJExtension: 21c5f6f8c4d5d8844b7ae8fbae08fed0b501f961
   MJRefresh: fdf5e979eb406a0341468932d1dfc8b7f9fce961
-  SDWebImage: 302d4e14efff86b36b5f36d1bf891b635436d071
+  SDWebImage: fd7e1a22f00303e058058278639bf6196ee431fe
   SJBaseVideoPlayer: f15debaa8c1e27b63bdefc8caeec515e9c71d079
   SJUIKit: a40111941e408cc17d4c1c23495aa92999e814b0
   SJVideoPlayer: 4f09814f58522e0975cb2dccfda925f6c8643467
   YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
   ZFPlayer: 5cf39e8d9f0c2394a014b0db4767b5b5a6bffe13
 
-PODFILE CHECKSUM: a953256473ed5f66ec42886da343c63c980765b4
+PODFILE CHECKSUM: d1ae6d1f54a65a22fe3c67c82c085f42a234bf57
 
 COCOAPODS: 1.12.0

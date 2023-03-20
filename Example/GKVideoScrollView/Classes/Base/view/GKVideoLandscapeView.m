@@ -182,11 +182,11 @@
 }
 
 #pragma mark - GKSliderViewDelegate
-- (void)sliderTouchBegan:(float)value {
+- (void)sliderView:(GKSliderView *)sliderView touchBegan:(float)value {
     self.isDragging = YES;
 }
 
-- (void)sliderTouchEnded:(float)value {
+- (void)sliderView:(GKSliderView *)sliderView touchEnded:(float)value {
     self.isDragging = NO;
     [self draggingEnded];
 }
@@ -297,7 +297,7 @@
         _sliderView.minimumTrackTintColor = UIColor.whiteColor;
         _sliderView.sliderHeight = 2;
         _sliderView.delegate = self;
-        _sliderView.allowTapped = NO;
+        _sliderView.isSliderAllowTapped = NO;
     }
     return _sliderView;
 }

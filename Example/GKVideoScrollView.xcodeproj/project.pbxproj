@@ -38,9 +38,7 @@
 		790791EE29C06979000D70A5 /* GKDoubleLikeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 790791EC29C06979000D70A5 /* GKDoubleLikeView.m */; };
 		790791EF29C06979000D70A5 /* GKLikeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 790791ED29C06979000D70A5 /* GKLikeView.m */; };
 		790791F329C16F12000D70A5 /* UIButton+GKEnlarge.m in Sources */ = {isa = PBXBuildFile; fileRef = 790791F229C16F12000D70A5 /* UIButton+GKEnlarge.m */; };
-		793231DD29A7041D000A61ED /* GKLineLoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 793231D629A7041D000A61ED /* GKLineLoadingView.m */; };
 		793231DE29A7041D000A61ED /* GKBallLoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 793231D729A7041D000A61ED /* GKBallLoadingView.m */; };
-		793231DF29A7041D000A61ED /* GKSliderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 793231DC29A7041D000A61ED /* GKSliderView.m */; };
 		873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 873B8AEA1B1F5CCA007FD442 /* Main.storyboard */; };
 /* End PBXBuildFile section */
 
@@ -112,12 +110,8 @@
 		790791ED29C06979000D70A5 /* GKLikeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GKLikeView.m; sourceTree = "<group>"; };
 		790791F129C16F12000D70A5 /* UIButton+GKEnlarge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIButton+GKEnlarge.h"; sourceTree = "<group>"; };
 		790791F229C16F12000D70A5 /* UIButton+GKEnlarge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIButton+GKEnlarge.m"; sourceTree = "<group>"; };
-		793231D629A7041D000A61ED /* GKLineLoadingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GKLineLoadingView.m; sourceTree = "<group>"; };
 		793231D729A7041D000A61ED /* GKBallLoadingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GKBallLoadingView.m; sourceTree = "<group>"; };
 		793231D829A7041D000A61ED /* GKBallLoadingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GKBallLoadingView.h; sourceTree = "<group>"; };
-		793231D929A7041D000A61ED /* GKLineLoadingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GKLineLoadingView.h; sourceTree = "<group>"; };
-		793231DB29A7041D000A61ED /* GKSliderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GKSliderView.h; sourceTree = "<group>"; };
-		793231DC29A7041D000A61ED /* GKSliderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GKSliderView.m; sourceTree = "<group>"; };
 		7F0618879C04E02E9493FE30 /* Pods-GKVideoScrollView_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GKVideoScrollView_Example.debug.xcconfig"; path = "Target Support Files/Pods-GKVideoScrollView_Example/Pods-GKVideoScrollView_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		873B8AEA1B1F5CCA007FD442 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		8FB265F428064BA85E807DD1 /* GKVideoScrollView.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = GKVideoScrollView.podspec; path = ../GKVideoScrollView.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
@@ -321,7 +315,6 @@
 				790791F029C16EFB000D70A5 /* Category */,
 				793231D529A7041D000A61ED /* GKLoadingView */,
 				790791E929C06979000D70A5 /* GKLikeView */,
-				793231DA29A7041D000A61ED /* GKSliderView */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -329,21 +322,10 @@
 		793231D529A7041D000A61ED /* GKLoadingView */ = {
 			isa = PBXGroup;
 			children = (
-				793231D929A7041D000A61ED /* GKLineLoadingView.h */,
-				793231D629A7041D000A61ED /* GKLineLoadingView.m */,
 				793231D829A7041D000A61ED /* GKBallLoadingView.h */,
 				793231D729A7041D000A61ED /* GKBallLoadingView.m */,
 			);
 			path = GKLoadingView;
-			sourceTree = "<group>";
-		};
-		793231DA29A7041D000A61ED /* GKSliderView */ = {
-			isa = PBXGroup;
-			children = (
-				793231DB29A7041D000A61ED /* GKSliderView.h */,
-				793231DC29A7041D000A61ED /* GKSliderView.m */,
-			);
-			path = GKSliderView;
 			sourceTree = "<group>";
 		};
 		79C4207429C3F75D00A0AB84 /* Base */ = {
@@ -521,6 +503,7 @@
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Example/Pods-Example-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/AFNetworking/AFNetworking.framework",
+				"${BUILT_PRODUCTS_DIR}/GKSliderView/GKSliderView.framework",
 				"${BUILT_PRODUCTS_DIR}/GKVideoScrollView/GKVideoScrollView.framework",
 				"${BUILT_PRODUCTS_DIR}/MJExtension/MJExtension.framework",
 				"${BUILT_PRODUCTS_DIR}/MJRefresh/MJRefresh.framework",
@@ -534,6 +517,7 @@
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AFNetworking.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GKSliderView.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GKVideoScrollView.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MJExtension.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MJRefresh.framework",
@@ -575,9 +559,7 @@
 				790791BF29BF1762000D70A5 /* GKMainViewController.m in Sources */,
 				790791F329C16F12000D70A5 /* UIButton+GKEnlarge.m in Sources */,
 				790791E829C06576000D70A5 /* GKSJPortraitView.m in Sources */,
-				793231DF29A7041D000A61ED /* GKSliderView.m in Sources */,
 				6003F59A195388D20070C39A /* main.m in Sources */,
-				793231DD29A7041D000A61ED /* GKLineLoadingView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

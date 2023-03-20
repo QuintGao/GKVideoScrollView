@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "GKVideoModel.h"
-#import "GKSliderView.h"
+#import <GKSliderView/GKSliderView.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

@@ -13,6 +13,7 @@ target 'Example' do
   pod 'MJExtension'
   pod 'ZFPlayer/AVPlayer'
   pod 'SJVideoPlayer'
+  pod 'GKSliderView'
   
 end
 
