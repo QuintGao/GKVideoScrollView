@@ -46,6 +46,9 @@
 @property (nonatomic, assign) CGFloat lastOffsetY;
 @property (nonatomic, weak) UIView *lastWillDisplayCell;
 
+// 记录是否在切换页面
+@property (nonatomic, assign) BOOL isChanging;
+
 // 存放cell标识和对应的类
 @property (nonatomic, strong) NSMutableDictionary<NSString *, Class> *cellClasses;
 
@@ -246,6 +249,54 @@
     }
 }
 
+- (void)scrollToPageWithIndex:(NSInteger)index {
+    if (self.currentIndex == index) return;
+    if (index < 0 || index > self.totalCount - 1) return;
+    self.isChanging = YES;
+    self.index = index;
+    self.changeIndex = index;
+    
+    // 更新cell
+    NSInteger updateIndex = 0;
+    if (index == 0) {
+        updateIndex = index + 1;
+    }else if (index == self.totalCount - 1) {
+        updateIndex = index - 1;
+        self.index = index - 1; // 特殊处理
+    }else {
+        updateIndex = index;
+    }
+    [self updateCellWithIndex:updateIndex];
+    
+    // 显示cell
+    [self updateDisplayCellWithIndex:index];
+    
+    self.isChanging = NO;
+}
+
+- (void)scrollToNextPage {
+    // 当前是最后一个，不做处理
+    if (self.currentIndex == self.totalCount - 1) return;
+    
+    self.changeIndex = self.currentIndex + 1;
+    // 即将显示
+    UIView *cell = nil;
+    if (self.currentCell == self.topCell) {
+        cell = self.ctrCell;
+    }else if (self.currentCell == self.ctrCell) {
+        cell = self.btmCell;
+    }
+    if (cell) {
+        [self willDisplayCell:cell forIndex:self.changeIndex];
+        self.lastWillDisplayCell = nil;
+    }
+    
+    // 切换
+    CGFloat offsetY = self.contentOffset.y;
+    offsetY += self.viewHeight;
+    [self setContentOffset:CGPointMake(0, offsetY) animated:YES];
+}
+
 #pragma mark - Private Methods
 #pragma mark - dequeue reusable cell
 - (UIView *)dequeueReusableCellWithIdentifier:(NSString *)identifier {
@@ -330,6 +381,40 @@
     self.lastWillDisplayCell = nil;
     if (self.isDecelerating) return;
     if (self.contentOffset.y > 0 && self.contentOffset.y != self.viewHeight * 2) return;
+    [self didEndScrollingCell:cell];
+}
+
+- (void)updateDisplayCellWithIndex:(NSInteger)index {
+    CGFloat viewH = self.viewHeight;
+    
+    UIView *cell = nil;
+    CGFloat offsetY = 0;
+    if (self.totalCount == 1) {
+        cell = self.topCell;
+        offsetY = 0;
+    }else if (self.totalCount == 2) {
+        cell = index == 0 ? self.topCell : self.ctrCell;
+        offsetY = index == 0 ? 0 : viewH;
+    }else {
+        if (index == 0) {
+            cell = self.topCell;
+            offsetY = 0;
+        }else if (index == self.totalCount - 1) {
+            cell = self.btmCell;
+            offsetY = viewH * 2;
+        }else {
+            cell = self.ctrCell;
+            offsetY = viewH;
+        }
+    }
+    //即将显示cell
+    [self willDisplayCell:cell forIndex:index];
+    self.lastWillDisplayCell = nil;
+    
+    // 切换位置
+    [self updateContentOffset:CGPointMake(0, offsetY)];
+    
+    // 滑动结束显示
     [self didEndScrollingCell:cell];
 }
 

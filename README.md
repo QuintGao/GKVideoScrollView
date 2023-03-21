@@ -33,3 +33,7 @@ QuintGao
 ## License
 
 GKVideoScrollView is available under the MIT license. See the LICENSE file for more info.
+
+## 更新记录
+
+* 2023.03.21 - 1.0.1 新增方法可切换到任意索引位置，新增切换到下一页的方法（带动画）

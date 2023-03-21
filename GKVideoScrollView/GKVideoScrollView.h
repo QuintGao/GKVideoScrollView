@@ -72,6 +72,12 @@ NS_ASSUME_NONNULL_BEGIN
 // 刷新数据
 - (void)reloadData;
 
+// 切换到指定索引页面，无动画
+- (void)scrollToPageWithIndex:(NSInteger)index;
+
+// 切换到下个页面，有动画
+- (void)scrollToNextPage;
+
 @end
 
 NS_ASSUME_NONNULL_END
