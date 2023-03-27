@@ -174,7 +174,7 @@
 - (void)likeAction {
     self.model.isLike = !self.model.isLike;
     self.likeBtn.selected = self.model.isLike;
-    !self.likeBtn ?: self.likeBlock(self.model);
+    !self.likeBlock ?: self.likeBlock(self.model);
 }
 
 - (void)fullscreenAction {
