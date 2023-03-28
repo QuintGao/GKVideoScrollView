@@ -8,7 +8,7 @@
 
 #import "GKVideoScrollView.h"
 
-#define kScreenW UIScreen.mainScreen.bounds.size.height
+#define kScreenW UIScreen.mainScreen.bounds.size.width
 #define kScreenH UIScreen.mainScreen.bounds.size.height
 
 @interface GKVideoScrollView()<UIScrollViewDelegate>
@@ -34,6 +34,9 @@
 
 // 内容总数
 @property (nonatomic, assign) NSInteger totalCount;
+
+// 是否第一次刷新
+@property (nonatomic, assign) BOOL isFirstLoad;
 
 // 处理上拉加载回弹问题
 @property (nonatomic, assign) NSInteger lastCount;
@@ -239,6 +242,7 @@
         [self updateContentSize];
         [self updateDisplayCell];
     }else {
+        self.isFirstLoad = YES;
         self.index = index;
         self.currentIndex = index;
         self.changeIndex = index;
@@ -379,9 +383,13 @@
     }
     [self willDisplayCell:cell forIndex:self.currentIndex];
     self.lastWillDisplayCell = nil;
-    if (self.isDecelerating) return;
-    if (self.contentOffset.y > 0 && self.contentOffset.y != self.viewHeight * 2) return;
-    [self didEndScrollingCell:cell];
+    if (self.isFirstLoad) {
+        [self didEndScrollingCell:cell];
+    }else {
+        if (self.isDecelerating) return;
+        if (self.contentOffset.y > 0 && self.contentOffset.y != self.viewHeight * 2) return;
+        [self didEndScrollingCell:cell];
+    }
 }
 
 - (void)updateDisplayCellWithIndex:(NSInteger)index {
