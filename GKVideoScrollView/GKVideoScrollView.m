@@ -893,7 +893,7 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
     }
 }
 
-- (void)scrollViewDidChangeAdjustedContentInset:(UIScrollView *)scrollView {
+- (void)scrollViewDidChangeAdjustedContentInset:(UIScrollView *)scrollView API_AVAILABLE(ios(11.0)) {
     if ([self.userDelegate respondsToSelector:@selector(scrollViewDidChangeAdjustedContentInset:)]) {
         [self.userDelegate scrollViewDidChangeAdjustedContentInset:scrollView];
     }

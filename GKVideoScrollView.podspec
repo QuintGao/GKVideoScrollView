@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "GKVideoScrollView"
-  s.version      = "1.0.3"
+  s.version      = "1.0.4"
   s.summary      = "iOS仿抖音等上下滑动切换内容，使用方便类似UITableView，可支持多种cell切换"
   s.homepage     = "https://github.com/QuintGao/GKVideoScrollView"
   s.license      = "MIT"
