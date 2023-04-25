@@ -137,6 +137,9 @@
         make.bottom.equalTo(self);
     }];
     
+    self.topContainerView.hidden = NO;
+    self.bottomContainerView.hidden = NO;
+    
     NSTimeInterval duration = animated ? 0.15 : 0;
     
     [UIView animateWithDuration:duration animations:^{
@@ -146,7 +149,7 @@
     }];
 }
 
-- (void)hideContainerView {
+- (void)hideContainerView:(BOOL)animated {
     [self.topContainerView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self).offset(-80);
     }];
@@ -155,10 +158,14 @@
         make.bottom.equalTo(self).offset(80);
     }];
     
-    [UIView animateWithDuration:0.15 animations:^{
+    NSTimeInterval duration = animated ? 0.15 : 0;
+    
+    [UIView animateWithDuration:duration animations:^{
         [self layoutIfNeeded];
     } completion:^(BOOL finished) {
         self.isContainerShow = NO;
+        self.topContainerView.hidden = YES;
+        self.bottomContainerView.hidden = YES;
     }];
 }
 

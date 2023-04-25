@@ -14,7 +14,7 @@
 #import <SDWebImage/SDWebImage.h>
 #import <GKVideoScrollView/GKVideoScrollView.h>
 
-@interface GKVideoPlayerViewController ()<GKVideoScrollViewDataSource, GKVideoScrollViewDelegate, GKVideoCellDelegate>
+@interface GKVideoPlayerViewController ()
 
 @property (nonatomic, assign) NSInteger page;
 @property (nonatomic, assign) NSInteger total;
@@ -38,12 +38,12 @@
 
 - (void)initUI {
     self.view.backgroundColor = UIColor.blackColor;
-    self.navigationItem.title = @"ZFPlayer播放";
     
-    [self.view addSubview:self.scrollView];
-    [self.scrollView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.edges.equalTo(self.view);
-    }];
+    [self.view addSubview:self.manager.portraitScrollView];
+    [self.view addSubview:self.manager.workListView];
+    
+    self.manager.portraitScrollView.frame = self.view.bounds;
+    self.manager.workListView.frame = CGRectMake(self.view.bounds.size.width, 80, 62, self.view.bounds.size.height - 160);
 }
 
 - (void)setupRefresh {
@@ -52,13 +52,13 @@
     self.pageSize = 5;
     
     __weak __typeof(self) weakSelf = self;
-    self.scrollView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+    self.manager.portraitScrollView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
         __strong __typeof(weakSelf) self = weakSelf;
         self.page = 1;
         [self requestData];
     }];
     
-    self.scrollView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
+    self.manager.portraitScrollView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
         __strong __typeof(weakSelf) self = weakSelf;
         self.page++;
         [self requestData];
@@ -77,108 +77,29 @@
         if ([responseObject[@"errno"] integerValue] == 0) {
             NSArray *list = [GKVideoModel mj_objectArrayWithKeyValuesArray:responseObject[@"data"][@"response"][@"videos"]];
             if (self.page == 1) {
-                [self.dataSources removeAllObjects];
+                [self.manager.dataSource removeAllObjects];
             }
-            [self.dataSources addObjectsFromArray:list];
-            [self.scrollView.mj_header endRefreshing];
-            [self.scrollView.mj_footer endRefreshing];
+            [self.manager.dataSource addObjectsFromArray:list];
+            [self.manager.portraitScrollView.mj_header endRefreshing];
+            [self.manager.portraitScrollView.mj_footer endRefreshing];
             if (self.page >= self.total) {
-                [self.scrollView.mj_footer endRefreshingWithNoMoreData];
+                [self.manager.portraitScrollView.mj_footer endRefreshingWithNoMoreData];
             }
-            [self.scrollView reloadData];
+            [self.manager reloadData];
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         __strong __typeof(weakSelf) self = weakSelf;
-        [self.scrollView.mj_header endRefreshing];
-        [self.scrollView.mj_footer endRefreshing];
+        [self.manager.portraitScrollView.mj_header endRefreshing];
+        [self.manager.portraitScrollView.mj_footer endRefreshing];
         NSLog(@"%@", error);
     }];
 }
 
-#pragma mark - Delegates
-#pragma mark - GKVideoScrollViewDataSource
-- (NSInteger)numberOfRowsInScrollView:(GKVideoScrollView *)scrollView {
-    return self.dataSources.count;
-}
-
-- (UIView *)scrollView:(GKVideoScrollView *)scrollView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    GKVideoCell *cell = [scrollView dequeueReusableCellWithIdentifier:@"GKVideoCell" forIndexPath:indexPath];
-    [cell loadData:self.dataSources[indexPath.row]];
-    cell.delegate = self;
-    return cell;
-}
-
-#pragma mark - GKVideoScrollViewDelegate
-- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
-    [self.currentCell scrollViewBeginDragging];
-}
-
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
-    [self.currentCell scrollViewDidEndDragging];
-}
-
-- (void)scrollView:(GKVideoScrollView *)scrollView willDisplayCell:(UIView *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-}
-
-- (void)scrollView:(GKVideoScrollView *)scrollView didEndDisplayingCell:(UIView *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-    // cell隐藏，结束播放
-    [self stopPlayWithCell:(GKVideoCell *)cell indexPath:indexPath];
-}
-
-- (void)scrollView:(GKVideoScrollView *)scrollView didEndScrollingCell:(UIView *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-    // 滑动结束，播放视频
-    [self playerVideoWithCell:(GKVideoCell *)cell indexPath:indexPath];
-}
-
-#pragma mark - FSPlayerViewCellDelegate
-- (void)cellClickLikeBtn:(GKVideoCell *)cell {
-    NSIndexPath *indexPath = [self.scrollView indexPathForCell:cell];
-    GKVideoModel *model = self.dataSources[indexPath.row];
-    model.isLike = !model.isLike;
-    [self.scrollView reloadData];
-}
-
-- (void)cellClickFullscreenBtn:(GKVideoCell *)cell {
-    [self enterFullScreen];
-}
-
-#pragma mark - Player
-- (void)playerVideoWithCell:(GKVideoCell *)cell indexPath:(NSIndexPath *)indexPath {
-    
-}
-
-- (void)stopPlayWithCell:(GKVideoCell *)cell indexPath:(NSIndexPath *)indexPath {
-    
-}
-
-- (void)enterFullScreen {
-    
-}
-
 - (void)likeVideoWithModel:(GKVideoModel *)model {
-    NSIndexPath *indexPath = [self.scrollView indexPathForCell:self.currentCell];
-    GKVideoModel *videoModel = self.dataSources[indexPath.row];
-    videoModel.isLike = model ? model.isLike : YES;
-    [self.scrollView reloadData];
-}
-
-#pragma mark - Lazy
-- (GKVideoScrollView *)scrollView {
-    if (!_scrollView) {
-        _scrollView = [[GKVideoScrollView alloc] init];
-        _scrollView.dataSource = self;
-        _scrollView.delegate = self;
-        [_scrollView registerClass:GKVideoCell.class forCellReuseIdentifier:@"GKVideoCell"];
-    }
-    return _scrollView;
-}
-
-- (NSMutableArray *)dataSources {
-    if (!_dataSources) {
-        _dataSources = [NSMutableArray array];
-    }
-    return _dataSources;
+//    NSIndexPath *indexPath = [self.scrollView indexPathForCell:self.currentCell];
+//    GKVideoModel *videoModel = self.dataSources[indexPath.row];
+//    videoModel.isLike = model ? model.isLike : YES;
+//    [self.scrollView reloadData];
 }
 
 @end

@@ -11,6 +11,7 @@
 #endif
 
 #import "GKVideoScrollView.h"
+#import "GKVideoViewCell.h"
 
 FOUNDATION_EXPORT double GKVideoScrollViewVersionNumber;
 FOUNDATION_EXPORT const unsigned char GKVideoScrollViewVersionString[];

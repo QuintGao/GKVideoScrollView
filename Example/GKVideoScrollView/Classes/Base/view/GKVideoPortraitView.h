@@ -7,12 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <SJVideoPlayer/SJVideoPlayer.h>
 #import "GKDoubleLikeView.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface GKVideoPortraitView : UIView<SJControlLayer>
+@interface GKVideoPortraitView : UIView
 
 // 播放按钮
 @property (nonatomic, strong) UIButton *playBtn;

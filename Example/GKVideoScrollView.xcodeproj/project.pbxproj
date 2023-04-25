@@ -39,6 +39,29 @@
 		790791EF29C06979000D70A5 /* GKLikeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 790791ED29C06979000D70A5 /* GKLikeView.m */; };
 		790791F329C16F12000D70A5 /* UIButton+GKEnlarge.m in Sources */ = {isa = PBXBuildFile; fileRef = 790791F229C16F12000D70A5 /* UIButton+GKEnlarge.m */; };
 		793231DE29A7041D000A61ED /* GKBallLoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 793231D729A7041D000A61ED /* GKBallLoadingView.m */; };
+		7991D49329F766A7002AADCD /* GKVideoWorkListView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7991D49229F766A7002AADCD /* GKVideoWorkListView.m */; };
+		79A5254B29D5854E00CFB32F /* GKRotationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 79A5254A29D5854E00CFB32F /* GKRotationViewController.m */; };
+		79A5254E29D6899D00CFB32F /* GKTestManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 79A5254D29D6899D00CFB32F /* GKTestManager.m */; };
+		79A5255129D68AB200CFB32F /* GKSJPlayerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 79A5255029D68AB200CFB32F /* GKSJPlayerManager.m */; };
+		79A5255429D68ABD00CFB32F /* GKZFPlayerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 79A5255329D68ABD00CFB32F /* GKZFPlayerManager.m */; };
+		79A5255829D6981D00CFB32F /* GKVideoManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 79A5255729D6981D00CFB32F /* GKVideoManager.m */; };
+		79A5255B29D69BF100CFB32F /* GKVideoLandscapeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 79A5255A29D69BF100CFB32F /* GKVideoLandscapeCell.m */; };
+		79A5255E29D6AD9800CFB32F /* GKVideoPortriatCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 79A5255D29D6AD9800CFB32F /* GKVideoPortriatCell.m */; };
+		79A5256229D6D00D00CFB32F /* GKRotationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 79A5256129D6D00D00CFB32F /* GKRotationManager.m */; };
+		79A5256529D6D02A00CFB32F /* GKRotationManager_iOS_9_15.m in Sources */ = {isa = PBXBuildFile; fileRef = 79A5256429D6D02A00CFB32F /* GKRotationManager_iOS_9_15.m */; };
+		79A5256829D6D03900CFB32F /* GKRotationManager_iOS_16_Later.m in Sources */ = {isa = PBXBuildFile; fileRef = 79A5256729D6D03900CFB32F /* GKRotationManager_iOS_16_Later.m */; };
+		79A5256D29D6D21D00CFB32F /* GKLandscapeWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 79A5256C29D6D21D00CFB32F /* GKLandscapeWindow.m */; };
+		79A5257029D6D45A00CFB32F /* GKLandscapeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 79A5256F29D6D45A00CFB32F /* GKLandscapeViewController.m */; };
+		79A5257329D6D5B500CFB32F /* GKLandscapeNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 79A5257229D6D5B500CFB32F /* GKLandscapeNavigationController.m */; };
+		79A5257929DA642D00CFB32F /* GKTimerControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 79A5257829DA642D00CFB32F /* GKTimerControl.m */; };
+		79A5257D29DC0D1A00CFB32F /* GKDouyinViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 79A5257C29DC0D1A00CFB32F /* GKDouyinViewController.m */; };
+		79A5258029DC0D2600CFB32F /* GKDouyinManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 79A5257F29DC0D2600CFB32F /* GKDouyinManager.m */; };
+		79CFE0D729F1296300B6A013 /* GKDouyinPortraitView.m in Sources */ = {isa = PBXBuildFile; fileRef = 79CFE0D629F1296300B6A013 /* GKDouyinPortraitView.m */; };
+		79CFE0DA29F1344600B6A013 /* GKDouyinLandscapeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 79CFE0D929F1344600B6A013 /* GKDouyinLandscapeView.m */; };
+		79CFE0DE29F26B6200B6A013 /* GKKuaishouViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 79CFE0DD29F26B6200B6A013 /* GKKuaishouViewController.m */; };
+		79CFE0E129F26B7400B6A013 /* GKKuaishouManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 79CFE0E029F26B7400B6A013 /* GKKuaishouManager.m */; };
+		79CFE0E429F28EE900B6A013 /* GKKuaishouLandscapeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 79CFE0E329F28EE900B6A013 /* GKKuaishouLandscapeView.m */; };
+		79CFE0E729F2904000B6A013 /* GKKuaishouPortraitView.m in Sources */ = {isa = PBXBuildFile; fileRef = 79CFE0E629F2904000B6A013 /* GKKuaishouPortraitView.m */; };
 		873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 873B8AEA1B1F5CCA007FD442 /* Main.storyboard */; };
 /* End PBXBuildFile section */
 
@@ -112,6 +135,52 @@
 		790791F229C16F12000D70A5 /* UIButton+GKEnlarge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIButton+GKEnlarge.m"; sourceTree = "<group>"; };
 		793231D729A7041D000A61ED /* GKBallLoadingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GKBallLoadingView.m; sourceTree = "<group>"; };
 		793231D829A7041D000A61ED /* GKBallLoadingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GKBallLoadingView.h; sourceTree = "<group>"; };
+		7991D49129F766A7002AADCD /* GKVideoWorkListView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GKVideoWorkListView.h; sourceTree = "<group>"; };
+		7991D49229F766A7002AADCD /* GKVideoWorkListView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GKVideoWorkListView.m; sourceTree = "<group>"; };
+		79A5254929D5854E00CFB32F /* GKRotationViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GKRotationViewController.h; sourceTree = "<group>"; };
+		79A5254A29D5854E00CFB32F /* GKRotationViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GKRotationViewController.m; sourceTree = "<group>"; };
+		79A5254C29D6899D00CFB32F /* GKTestManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GKTestManager.h; sourceTree = "<group>"; };
+		79A5254D29D6899D00CFB32F /* GKTestManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GKTestManager.m; sourceTree = "<group>"; };
+		79A5254F29D68AB200CFB32F /* GKSJPlayerManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GKSJPlayerManager.h; sourceTree = "<group>"; };
+		79A5255029D68AB200CFB32F /* GKSJPlayerManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GKSJPlayerManager.m; sourceTree = "<group>"; };
+		79A5255229D68ABD00CFB32F /* GKZFPlayerManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GKZFPlayerManager.h; sourceTree = "<group>"; };
+		79A5255329D68ABD00CFB32F /* GKZFPlayerManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GKZFPlayerManager.m; sourceTree = "<group>"; };
+		79A5255629D6981D00CFB32F /* GKVideoManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GKVideoManager.h; sourceTree = "<group>"; };
+		79A5255729D6981D00CFB32F /* GKVideoManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GKVideoManager.m; sourceTree = "<group>"; };
+		79A5255929D69BF100CFB32F /* GKVideoLandscapeCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GKVideoLandscapeCell.h; sourceTree = "<group>"; };
+		79A5255A29D69BF100CFB32F /* GKVideoLandscapeCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GKVideoLandscapeCell.m; sourceTree = "<group>"; };
+		79A5255C29D6AD9800CFB32F /* GKVideoPortriatCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GKVideoPortriatCell.h; sourceTree = "<group>"; };
+		79A5255D29D6AD9800CFB32F /* GKVideoPortriatCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GKVideoPortriatCell.m; sourceTree = "<group>"; };
+		79A5256029D6D00D00CFB32F /* GKRotationManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GKRotationManager.h; sourceTree = "<group>"; };
+		79A5256129D6D00D00CFB32F /* GKRotationManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GKRotationManager.m; sourceTree = "<group>"; };
+		79A5256329D6D02A00CFB32F /* GKRotationManager_iOS_9_15.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GKRotationManager_iOS_9_15.h; sourceTree = "<group>"; };
+		79A5256429D6D02A00CFB32F /* GKRotationManager_iOS_9_15.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GKRotationManager_iOS_9_15.m; sourceTree = "<group>"; };
+		79A5256629D6D03900CFB32F /* GKRotationManager_iOS_16_Later.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GKRotationManager_iOS_16_Later.h; sourceTree = "<group>"; };
+		79A5256729D6D03900CFB32F /* GKRotationManager_iOS_16_Later.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GKRotationManager_iOS_16_Later.m; sourceTree = "<group>"; };
+		79A5256B29D6D21D00CFB32F /* GKLandscapeWindow.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GKLandscapeWindow.h; sourceTree = "<group>"; };
+		79A5256C29D6D21D00CFB32F /* GKLandscapeWindow.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GKLandscapeWindow.m; sourceTree = "<group>"; };
+		79A5256E29D6D45A00CFB32F /* GKLandscapeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GKLandscapeViewController.h; sourceTree = "<group>"; };
+		79A5256F29D6D45A00CFB32F /* GKLandscapeViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GKLandscapeViewController.m; sourceTree = "<group>"; };
+		79A5257129D6D5B500CFB32F /* GKLandscapeNavigationController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GKLandscapeNavigationController.h; sourceTree = "<group>"; };
+		79A5257229D6D5B500CFB32F /* GKLandscapeNavigationController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GKLandscapeNavigationController.m; sourceTree = "<group>"; };
+		79A5257729DA642D00CFB32F /* GKTimerControl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GKTimerControl.h; sourceTree = "<group>"; };
+		79A5257829DA642D00CFB32F /* GKTimerControl.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GKTimerControl.m; sourceTree = "<group>"; };
+		79A5257B29DC0D1A00CFB32F /* GKDouyinViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GKDouyinViewController.h; sourceTree = "<group>"; };
+		79A5257C29DC0D1A00CFB32F /* GKDouyinViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GKDouyinViewController.m; sourceTree = "<group>"; };
+		79A5257E29DC0D2600CFB32F /* GKDouyinManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GKDouyinManager.h; sourceTree = "<group>"; };
+		79A5257F29DC0D2600CFB32F /* GKDouyinManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GKDouyinManager.m; sourceTree = "<group>"; };
+		79CFE0D529F1296300B6A013 /* GKDouyinPortraitView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GKDouyinPortraitView.h; sourceTree = "<group>"; };
+		79CFE0D629F1296300B6A013 /* GKDouyinPortraitView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GKDouyinPortraitView.m; sourceTree = "<group>"; };
+		79CFE0D829F1344600B6A013 /* GKDouyinLandscapeView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GKDouyinLandscapeView.h; sourceTree = "<group>"; };
+		79CFE0D929F1344600B6A013 /* GKDouyinLandscapeView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GKDouyinLandscapeView.m; sourceTree = "<group>"; };
+		79CFE0DC29F26B6200B6A013 /* GKKuaishouViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GKKuaishouViewController.h; sourceTree = "<group>"; };
+		79CFE0DD29F26B6200B6A013 /* GKKuaishouViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GKKuaishouViewController.m; sourceTree = "<group>"; };
+		79CFE0DF29F26B7400B6A013 /* GKKuaishouManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GKKuaishouManager.h; sourceTree = "<group>"; };
+		79CFE0E029F26B7400B6A013 /* GKKuaishouManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GKKuaishouManager.m; sourceTree = "<group>"; };
+		79CFE0E229F28EE900B6A013 /* GKKuaishouLandscapeView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GKKuaishouLandscapeView.h; sourceTree = "<group>"; };
+		79CFE0E329F28EE900B6A013 /* GKKuaishouLandscapeView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GKKuaishouLandscapeView.m; sourceTree = "<group>"; };
+		79CFE0E529F2904000B6A013 /* GKKuaishouPortraitView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GKKuaishouPortraitView.h; sourceTree = "<group>"; };
+		79CFE0E629F2904000B6A013 /* GKKuaishouPortraitView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GKKuaishouPortraitView.m; sourceTree = "<group>"; };
 		7F0618879C04E02E9493FE30 /* Pods-GKVideoScrollView_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GKVideoScrollView_Example.debug.xcconfig"; path = "Target Support Files/Pods-GKVideoScrollView_Example/Pods-GKVideoScrollView_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		873B8AEA1B1F5CCA007FD442 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		8FB265F428064BA85E807DD1 /* GKVideoScrollView.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = GKVideoScrollView.podspec; path = ../GKVideoScrollView.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
@@ -256,6 +325,9 @@
 				79C4207429C3F75D00A0AB84 /* Base */,
 				790791C029BF176D000D70A5 /* ZFPlayer */,
 				790791C129BF1773000D70A5 /* SJVideoPlayer */,
+				79A5254829D5851800CFB32F /* Rotation */,
+				79A5257A29DC0CFD00CFB32F /* Douyin */,
+				79CFE0DB29F2682400B6A013 /* Kuaishou */,
 				793231D429A703ED000A61ED /* Common */,
 				790791BD29BF1762000D70A5 /* GKMainViewController.h */,
 				790791BE29BF1762000D70A5 /* GKMainViewController.m */,
@@ -272,6 +344,8 @@
 				790791E429C06544000D70A5 /* GKZFPortraitView.m */,
 				790791DA29C04595000D70A5 /* GKZFLandscapeView.h */,
 				790791DB29C04595000D70A5 /* GKZFLandscapeView.m */,
+				79A5255229D68ABD00CFB32F /* GKZFPlayerManager.h */,
+				79A5255329D68ABD00CFB32F /* GKZFPlayerManager.m */,
 			);
 			path = ZFPlayer;
 			sourceTree = "<group>";
@@ -285,6 +359,8 @@
 				790791E729C06576000D70A5 /* GKSJPortraitView.m */,
 				790791DD29C0469E000D70A5 /* GKSJLandscapeView.h */,
 				790791DE29C0469E000D70A5 /* GKSJLandscapeView.m */,
+				79A5254F29D68AB200CFB32F /* GKSJPlayerManager.h */,
+				79A5255029D68AB200CFB32F /* GKSJPlayerManager.m */,
 			);
 			path = SJVideoPlayer;
 			sourceTree = "<group>";
@@ -312,6 +388,7 @@
 		793231D429A703ED000A61ED /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				79A5255F29D6CFE600CFB32F /* GKRotationManager */,
 				790791F029C16EFB000D70A5 /* Category */,
 				793231D529A7041D000A61ED /* GKLoadingView */,
 				790791E929C06979000D70A5 /* GKLikeView */,
@@ -328,12 +405,69 @@
 			path = GKLoadingView;
 			sourceTree = "<group>";
 		};
+		79A5254829D5851800CFB32F /* Rotation */ = {
+			isa = PBXGroup;
+			children = (
+				79A5254929D5854E00CFB32F /* GKRotationViewController.h */,
+				79A5254A29D5854E00CFB32F /* GKRotationViewController.m */,
+				79A5254C29D6899D00CFB32F /* GKTestManager.h */,
+				79A5254D29D6899D00CFB32F /* GKTestManager.m */,
+			);
+			path = Rotation;
+			sourceTree = "<group>";
+		};
+		79A5255529D6980000CFB32F /* manager */ = {
+			isa = PBXGroup;
+			children = (
+				79A5255629D6981D00CFB32F /* GKVideoManager.h */,
+				79A5255729D6981D00CFB32F /* GKVideoManager.m */,
+			);
+			path = manager;
+			sourceTree = "<group>";
+		};
+		79A5255F29D6CFE600CFB32F /* GKRotationManager */ = {
+			isa = PBXGroup;
+			children = (
+				79A5256029D6D00D00CFB32F /* GKRotationManager.h */,
+				79A5256129D6D00D00CFB32F /* GKRotationManager.m */,
+				79A5256329D6D02A00CFB32F /* GKRotationManager_iOS_9_15.h */,
+				79A5256429D6D02A00CFB32F /* GKRotationManager_iOS_9_15.m */,
+				79A5256629D6D03900CFB32F /* GKRotationManager_iOS_16_Later.h */,
+				79A5256729D6D03900CFB32F /* GKRotationManager_iOS_16_Later.m */,
+				79A5256B29D6D21D00CFB32F /* GKLandscapeWindow.h */,
+				79A5256C29D6D21D00CFB32F /* GKLandscapeWindow.m */,
+				79A5256E29D6D45A00CFB32F /* GKLandscapeViewController.h */,
+				79A5256F29D6D45A00CFB32F /* GKLandscapeViewController.m */,
+				79A5257129D6D5B500CFB32F /* GKLandscapeNavigationController.h */,
+				79A5257229D6D5B500CFB32F /* GKLandscapeNavigationController.m */,
+				79A5257729DA642D00CFB32F /* GKTimerControl.h */,
+				79A5257829DA642D00CFB32F /* GKTimerControl.m */,
+			);
+			path = GKRotationManager;
+			sourceTree = "<group>";
+		};
+		79A5257A29DC0CFD00CFB32F /* Douyin */ = {
+			isa = PBXGroup;
+			children = (
+				79A5257B29DC0D1A00CFB32F /* GKDouyinViewController.h */,
+				79A5257C29DC0D1A00CFB32F /* GKDouyinViewController.m */,
+				79A5257E29DC0D2600CFB32F /* GKDouyinManager.h */,
+				79A5257F29DC0D2600CFB32F /* GKDouyinManager.m */,
+				79CFE0D529F1296300B6A013 /* GKDouyinPortraitView.h */,
+				79CFE0D629F1296300B6A013 /* GKDouyinPortraitView.m */,
+				79CFE0D829F1344600B6A013 /* GKDouyinLandscapeView.h */,
+				79CFE0D929F1344600B6A013 /* GKDouyinLandscapeView.m */,
+			);
+			path = Douyin;
+			sourceTree = "<group>";
+		};
 		79C4207429C3F75D00A0AB84 /* Base */ = {
 			isa = PBXGroup;
 			children = (
 				79C4207529C3F76600A0AB84 /* controller */,
 				79C4207629C3F76B00A0AB84 /* view */,
 				79C4207729C3F77200A0AB84 /* model */,
+				79A5255529D6980000CFB32F /* manager */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -354,12 +488,18 @@
 			children = (
 				790791CB29BF1937000D70A5 /* GKVideoCell.h */,
 				790791CC29BF1937000D70A5 /* GKVideoCell.m */,
+				79A5255C29D6AD9800CFB32F /* GKVideoPortriatCell.h */,
+				79A5255D29D6AD9800CFB32F /* GKVideoPortriatCell.m */,
+				79A5255929D69BF100CFB32F /* GKVideoLandscapeCell.h */,
+				79A5255A29D69BF100CFB32F /* GKVideoLandscapeCell.m */,
 				790791D429BF2300000D70A5 /* GKVideoPortraitView.h */,
 				790791D529BF2300000D70A5 /* GKVideoPortraitView.m */,
 				790791D129BF1DAF000D70A5 /* GKVideoLandscapeView.h */,
 				790791D229BF1DAF000D70A5 /* GKVideoLandscapeView.m */,
 				790791D729C02040000D70A5 /* GKVideoPlayerStatusBar.h */,
 				790791D829C02040000D70A5 /* GKVideoPlayerStatusBar.m */,
+				7991D49129F766A7002AADCD /* GKVideoWorkListView.h */,
+				7991D49229F766A7002AADCD /* GKVideoWorkListView.m */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -371,6 +511,21 @@
 				790791C929BF18FF000D70A5 /* GKVideoModel.m */,
 			);
 			path = model;
+			sourceTree = "<group>";
+		};
+		79CFE0DB29F2682400B6A013 /* Kuaishou */ = {
+			isa = PBXGroup;
+			children = (
+				79CFE0DC29F26B6200B6A013 /* GKKuaishouViewController.h */,
+				79CFE0DD29F26B6200B6A013 /* GKKuaishouViewController.m */,
+				79CFE0DF29F26B7400B6A013 /* GKKuaishouManager.h */,
+				79CFE0E029F26B7400B6A013 /* GKKuaishouManager.m */,
+				79CFE0E529F2904000B6A013 /* GKKuaishouPortraitView.h */,
+				79CFE0E629F2904000B6A013 /* GKKuaishouPortraitView.m */,
+				79CFE0E229F28EE900B6A013 /* GKKuaishouLandscapeView.h */,
+				79CFE0E329F28EE900B6A013 /* GKKuaishouLandscapeView.m */,
+			);
+			path = Kuaishou;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -541,25 +696,48 @@
 			buildActionMask = 2147483647;
 			files = (
 				790791D929C02040000D70A5 /* GKVideoPlayerStatusBar.m in Sources */,
+				79A5255B29D69BF100CFB32F /* GKVideoLandscapeCell.m in Sources */,
+				79CFE0D729F1296300B6A013 /* GKDouyinPortraitView.m in Sources */,
 				790791E529C06544000D70A5 /* GKZFPortraitView.m in Sources */,
+				79CFE0E729F2904000B6A013 /* GKKuaishouPortraitView.m in Sources */,
+				79A5257029D6D45A00CFB32F /* GKLandscapeViewController.m in Sources */,
+				79CFE0DE29F26B6200B6A013 /* GKKuaishouViewController.m in Sources */,
 				790791DF29C0469E000D70A5 /* GKSJLandscapeView.m in Sources */,
+				79A5255829D6981D00CFB32F /* GKVideoManager.m in Sources */,
 				6003F59E195388D20070C39A /* GKAppDelegate.m in Sources */,
 				790791D329BF1DAF000D70A5 /* GKVideoLandscapeView.m in Sources */,
+				79A5256229D6D00D00CFB32F /* GKRotationManager.m in Sources */,
+				79A5256529D6D02A00CFB32F /* GKRotationManager_iOS_9_15.m in Sources */,
 				790791C729BF182D000D70A5 /* GKSJPlayerViewController.m in Sources */,
+				79A5256829D6D03900CFB32F /* GKRotationManager_iOS_16_Later.m in Sources */,
 				790791CA29BF18FF000D70A5 /* GKVideoModel.m in Sources */,
+				79A5254E29D6899D00CFB32F /* GKTestManager.m in Sources */,
 				790791DC29C04595000D70A5 /* GKZFLandscapeView.m in Sources */,
+				79A5255E29D6AD9800CFB32F /* GKVideoPortriatCell.m in Sources */,
 				790791EF29C06979000D70A5 /* GKLikeView.m in Sources */,
 				793231DE29A7041D000A61ED /* GKBallLoadingView.m in Sources */,
 				790791D029BF1D95000D70A5 /* GKVideoPlayerViewController.m in Sources */,
+				79A5254B29D5854E00CFB32F /* GKRotationViewController.m in Sources */,
+				79A5255129D68AB200CFB32F /* GKSJPlayerManager.m in Sources */,
+				79CFE0DA29F1344600B6A013 /* GKDouyinLandscapeView.m in Sources */,
+				79A5258029DC0D2600CFB32F /* GKDouyinManager.m in Sources */,
 				790791C429BF1825000D70A5 /* GKZFPlayerViewController.m in Sources */,
 				790791CD29BF1937000D70A5 /* GKVideoCell.m in Sources */,
+				79A5257929DA642D00CFB32F /* GKTimerControl.m in Sources */,
+				79CFE0E129F26B7400B6A013 /* GKKuaishouManager.m in Sources */,
+				79A5255429D68ABD00CFB32F /* GKZFPlayerManager.m in Sources */,
+				79A5257329D6D5B500CFB32F /* GKLandscapeNavigationController.m in Sources */,
 				790791D629BF2300000D70A5 /* GKVideoPortraitView.m in Sources */,
+				79A5257D29DC0D1A00CFB32F /* GKDouyinViewController.m in Sources */,
+				7991D49329F766A7002AADCD /* GKVideoWorkListView.m in Sources */,
+				79CFE0E429F28EE900B6A013 /* GKKuaishouLandscapeView.m in Sources */,
 				790791EE29C06979000D70A5 /* GKDoubleLikeView.m in Sources */,
 				790791E229C05E5F000D70A5 /* GKNavigationController.m in Sources */,
 				790791BF29BF1762000D70A5 /* GKMainViewController.m in Sources */,
 				790791F329C16F12000D70A5 /* UIButton+GKEnlarge.m in Sources */,
 				790791E829C06576000D70A5 /* GKSJPortraitView.m in Sources */,
 				6003F59A195388D20070C39A /* main.m in Sources */,
+				79A5256D29D6D21D00CFB32F /* GKLandscapeWindow.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

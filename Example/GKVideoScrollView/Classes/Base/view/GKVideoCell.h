@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "GKVideoModel.h"
 #import <GKSliderView/GKSliderView.h>
+#import <GKVideoScrollView/GKVideoScrollView.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -16,20 +17,20 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol GKVideoCellDelegate <NSObject>
 
+- (void)cellClickBackBtn;
 - (void)cellClickLikeBtn:(GKVideoCell *)cell;
 - (void)cellClickFullscreenBtn:(GKVideoCell *)cell;
 
 @end
 
-@interface GKVideoCell : UIView
+@interface GKVideoCell : GKVideoViewCell
 
 @property (nonatomic, weak) id<GKVideoCellDelegate> delegate;
 
 // 封面图
 @property (nonatomic, strong) UIImageView *coverImgView;
 
-// 进度条
-@property (nonatomic, strong) GKSliderView *sliderView;
+- (void)initUI;
 
 - (void)loadData:(GKVideoModel *)model;
 
@@ -37,6 +38,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)scrollViewBeginDragging;
 - (void)scrollViewDidEndDragging;
+
+- (void)showLoading;
+- (void)hideLoading;
+
+- (void)setProgress:(float)progress;
 
 @end
 

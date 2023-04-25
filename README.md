@@ -36,5 +36,6 @@ GKVideoScrollView is available under the MIT license. See the LICENSE file for m
 
 ## 更新记录
 
+* 2023.04.25 - 1.0.3 优化加载逻辑，避免多次加载
 * 2023.03.28 - 1.0.2 修复首次刷新bug，修复默认宽度bug
 * 2023.03.21 - 1.0.1 新增方法可切换到任意索引位置，新增切换到下一页的方法（带动画）

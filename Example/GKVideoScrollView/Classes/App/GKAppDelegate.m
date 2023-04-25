@@ -10,6 +10,8 @@
 #import <ZFPlayer/ZFLandscapeRotationManager.h>
 #import <SJBaseVideoPlayer/SJRotationFullscreenWindow.h>
 #import <SJBaseVideoPlayer/SJRotationManagerInternal.h>
+#import "GKRotationManager.h"
+#import "GKLandscapeWindow.h"
 
 @implementation GKAppDelegate
 
@@ -23,6 +25,11 @@
         if (manager) {
             return [manager supportedInterfaceOrientationsForWindow:window];
         }
+    }
+    
+    GKInterfaceOrientationMask gk_orientationMask = [GKRotationManager supportedInterfaceOrientationsForWindow:window];
+    if (gk_orientationMask != GKInterfaceOrientationMaskUnknow) {
+        return (UIInterfaceOrientationMask)gk_orientationMask;
     }
     
     ZFInterfaceOrientationMask orientationMask = [ZFLandscapeRotationManager supportedInterfaceOrientationsForWindow:window];

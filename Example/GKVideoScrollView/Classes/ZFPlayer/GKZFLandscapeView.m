@@ -15,7 +15,12 @@
 @implementation GKZFLandscapeView
 
 - (void)backAction {
-    [self.player enterFullScreen:!self.player.isFullScreen animated:YES];
+//    [self.player enterFullScreen:!self.player.isFullScreen animated:YES];
+    if (self.rotationManager) {
+        [self.rotationManager rotate];
+    }else {
+        [self.player enterFullScreen:!self.player.isFullScreen animated:YES];
+    }
 }
 
 - (void)playAction {
@@ -41,23 +46,23 @@
     if (videoPlayer.isFullScreen) {
         [self showContainerView:NO];
         
-        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideContainerView) object:nil];
-        [self performSelector:@selector(hideContainerView) withObject:nil afterDelay:5.0f];
+        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideContainerView:) object:@(YES)];
+        [self performSelector:@selector(hideContainerView:) withObject:@(YES) afterDelay:5.0f];
     }
 }
 
 - (void)gestureSingleTapped:(ZFPlayerGestureControl *)gestureControl {
-    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideContainerView) object:nil];
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideContainerView:) object:@(YES)];
     if (self.isContainerShow) {
-        [self hideContainerView];
+        [self hideContainerView:YES];
     }else {
         [self showContainerView:YES];
-        [self performSelector:@selector(hideContainerView) withObject:nil afterDelay:5.0f];
+        [self performSelector:@selector(hideContainerView:) withObject:@(YES) afterDelay:5.0f];
     }
 }
 
 - (void)gestureDoubleTapped:(ZFPlayerGestureControl *)gestureControl {
-    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideContainerView) object:nil];
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideContainerView:) object:@(YES)];
     
     UIGestureRecognizer *gesture = gestureControl.doubleTap;
     CGPoint point = [gesture locationInView:gesture.view];
@@ -65,7 +70,7 @@
     __weak __typeof(self) weakSelf = self;
     [self.likeView createAnimationWithPoint:point view:gesture.view completion:^{
         __strong __typeof(weakSelf) self = weakSelf;
-        [self performSelector:@selector(hideContainerView) withObject:nil afterDelay:5.0f];
+        [self performSelector:@selector(hideContainerView:) withObject:@(YES) afterDelay:5.0f];
     }];
     self.model.isLike = YES;
     self.likeBtn.selected = self.model.isLike;

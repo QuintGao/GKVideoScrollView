@@ -12,6 +12,7 @@
 #import "GKVideoPlayerStatusBar.h"
 #import "GKVideoModel.h"
 #import "GKDoubleLikeView.h"
+#import "GKRotationManager.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -39,7 +40,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong) GKDoubleLikeView *likeView;
 
+@property (nonatomic, weak) GKRotationManager *rotationManager;
+
 @property (nonatomic, copy) void(^likeBlock)(GKVideoModel *);
+
+@property (nonatomic, copy) void(^singleTapBlock)(void);
 
 - (void)backAction;
 - (void)playAction;
@@ -50,7 +55,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, assign) BOOL isContainerShow;
 - (void)showContainerView:(BOOL)animated;
-- (void)hideContainerView;
+- (void)hideContainerView:(BOOL)animated;
 
 - (void)draggingEnded;
 

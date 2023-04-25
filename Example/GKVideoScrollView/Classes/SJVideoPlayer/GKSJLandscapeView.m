@@ -17,11 +17,15 @@
 @implementation GKSJLandscapeView
 
 - (void)clickFullScreenBtn {
-    [self.player rotate:SJOrientation_Portrait animated:YES];
+    [self backAction];
 }
 
 - (void)backAction {
-    [self.player rotate:SJOrientation_Portrait animated:YES];
+    if (self.rotationManager) {
+        [self.rotationManager rotate];
+    }else {
+        [self.player rotate:SJOrientation_Portrait animated:YES];
+    }
 }
 
 - (void)playAction {
@@ -47,22 +51,22 @@
     __weak __typeof(self) weakSelf = self;
     self.player.gestureController.singleTapHandler = ^(id<SJGestureController>  _Nonnull control, CGPoint location) {
         __strong __typeof(weakSelf) self = weakSelf;
-        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideContainerView) object:nil];
+        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideContainerView:) object:@(YES)];
         if (self.isContainerShow) {
-            [self hideContainerView];
+            [self hideContainerView:YES];
         }else {
             [self showContainerView:YES];
-            [self performSelector:@selector(hideContainerView) withObject:nil afterDelay:5.0f];
+            [self performSelector:@selector(hideContainerView:) withObject:@(YES) afterDelay:5.0f];
         }
     };
     
     self.player.gestureController.doubleTapHandler = ^(id<SJGestureController>  _Nonnull control, CGPoint location) {
         __strong __typeof(weakSelf) self = weakSelf;
-        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideContainerView) object:nil];
+        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideContainerView:) object:@(YES)];
         
         [self.likeView createAnimationWithPoint:location view:self.player.presentView completion:^{
             __strong __typeof(weakSelf) self = weakSelf;
-            [self performSelector:@selector(hideContainerView) withObject:nil afterDelay:5.0f];
+            [self performSelector:@selector(hideContainerView:) withObject:@(YES) afterDelay:5.0f];
         }];;
         self.model.isLike = YES;
         self.likeBtn.selected = self.model.isLike;
@@ -86,8 +90,8 @@
     if (isFull) {
         [self showContainerView:NO];
         
-        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideContainerView) object:nil];
-        [self performSelector:@selector(hideContainerView) withObject:nil afterDelay:5.0f];
+        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideContainerView:) object:@(YES)];
+        [self performSelector:@selector(hideContainerView:) withObject:@(YES) afterDelay:5.0f];
     }
 }
 

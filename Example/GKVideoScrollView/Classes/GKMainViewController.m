@@ -10,6 +10,9 @@
 #import <Masonry/Masonry.h>
 #import "GKZFPlayerViewController.h"
 #import "GKSJPlayerViewController.h"
+#import "GKRotationViewController.h"
+#import "GKDouyinViewController.h"
+#import "GKKuaishouViewController.h"
 
 @interface GKMainViewController ()<UITableViewDataSource, UITableViewDelegate>
 
@@ -46,7 +49,10 @@
     self.navigationItem.title = @"GKVideoScrollView";
     
     self.dataSources = @[@"ZFPlayer播放",
-                         @"SJVideoPlayer播放"];
+                         @"SJVideoPlayer播放",
+                         @"列表旋转",
+                         @"抖音",
+                         @"快手"];
 }
 
 #pragma mark - <UITableViewDataSource, UITableViewDelegate>
@@ -68,6 +74,12 @@
         vc = [[GKZFPlayerViewController alloc] init];
     }else if (indexPath.row == 1) {
         vc = [[GKSJPlayerViewController alloc] init];
+    }else if (indexPath.row == 2) {
+        vc = [[GKRotationViewController alloc] init];
+    }else if (indexPath.row == 3) {
+        vc = [[GKDouyinViewController alloc] init];
+    }else if (indexPath.row == 4) {
+        vc = [[GKKuaishouViewController alloc] init];
     }
     [self.navigationController pushViewController:vc animated:YES];
 }

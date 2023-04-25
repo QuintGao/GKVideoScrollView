@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "GKVideoViewCell.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -18,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSInteger)numberOfRowsInScrollView:(GKVideoScrollView *)scrollView;
 
 // 设置cell
-- (UIView *)scrollView:(GKVideoScrollView *)scrollView cellForRowAtIndexPath:(NSIndexPath *)indexPath;
+- (GKVideoViewCell *)scrollView:(GKVideoScrollView *)scrollView cellForRowAtIndexPath:(NSIndexPath *)indexPath;
 
 @end
 
@@ -27,13 +28,13 @@ NS_ASSUME_NONNULL_BEGIN
 @optional
 
 // cell即将显示时调用，可用于请求播放信息
-- (void)scrollView:(GKVideoScrollView *)scrollView willDisplayCell:(UIView *)cell forRowAtIndexPath:(NSIndexPath *)indexPath;
+- (void)scrollView:(GKVideoScrollView *)scrollView willDisplayCell:(GKVideoViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath;
 
 // cell结束显示时调用，可用于结束播放
-- (void)scrollView:(GKVideoScrollView *)scrollView didEndDisplayingCell:(UIView *)cell forRowAtIndexPath:(NSIndexPath *)indexPath;
+- (void)scrollView:(GKVideoScrollView *)scrollView didEndDisplayingCell:(GKVideoViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath;
 
 // 结束滑动时显示的cell，可在这里开始播放
-- (void)scrollView:(GKVideoScrollView *)scrollView didEndScrollingCell:(UIView *)cell forRowAtIndexPath:(NSIndexPath *)indexPath;
+- (void)scrollView:(GKVideoScrollView *)scrollView didEndScrollingCell:(GKVideoViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath;
 
 @end
 
@@ -58,16 +59,17 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSInteger)numberOfRows;
 
 // 获取cell对应的indexPath
-- (nullable NSIndexPath *)indexPathForCell:(UIView *)cell;
+- (nullable NSIndexPath *)indexPathForCell:(GKVideoViewCell *)cell;
 
 // 获取indexPath对应的cell
-- (nullable __kindof UIView *)cellForRowAtIndexPath:(NSIndexPath *)indexPath;
+- (nullable __kindof GKVideoViewCell *)cellForRowAtIndexPath:(NSIndexPath *)indexPath;
 
 // 注册cell
-- (void)registerClass:(nonnull Class)cellClass forCellReuseIdentifier:(nonnull NSString *)identifier;
+- (void)registerNib:(nullable UINib *)nib forCellReuseIdentifier:(nonnull NSString *)identifier;
+- (void)registerClass:(nullable Class)cellClass forCellReuseIdentifier:(nonnull NSString *)identifier;
 
 // 获取可复用的cell
-- (__kindof UIView *)dequeueReusableCellWithIdentifier:(NSString *)identifier forIndexPath:(nonnull NSIndexPath *)indexPath;
+- (__kindof GKVideoViewCell *)dequeueReusableCellWithIdentifier:(NSString *)identifier forIndexPath:(nonnull NSIndexPath *)indexPath;
 
 // 刷新数据
 - (void)reloadData;

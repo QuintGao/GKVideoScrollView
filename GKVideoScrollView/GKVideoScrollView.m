@@ -8,17 +8,21 @@
 
 #import "GKVideoScrollView.h"
 
-#define kScreenW UIScreen.mainScreen.bounds.size.width
-#define kScreenH UIScreen.mainScreen.bounds.size.height
+/// cell更新类型
+typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
+    GKVideoCellUpdateType_Top,  // 显示topCell，更新上中
+    GKVideoCellUpdateType_Ctr,  // 显示ctrCell，更新上中下
+    GKVideoCellUpdateType_Btm   // 显示btmCell，更新中下
+};
 
 @interface GKVideoScrollView()<UIScrollViewDelegate>
 
 @property (nonatomic, weak) id<GKVideoScrollViewDelegate> userDelegate;
 
 // 创建三个控制视图，用于滑动切换
-@property (nonatomic, strong) UIView *topCell; // 顶部视图
-@property (nonatomic, strong) UIView *ctrCell; // 中间视图
-@property (nonatomic, strong) UIView *btmCell; // 底部视图
+@property (nonatomic, strong) GKVideoViewCell *topCell; // 顶部视图
+@property (nonatomic, strong) GKVideoViewCell *ctrCell; // 中间视图
+@property (nonatomic, strong) GKVideoViewCell *btmCell; // 底部视图
 
 // 控制播放的索引，不完全等于当前播放内容的索引
 @property (nonatomic, assign) NSInteger index;
@@ -27,7 +31,7 @@
 @property (nonatomic, assign) NSInteger currentIndex;
 
 // 当前显示的view
-@property (nonatomic, weak) UIView *currentCell;
+@property (nonatomic, weak) GKVideoViewCell *currentCell;
 
 // 将要改变的索引
 @property (nonatomic, assign) NSInteger changeIndex;
@@ -43,16 +47,21 @@
 @property (nonatomic, assign) BOOL isDelay;
 
 // 当前正在更新的view
-@property (nonatomic, weak) UIView *updateCell;
+@property (nonatomic, weak) GKVideoViewCell *updateCell;
 
 // 处理view即将显示
 @property (nonatomic, assign) CGFloat lastOffsetY;
-@property (nonatomic, weak) UIView *lastWillDisplayCell;
+@property (nonatomic, weak) GKVideoViewCell *lastWillDisplayCell;
 
 // 记录是否在切换页面
 @property (nonatomic, assign) BOOL isChanging;
 
-// 存放cell标识和对应的类
+@property (nonatomic, assign) CGRect lastFrame;
+
+// 存放cell标识和对应的nib
+@property (nonatomic, strong) NSMutableDictionary<NSString *, UINib *> *cellNibs;
+
+// 存放cell标识和对应的类（包括nib对应的类）
 @property (nonatomic, strong) NSMutableDictionary<NSString *, Class> *cellClasses;
 
 // 存放cell标识和对应的可重用view列表
@@ -79,6 +88,7 @@
 }
 
 - (void)initialize {
+    [super setDelegate:self];
     self.showsVerticalScrollIndicator = NO;
     self.showsHorizontalScrollIndicator = NO;
     self.backgroundColor = UIColor.clearColor;
@@ -88,6 +98,7 @@
         self.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
     }
     
+    self.cellNibs = [NSMutableDictionary dictionary];
     self.cellClasses = [NSMutableDictionary dictionary];
     self.reusableCells = [NSMutableDictionary dictionary];
 }
@@ -95,22 +106,23 @@
 - (void)layoutSubviews {
     [super layoutSubviews];
     
-    CGFloat controlW = CGRectGetWidth(self.frame);
-    CGFloat controlH = CGRectGetHeight(self.frame);
+    CGFloat scrollW = CGRectGetWidth(self.frame);
+    CGFloat scrollH = CGRectGetHeight(self.frame);
     
-    self.topCell.frame = CGRectMake(0, 0, controlW, controlH);
-    self.ctrCell.frame = CGRectMake(0, controlH, controlW, controlH);
-    self.btmCell.frame = CGRectMake(0, controlH * 2, controlW, controlH);
+    self.topCell.frame = CGRectMake(0, 0, scrollW, scrollH);
+    self.ctrCell.frame = CGRectMake(0, scrollH, scrollW, scrollH);
+    self.btmCell.frame = CGRectMake(0, scrollH * 2, scrollW, scrollH);
+    
+    if (CGSizeEqualToSize(self.contentSize, CGSizeZero) || self.contentSize.width != scrollW) {
+        [self updateContentSize];
+        self.isChanging = YES;
+        [self updateContentOffset];
+        self.isChanging = NO;
+    }
 }
 
 - (void)setDelegate:(id<GKVideoScrollViewDelegate>)delegate {
-    if (delegate) {
-        [super setDelegate:self];
-        self.userDelegate = delegate;
-    }else {
-        [super setDelegate:nil];
-        self.userDelegate = nil;
-    }
+    self.userDelegate = delegate;
 }
 
 #pragma mark - Public Methods
@@ -122,103 +134,95 @@
     return self.totalCount;
 }
 
-- (NSIndexPath *)indexPathForCell:(UIView *)cell {
-    NSInteger index = -1;
+- (NSIndexPath *)indexPathForCell:(GKVideoViewCell *)cell {
+    NSInteger index = NSNotFound;
+    
+    NSInteger diff = NSNotFound;
     if (cell == self.topCell) {
-        if (self.currentCell == self.topCell) {
-            index = self.currentIndex;
-        }else if (self.currentCell == self.ctrCell) {
-            index = self.currentIndex - 1;
-        }else if (self.currentCell == self.btmCell) {
-            index = self.currentIndex - 2;
-        }
+        diff = -1;
     }else if (cell == self.ctrCell) {
-        if (self.currentCell == self.topCell) {
-            index = self.currentIndex + 1;
-        }else if (self.currentCell == self.ctrCell) {
-            index = self.currentIndex;
-        }else if (self.currentCell == self.btmCell) {
-            index = self.currentIndex - 1;
-        }
+        diff = 0;
     }else if (cell == self.btmCell) {
+        diff = 1;
+    }
+    
+    if (diff != NSNotFound) {
         if (self.currentCell == self.topCell) {
-            index = self.currentIndex + 2;
+            index = self.currentIndex + 1 + diff;
         }else if (self.currentCell == self.ctrCell) {
-            index = self.currentIndex + 1;
+            index = self.currentIndex + diff;
         }else if (self.currentCell == self.btmCell) {
-            index = self.currentIndex;
+            index = self.currentIndex - 1 + diff;
         }
     }
     
-    if (index >= 0) {
+    if (index != NSNotFound) {
         return [NSIndexPath indexPathForRow:index inSection:0];
     }
     return nil;
 }
 
-- (__kindof UIView *)cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (__kindof GKVideoViewCell *)cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     NSInteger index = indexPath.row;
-    UIView *cell = nil;
-    if (self.totalCount == 1) {
-        if (index == 0) {
-            cell = self.topCell;
-        }
-    }else if (self.totalCount == 2) {
-        if (index == 0) {
-            cell = self.topCell;
-        }else {
-            cell = self.ctrCell;
-        }
-    }else if (self.totalCount >= 3) {
-        NSInteger diff = self.currentIndex - index;
-        if (self.currentIndex == 0) {
-            if (diff == 0) {
-                cell = self.topCell;
-            }else if (diff == -1) {
-                cell = self.ctrCell;
-            }else if (diff == -2) {
-                cell = self.btmCell;
-            }
-        }else if (self.currentIndex == self.totalCount - 1) {
-            if (diff == 0) {
-                cell = self.btmCell;
-            }else if (diff == 1) {
-                cell = self.ctrCell;
-            }else if (diff == 2) {
-                cell = self.topCell;
-            }
-        }else {
-            if (diff == -1) {
-                cell = self.btmCell;
-            }else if (diff == 0) {
-                cell = self.ctrCell;
-            }else if (diff == 1) {
-                cell = self.topCell;
-            }
-        }
+    if (index < 0 || index > self.totalCount - 1) return nil;
+    GKVideoViewCell *cell = nil;
+    NSInteger diff = self.currentIndex - index;
+    if (self.currentIndex == 0) {
+        diff += 1;
+    }else if (self.currentIndex == self.totalCount - 1) {
+        diff -= 1;
+    }
+    if (diff == 1) {
+        cell = self.topCell;
+    }else if (diff == 0) {
+        cell = self.ctrCell;
+    }else if (diff == -1) {
+        cell = self.btmCell;
     }
     return cell;
 }
 
+- (void)registerNib:(UINib *)nib forCellReuseIdentifier:(NSString *)identifier {
+    if (identifier.length <= 0) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException
+                                       reason:[NSString stringWithFormat:@"must pass a valid reuse identifier to - %s", __func__]
+                                     userInfo:nil];
+    }
+    [self clearWithIdentifier:identifier];
+    [self.cellNibs setValue:nib forKey:identifier];
+    [self.reusableCells setValue:[NSMutableSet set] forKey:identifier];
+}
+
 - (void)registerClass:(Class)cellClass forCellReuseIdentifier:(NSString *)identifier {
-    NSAssert(cellClass, @"cellClass不能为nil");
-    NSAssert(identifier.length > 0, @"标识不能为nil或空字符串");
+    if (cellClass == nil) {
+        @throw [NSException exceptionWithName:NSInternalInconsistencyException
+                                       reason:[NSString stringWithFormat:@"unable to dequeue a cell with identifier %@ - must register a nib or a class for the identifier or connect a prototype cell in a storyboard", identifier]
+                                     userInfo:nil];
+    }
+    if (![cellClass isSubclassOfClass:GKVideoViewCell.class]) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException
+                                       reason:@"must pass a class of kind GKVideoViewCell"
+                                     userInfo:nil];
+    }
+    if (identifier.length <= 0) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException
+                                       reason:[NSString stringWithFormat:@"must pass a valid reuse identifier to - %s", __func__]
+                                     userInfo:nil];
+    }
+    [self clearWithIdentifier:identifier];
     [self.cellClasses setValue:cellClass forKey:identifier];
     [self.reusableCells setValue:[NSMutableSet set] forKey:identifier];
 }
 
-- (__kindof UIView *)dequeueReusableCellWithIdentifier:(NSString *)identifier forIndexPath:(NSIndexPath *)indexPath {
-    NSAssert(identifier.length > 0, @"标识不能为nil或空字符串");
-    NSAssert([self.cellClasses.allKeys containsObject:identifier], @"请先注册cell");
-    Class cellClass = self.cellClasses[identifier];
-    UIView *cell = nil;
+- (__kindof GKVideoViewCell *)dequeueReusableCellWithIdentifier:(NSString *)identifier forIndexPath:(NSIndexPath *)indexPath {
+    Class cellClass = [self cellClassWithIdentifier:identifier];
+    GKVideoViewCell *cell = nil;
     if (!self.updateCell || self.updateCell.class != cellClass) {
         cell = [self dequeueReusableCellWithIdentifier:identifier];
         if (self.updateCell) {
             [self saveReusableCell:self.updateCell];
             self.updateCell = nil;
         }
-        [self addSubview:cell];
     }else {
         cell = self.updateCell;
         self.updateCell = nil;
@@ -261,16 +265,18 @@
     self.changeIndex = index;
     
     // 更新cell
-    NSInteger updateIndex = 0;
-    if (index == 0) {
-        updateIndex = index + 1;
-    }else if (index == self.totalCount - 1) {
-        updateIndex = index - 1;
-        self.index = index - 1; // 特殊处理
-    }else {
-        updateIndex = index;
+    GKVideoCellUpdateType type = GKVideoCellUpdateType_Top;
+    if (self.totalCount >= 3) {
+        if (index == 0) {
+            type = GKVideoCellUpdateType_Top;
+        }else if (index == self.totalCount - 1) {
+            type = GKVideoCellUpdateType_Btm;
+            self.index = index - 1; // 特殊处理
+        }else {
+            type = GKVideoCellUpdateType_Ctr;
+        }
+        [self createCellWithType:type index:index];
     }
-    [self updateCellWithIndex:updateIndex];
     
     // 显示cell
     [self updateDisplayCellWithIndex:index];
@@ -284,7 +290,7 @@
     
     self.changeIndex = self.currentIndex + 1;
     // 即将显示
-    UIView *cell = nil;
+    GKVideoViewCell *cell = nil;
     if (self.currentCell == self.topCell) {
         cell = self.ctrCell;
     }else if (self.currentCell == self.ctrCell) {
@@ -302,72 +308,130 @@
 }
 
 #pragma mark - Private Methods
+- (void)clearWithIdentifier:(NSString *)identifier {
+    if ([self.cellNibs.allKeys containsObject:identifier]) {
+        [self.cellNibs removeObjectForKey:identifier];
+    }
+    if ([self.cellClasses.allKeys containsObject:identifier]) {
+        [self.cellClasses removeObjectForKey:identifier];
+    }
+    if ([self.reusableCells.allKeys containsObject:identifier]) {
+        [self.reusableCells removeObjectForKey:identifier];
+    }
+}
+
 #pragma mark - dequeue reusable cell
-- (UIView *)dequeueReusableCellWithIdentifier:(NSString *)identifier {
+- (Class)cellClassWithIdentifier:(NSString *)identifier {
+    // 标识未注册
+    if (![self.cellNibs.allKeys containsObject:identifier] && ![self.cellClasses.allKeys containsObject:identifier]) {
+        @throw [NSException exceptionWithName:NSInternalInconsistencyException
+                                       reason:[NSString stringWithFormat:@"unable to dequeue a cell with identifier %@ - must register a nib or a class for the identifier or connect a prototype cell in a storyboard", identifier]
+                                     userInfo:nil];
+    }
+    // 如果获取过class，直接返回
+    if ([self.cellClasses.allKeys containsObject:identifier]) {
+        return self.cellClasses[identifier];
+    }
+    // 通过nib获取cell
+    UINib *nib = self.cellNibs[identifier];
+    GKVideoViewCell *nibCell = [self cellWithNib:nib identifier:identifier];
+    // 放入重用池
+    [self saveReusableCell:nibCell];
+    // 存储class
+    Class class = nibCell.class;
+    [self.cellClasses setValue:class forKey:identifier];
+    return class;
+}
+
+- (GKVideoViewCell *)cellWithNib:(UINib *)nib identifier:(NSString *)identifier {
+    NSArray *views = [nib instantiateWithOwner:self options:nil];
+    // 只能存在一个view且必须是GKVideoViewCell或其子类
+    if (views.count == 1 && [[views.firstObject class] isSubclassOfClass:GKVideoViewCell.class]) {
+        GKVideoViewCell *nibCell = (GKVideoViewCell *)views.firstObject;
+        if (nibCell.reuseIdentifier.length > 0 && ![nibCell.reuseIdentifier isEqualToString:identifier]) {
+            // 重用标识不一致
+            @throw [NSException exceptionWithName:NSInternalInconsistencyException
+                                           reason:[NSString stringWithFormat:@"cell reuse indentifier in nib (%@) does not match the identifier used to register the nib (%@)", nibCell.reuseIdentifier, identifier]
+                                         userInfo:nil];
+        }else {
+            if (nibCell.reuseIdentifier.length <= 0) {
+                [nibCell setValue:identifier forKey:@"reuseIdentifier"];
+            }
+            return nibCell;
+        }
+    }else {
+        @throw [NSException exceptionWithName:NSInternalInconsistencyException
+                                       reason:[NSString stringWithFormat:@"invalid nib registered for identifier (%@) - nib must contain exactly one top level object which must be a UIView instance", identifier]
+                                     userInfo:nil];
+    }
+}
+
+- (GKVideoViewCell *)dequeueReusableCellWithIdentifier:(NSString *)identifier {
     NSMutableSet *cells = self.reusableCells[identifier];
     
-    UIView *cell = cells.anyObject;
+    GKVideoViewCell *cell = cells.anyObject;
     if (cell) {
+        [UIView performWithoutAnimation:^{
+            [cell prepareForReuse];
+        }];
         [cells removeObject:cell];
     }else {
-        Class cellClass = self.cellClasses[identifier];
-        cell = [[cellClass alloc] initWithFrame:self.bounds];
+        if ([self.cellNibs.allKeys containsObject:identifier]) {
+            UINib *nib = self.cellNibs[identifier];
+            cell = [self cellWithNib:nib identifier:identifier];
+        }else {
+            Class class = self.cellClasses[identifier];
+            cell = [[class alloc] initWithReuseIdentifier:identifier];
+        }
     }
     return cell;
 }
 
-- (void)saveReusableCell:(UIView *)cell {
-    NSString *identifier = [self identifierWithClass:cell.class];
+- (void)saveReusableCell:(GKVideoViewCell *)cell {
+    if (!cell) return;
+    NSString *identifier = cell.reuseIdentifier;
     NSMutableSet *cells = self.reusableCells[identifier];
     [cells addObject:cell];
     [cell removeFromSuperview];
     [self.reusableCells setValue:cells forKey:identifier];
 }
 
-- (NSString *)identifierWithClass:(Class)class {
-    __block NSString *identifier = nil;
-    [self.cellClasses enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, Class  _Nonnull obj, BOOL * _Nonnull stop) {
-        if (obj == class) {
-            identifier = key;
-            *stop = YES;
-        }
-    }];
-    return identifier;
-}
-
 #pragma mark - create and update cell
 - (void)createCellsIfNeeded {
-    NSInteger index = 0;
-    if (self.totalCount == 1) {
-        index = 0;
-    }else if (self.totalCount == 2) {
-        index = 1;
-    }else {
-        if (self.defaultIndex == -1 && self.topCell && self.ctrCell && self.btmCell) {
-            if (self.currentIndex == 0) {
-                index = self.currentIndex + 1;
-            }else {
-                if (self.currentCell == self.btmCell) {
-                    index = self.currentIndex - 1;
-                }else {
-                    index = self.currentIndex;
-                }
-            }
+    GKVideoCellUpdateType type = GKVideoCellUpdateType_Top;
+    if (self.totalCount >= 3) {
+        if (self.currentIndex == 0) {
+            type = GKVideoCellUpdateType_Top;
+        }else if ((self.btmCell && self.currentCell == self.btmCell) || (self.currentIndex == self.totalCount - 1)) {
+            type = GKVideoCellUpdateType_Btm;
         }else {
-            if (self.currentIndex == 0) {
-                index = self.currentIndex + 1;
-            }else if (self.currentIndex == self.totalCount - 1) {
-                index = self.currentIndex - 1;
-            }else {
-                index = self.currentIndex;
-            }
+            type = GKVideoCellUpdateType_Ctr;
         }
     }
-    [self createCellWithIndex:index];
+    [self createCellWithType:type index:self.currentIndex];
+}
+
+- (void)createCellWithType:(GKVideoCellUpdateType)type index:(NSInteger)index {
+    if (type == GKVideoCellUpdateType_Top) {
+        [self createTopCellWithIndex:0];
+        if (self.totalCount > 1) {
+            [self createCtrCellWithIndex:1];
+        }
+        if (self.btmCell) self.btmCell = nil;
+    }else if (type == GKVideoCellUpdateType_Ctr) {
+        [self createTopCellWithIndex:index - 1];
+        [self createCtrCellWithIndex:index];
+        [self createBtmCellWithIndex:index + 1];
+    }else if (type == GKVideoCellUpdateType_Btm) {
+        [self createCtrCellWithIndex:index - 1];
+        [self createBtmCellWithIndex:index];
+    }
+    [self setNeedsLayout];
+    [self layoutIfNeeded];
 }
 
 - (void)updateDisplayCell {
-    UIView *cell = nil;
+    GKVideoViewCell *cell = nil;
     if (self.totalCount == 1) {
         cell = self.topCell;
     }else if (self.totalCount == 2) {
@@ -381,10 +445,13 @@
             cell = self.ctrCell;
         }
     }
-    [self willDisplayCell:cell forIndex:self.currentIndex];
-    self.lastWillDisplayCell = nil;
+    
     if (self.isFirstLoad) {
+        [self willDisplayCell:cell forIndex:self.currentIndex];
+        self.lastWillDisplayCell = nil;
+        
         [self didEndScrollingCell:cell];
+        self.isFirstLoad = NO;
     }else {
         if (self.isDecelerating) return;
         if (self.contentOffset.y > 0 && self.contentOffset.y != self.viewHeight * 2) return;
@@ -395,7 +462,7 @@
 - (void)updateDisplayCellWithIndex:(NSInteger)index {
     CGFloat viewH = self.viewHeight;
     
-    UIView *cell = nil;
+    GKVideoViewCell *cell = nil;
     CGFloat offsetY = 0;
     if (self.totalCount == 1) {
         cell = self.topCell;
@@ -450,60 +517,83 @@
     [self updateContentOffset:CGPointMake(0, offsetY)];
 }
 
-- (void)createCellWithIndex:(NSInteger)index {
-    if (self.totalCount == 1) {
-        self.updateCell = self.topCell;
-        self.topCell = [self cellForIndex:0];
-        [self layoutSubviews];
-    }else if (self.totalCount == 2) {
-        self.updateCell = self.topCell;
-        self.topCell = [self cellForIndex:0];
-        self.updateCell = self.ctrCell;
-        self.ctrCell = [self cellForIndex:1];
-        [self layoutSubviews];
-    }else {
-        [self updateCellWithIndex:index];
-    }
+- (void)createTopCellWithIndex:(NSInteger)index {
+    self.updateCell = self.topCell;
+    self.topCell = [self cellForIndex:index];
+    [self addSubview:self.topCell];
 }
 
-- (void)updateCellWithIndex:(NSInteger)index {
-    if (index < 1 || index > self.totalCount - 2) return;
-    self.updateCell = self.topCell;
-    self.topCell = [self cellForIndex:index - 1];
+- (void)createCtrCellWithIndex:(NSInteger)index {
     self.updateCell = self.ctrCell;
     self.ctrCell = [self cellForIndex:index];
-    self.updateCell = self.btmCell;
-    self.btmCell = [self cellForIndex:index + 1];
-    [self layoutSubviews];
+    [self addSubview:self.ctrCell];
 }
 
-- (UIView *)cellForIndex:(NSInteger)index {
+- (void)createBtmCellWithIndex:(NSInteger)index {
+    self.updateCell = self.btmCell;
+    self.btmCell = [self cellForIndex:index];
+    [self addSubview:self.btmCell];
+}
+
+/// 上滑cell
+- (void)updateUpScrollCellWithIndex:(NSInteger)index {
+    if (index < 1 || index > self.totalCount - 2) return;
+    // 上视图放入复用池
+    [self saveReusableCell:self.topCell];
+    // 中视图切换为上视图
+    self.topCell = self.ctrCell;
+    // 下视图切换为中视图
+    self.ctrCell = self.btmCell;
+    // 更新下视图
+    self.btmCell = [self cellForIndex:index + 1];
+    [self addSubview:self.btmCell];
+    [self setNeedsLayout];
+    [self layoutIfNeeded];
+}
+
+/// 下滑cell
+- (void)updateDownScrollCellWithIndex:(NSInteger)index {
+    if (index < 1 || index > self.totalCount - 2) return;
+    // 下视图放入复用池
+    [self saveReusableCell:self.btmCell];
+    // 中视图切换为下视图
+    self.btmCell = self.ctrCell;
+    // 上视图切换为中视图
+    self.ctrCell = self.topCell;
+    // 更新上视图
+    self.topCell = [self cellForIndex:index - 1];
+    [self addSubview:self.topCell];
+    [self setNeedsLayout];
+    [self layoutIfNeeded];
+}
+
+- (GKVideoViewCell *)cellForIndex:(NSInteger)index {
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
     return [self.dataSource scrollView:self cellForRowAtIndexPath:indexPath];
 }
 
 #pragma mark - DisplayCell
+// 延迟更新cell，处理上拉加载更多后的回弹问题
 - (void)delayUpdateCellWithIndex:(NSInteger)index {
     if (self.isDelay) return;
     self.isDelay = YES;
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.4f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         self.isDelay = NO;
-        self.index = index;
         self.lastCount = 0;
-        [self updateContentOffset:CGPointMake(0, self.viewHeight)];
-        
-        // 瞬移大法
-        UIView *tempCell = self.btmCell;
-        self.btmCell = self.ctrCell;
-        self.ctrCell = tempCell;
-        
-        [self updateCellWithIndex:self.index];
-        [self didEndScrollingCell:self.ctrCell];
+        if (index != NSNotFound) {
+            self.index = index;
+            [self updateContentOffset:CGPointMake(0, self.viewHeight)];
+            [self updateUpScrollCellWithIndex:self.index];
+            [self didEndScrollingCell:self.ctrCell];
+        }else {
+            [self didEndScrollingCell:self.currentCell];
+        }
     });
 }
 
 - (void)handleWillDisplayCell {
     if (!self.isDragging) return;
+
     CGFloat offsetY = self.contentOffset.y;
     if (offsetY < self.lastOffsetY) { // 下拉
         if (offsetY < 0) return; // 第一个cell下拉
@@ -525,7 +615,7 @@
     }
 }
 
-- (void)willDisplayCell:(UIView *)cell forIndex:(NSInteger)index {
+- (void)willDisplayCell:(GKVideoViewCell *)cell forIndex:(NSInteger)index {
     if (!cell) return;
     if (self.lastWillDisplayCell == cell) return;
     self.lastWillDisplayCell = cell;
@@ -535,17 +625,17 @@
     }
 }
 
-- (void)didEndDisplayingCell:(UIView *)cell forIndex:(NSInteger)index {
+- (void)didEndDisplayingCell:(GKVideoViewCell *)cell forIndex:(NSInteger)index {
     if ([self.userDelegate respondsToSelector:@selector(scrollView:didEndDisplayingCell:forRowAtIndexPath:)]) {
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
         [self.userDelegate scrollView:self didEndDisplayingCell:cell forRowAtIndexPath:indexPath];
     }
 }
 
-- (void)didEndScrollingCell:(UIView *)cell {
+- (void)didEndScrollingCell:(GKVideoViewCell *)cell {
     // 隐藏cell
     if (self.currentIndex != self.changeIndex) {
-        if (self.currentCell == self.topCell || self.totalCount <= 3) {
+        if (self.totalCount <= 3 || self.isChanging || self.currentIndex == 0 || self.currentIndex == self.totalCount - 1) {
             [self didEndDisplayingCell:self.currentCell forIndex:self.currentIndex];
         }
     }
@@ -554,23 +644,20 @@
     self.currentCell = cell;
     self.currentIndex = self.changeIndex;
     
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        if ([self.userDelegate respondsToSelector:@selector(scrollView:didEndScrollingCell:forRowAtIndexPath:)]) {
-            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:self.currentIndex inSection:0];
-            [self.userDelegate scrollView:self didEndScrollingCell:cell forRowAtIndexPath:indexPath];
-        }
-    });
+    // 更新滑动结束时显示的cell
+    if ([self.userDelegate respondsToSelector:@selector(scrollView:didEndScrollingCell:forRowAtIndexPath:)]) {
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:self.currentIndex inSection:0];
+        [self.userDelegate scrollView:self didEndScrollingCell:cell forRowAtIndexPath:indexPath];
+    }
 }
 
 #pragma mark - update view
 - (CGFloat)viewWidth {
-    CGFloat width = self.bounds.size.width;
-    return width == 0 ? kScreenW : width;
+    return self.bounds.size.width;
 }
 
 - (CGFloat)viewHeight {
-    CGFloat height = self.bounds.size.height;
-    return height == 0 ? kScreenH : height;
+    return self.bounds.size.height;
 }
 
 - (void)updateContentSize:(CGSize)size {
@@ -595,6 +682,7 @@
     if ([self.userDelegate respondsToSelector:@selector(scrollViewDidScroll:)]) {
         [self.userDelegate scrollViewDidScroll:scrollView];
     }
+    if (self.isChanging) return;
     // 处理cell显示
     [self handleWillDisplayCell];
     
@@ -603,7 +691,11 @@
     
     // 小于等于3个，不用处理
     if (self.totalCount <= 3) {
-        self.lastCount = self.totalCount;
+        if (self.lastCount > 0 && self.lastCount < self.totalCount) {
+            [self delayUpdateCellWithIndex:NSNotFound];
+        }else {
+            self.lastCount = self.totalCount;
+        }
         return;
     }
     
@@ -614,12 +706,15 @@
     
     // 上滑到最后一个
     if (self.index > 0 && self.index == self.totalCount - 1 && offsetY > viewH) {
+        if (self.lastCount == 0) {
+            self.lastCount = self.totalCount;
+        }
         return;
     }
     
     // 判断是从中间视图上滑还是下滑
     if (offsetY >= 2 * viewH) { // 上滑
-        if (self.currentCell != self.btmCell) {
+        if (self.currentCell != self.btmCell && (self.isDragging || self.isDecelerating)) {
             [self didEndDisplayingCell:self.currentCell forIndex:self.currentIndex];
         }
         if (self.index == 0) {
@@ -629,7 +724,7 @@
                 self.index = 2;
                 [self updateContentOffset:CGPointMake(0, viewH)];
                 self.changeIndex = self.index;
-                [self updateCellWithIndex:self.index];
+                [self updateUpScrollCellWithIndex:self.index];
             }
         }else {
             if (self.index < self.totalCount - 1) {
@@ -639,7 +734,6 @@
                         [self delayUpdateCellWithIndex:self.lastCount - 1];
                     }else {
                         self.changeIndex = self.index;
-                        [self updateCellWithIndex:self.index - 1];
                         self.lastCount = self.totalCount;
                     }
                 }else {
@@ -648,20 +742,20 @@
                     }else {
                         [self updateContentOffset:CGPointMake(0, viewH)];
                         self.changeIndex = self.index;
-                        [self updateCellWithIndex:self.index];
+                        [self updateUpScrollCellWithIndex:self.index];
                     }
                 }
             }
         }
     }else if (offsetY <= 0) { // 下滑
-        if (self.currentCell != self.topCell) {
+        if (self.currentCell != self.topCell && (self.isDragging || self.isDecelerating)) {
             [self didEndDisplayingCell:self.currentCell forIndex:self.currentIndex];
         }
         self.lastCount = 0;
         if (self.index == 1) {
             self.index -= 1;
             self.changeIndex = self.index;
-            [self updateCellWithIndex:self.index + 1];
+            [self updateDownScrollCellWithIndex:self.index];
         }else {
             if (self.index == self.totalCount - 1) {
                 self.index -= 2;
@@ -670,8 +764,18 @@
             }
             [self updateContentOffset:CGPointMake(0, viewH)];
             self.changeIndex = self.index;
-            [self updateCellWithIndex:self.index];
+            [self updateDownScrollCellWithIndex:self.index];
         }
+    }else {
+        if (self.lastCount > 0 && self.lastCount < self.totalCount) {
+            [self delayUpdateCellWithIndex:NSNotFound];
+        }
+    }
+}
+
+- (void)scrollViewDidZoom:(UIScrollView *)scrollView {
+    if ([self.userDelegate respondsToSelector:@selector(scrollViewDidZoom:)]) {
+        [self.userDelegate scrollViewDidZoom:scrollView];
     }
 }
 
@@ -721,16 +825,18 @@
         self.changeIndex = offsetY / viewH + 0.5;
     }
     
-    UIView *cell = nil;
+    GKVideoViewCell *cell = nil;
     if (offsetY == 0) {
         cell = self.topCell;
     }else if (offsetY == viewH) {
-        if (self.index == 0) {
-            self.index += 1;
-            self.changeIndex = self.index;
-        }else if (self.index == self.totalCount - 1) {
-            self.index -= 1;
-            self.changeIndex = self.index;
+        if (self.totalCount > 3) {
+            if (self.index == 0) {
+                self.index += 1;
+                self.changeIndex = self.index;
+            }else if (self.index == self.totalCount - 1) {
+                self.index -= 1;
+                self.changeIndex = self.index;
+            }
         }
         cell = self.ctrCell;
     }else {
@@ -740,6 +846,57 @@
     }
     if (!cell) return;
     [self didEndScrollingCell:cell];
+    
+    if (self.totalCount >= 3) {
+        if (!self.topCell) {
+            [self createTopCellWithIndex:self.currentIndex - 1];
+            [self setNeedsLayout];
+            [self layoutIfNeeded];
+        }
+        if (!self.btmCell) {
+            [self createBtmCellWithIndex:self.currentIndex + 1];
+            [self setNeedsLayout];
+            [self layoutIfNeeded];
+        }
+    }
+}
+
+- (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
+    if ([self.userDelegate respondsToSelector:@selector(viewForZoomingInScrollView:)]) {
+        return [self.userDelegate viewForZoomingInScrollView:scrollView];
+    }
+    return nil;
+}
+
+- (void)scrollViewWillBeginZooming:(UIScrollView *)scrollView withView:(UIView *)view {
+    if ([self.userDelegate respondsToSelector:@selector(scrollViewWillBeginZooming:withView:)]) {
+        [self.userDelegate scrollViewWillBeginZooming:scrollView withView:view];
+    }
+}
+
+- (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(CGFloat)scale {
+    if ([self.userDelegate respondsToSelector:@selector(scrollViewDidEndZooming:withView:atScale:)]) {
+        [self.userDelegate scrollViewDidEndZooming:scrollView withView:view atScale:scale];
+    }
+}
+
+- (BOOL)scrollViewShouldScrollToTop:(UIScrollView *)scrollView {
+    if ([self.userDelegate respondsToSelector:@selector(scrollViewShouldScrollToTop:)]) {
+        return [self.userDelegate scrollViewShouldScrollToTop:scrollView];
+    }
+    return NO;
+}
+
+- (void)scrollViewDidScrollToTop:(UIScrollView *)scrollView {
+    if ([self.userDelegate respondsToSelector:@selector(scrollViewDidScrollToTop:)]) {
+        [self.userDelegate scrollViewDidScrollToTop:scrollView];
+    }
+}
+
+- (void)scrollViewDidChangeAdjustedContentInset:(UIScrollView *)scrollView {
+    if ([self.userDelegate respondsToSelector:@selector(scrollViewDidChangeAdjustedContentInset:)]) {
+        [self.userDelegate scrollViewDidChangeAdjustedContentInset:scrollView];
+    }
 }
 
 @end

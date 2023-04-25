@@ -16,24 +16,6 @@
 
 @implementation GKVideoPortraitView
 
-@synthesize restarted = _restarted;
-
-- (UIView *)controlView {
-    return self;
-}
-
-- (void)installedControlViewToVideoPlayer:(__kindof SJBaseVideoPlayer *)videoPlayer {
-    
-}
-
-- (void)restartControlLayer {
-    _restarted = YES;
-}
-
-- (void)exitControlLayer {
-    _restarted = NO;
-}
-
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         [self addSubview:self.playBtn];
