@@ -15,7 +15,7 @@ PODS:
   - AFNetworking/UIKit (4.0.1):
     - AFNetworking/NSURLSession
   - GKSliderView (1.0.8)
-  - GKVideoScrollView (1.0.2)
+  - GKVideoScrollView (1.0.3)
   - Masonry (1.1.0)
   - MJExtension (3.4.1)
   - MJRefresh (3.7.5)
@@ -118,7 +118,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   AFNetworking: 3bd23d814e976cd148d7d44c3ab78017b744cd58
   GKSliderView: 3bd9bac3228a761dca494881fa27327d8ecd4629
-  GKVideoScrollView: fc8c41bdb40297abbfd53b060cc59cd6bfd6136b
+  GKVideoScrollView: dacd701a92e4977ea1632b2a0eb1195c2996264b
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   MJExtension: 21c5f6f8c4d5d8844b7ae8fbae08fed0b501f961
   MJRefresh: fdf5e979eb406a0341468932d1dfc8b7f9fce961
