@@ -237,6 +237,22 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
     // 获取总数
     self.totalCount = [self.dataSource numberOfRowsInScrollView:self];
     
+    if (self.totalCount == 0) {
+        [self saveReusableCell:self.topCell];
+        [self saveReusableCell:self.ctrCell];
+        [self saveReusableCell:self.btmCell];
+        self.topCell = nil;
+        self.ctrCell = nil;
+        self.btmCell = nil;
+        [self updateContentSize:CGSizeZero];
+        [self updateContentOffset:CGPointZero];
+        self.defaultIndex = 0;
+        self.isFirstLoad = NO;
+        self.currentIndex = 0;
+        self.changeIndex = 0;
+        self.index = 0;
+    }
+    
     // 容错处理
     if (self.totalCount <= 0) return;
     if (index > self.totalCount - 1) return;
@@ -815,6 +831,9 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
     if ([self.userDelegate respondsToSelector:@selector(scrollViewDidEndScrollingAnimation:)]) {
         [self.userDelegate scrollViewDidEndScrollingAnimation:scrollView];
     }
+    
+    if (self.totalCount <= 0) return;
+    
     // 清空上一次将要显示的cell，保证下一次正常显示
     self.lastWillDisplayCell = nil;
     
@@ -847,7 +866,7 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
     if (!cell) return;
     [self didEndScrollingCell:cell];
     
-    if (self.totalCount >= 3) {
+    if (self.totalCount >= 3 && offsetY == viewH) {
         if (!self.topCell) {
             [self createTopCellWithIndex:self.currentIndex - 1];
             [self setNeedsLayout];
