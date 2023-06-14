@@ -39,6 +39,12 @@
 		790791EF29C06979000D70A5 /* GKLikeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 790791ED29C06979000D70A5 /* GKLikeView.m */; };
 		790791F329C16F12000D70A5 /* UIButton+GKEnlarge.m in Sources */ = {isa = PBXBuildFile; fileRef = 790791F229C16F12000D70A5 /* UIButton+GKEnlarge.m */; };
 		793231DE29A7041D000A61ED /* GKBallLoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 793231D729A7041D000A61ED /* GKBallLoadingView.m */; };
+		795240592A3857FF001ED53C /* GKTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 795240582A3857FF001ED53C /* GKTestViewController.m */; };
+		7952405C2A3860AF001ED53C /* GKTestCell1.m in Sources */ = {isa = PBXBuildFile; fileRef = 7952405B2A3860AF001ED53C /* GKTestCell1.m */; };
+		7952405F2A3860C3001ED53C /* GKTestCell2.m in Sources */ = {isa = PBXBuildFile; fileRef = 7952405E2A3860C3001ED53C /* GKTestCell2.m */; };
+		795240622A3860CC001ED53C /* GKTestCell3.m in Sources */ = {isa = PBXBuildFile; fileRef = 795240612A3860CC001ED53C /* GKTestCell3.m */; };
+		795240652A3860D2001ED53C /* GKTestCell4.m in Sources */ = {isa = PBXBuildFile; fileRef = 795240642A3860D2001ED53C /* GKTestCell4.m */; };
+		795240682A3861A3001ED53C /* GKTestModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 795240672A3861A3001ED53C /* GKTestModel.m */; };
 		7991D49329F766A7002AADCD /* GKVideoWorkListView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7991D49229F766A7002AADCD /* GKVideoWorkListView.m */; };
 		79A5254B29D5854E00CFB32F /* GKRotationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 79A5254A29D5854E00CFB32F /* GKRotationViewController.m */; };
 		79A5254E29D6899D00CFB32F /* GKTestManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 79A5254D29D6899D00CFB32F /* GKTestManager.m */; };
@@ -135,6 +141,18 @@
 		790791F229C16F12000D70A5 /* UIButton+GKEnlarge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIButton+GKEnlarge.m"; sourceTree = "<group>"; };
 		793231D729A7041D000A61ED /* GKBallLoadingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GKBallLoadingView.m; sourceTree = "<group>"; };
 		793231D829A7041D000A61ED /* GKBallLoadingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GKBallLoadingView.h; sourceTree = "<group>"; };
+		795240572A3857FF001ED53C /* GKTestViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GKTestViewController.h; sourceTree = "<group>"; };
+		795240582A3857FF001ED53C /* GKTestViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GKTestViewController.m; sourceTree = "<group>"; };
+		7952405A2A3860AF001ED53C /* GKTestCell1.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GKTestCell1.h; sourceTree = "<group>"; };
+		7952405B2A3860AF001ED53C /* GKTestCell1.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GKTestCell1.m; sourceTree = "<group>"; };
+		7952405D2A3860C3001ED53C /* GKTestCell2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GKTestCell2.h; sourceTree = "<group>"; };
+		7952405E2A3860C3001ED53C /* GKTestCell2.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GKTestCell2.m; sourceTree = "<group>"; };
+		795240602A3860CC001ED53C /* GKTestCell3.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GKTestCell3.h; sourceTree = "<group>"; };
+		795240612A3860CC001ED53C /* GKTestCell3.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GKTestCell3.m; sourceTree = "<group>"; };
+		795240632A3860D2001ED53C /* GKTestCell4.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GKTestCell4.h; sourceTree = "<group>"; };
+		795240642A3860D2001ED53C /* GKTestCell4.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GKTestCell4.m; sourceTree = "<group>"; };
+		795240662A3861A3001ED53C /* GKTestModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GKTestModel.h; sourceTree = "<group>"; };
+		795240672A3861A3001ED53C /* GKTestModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GKTestModel.m; sourceTree = "<group>"; };
 		7991D49129F766A7002AADCD /* GKVideoWorkListView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GKVideoWorkListView.h; sourceTree = "<group>"; };
 		7991D49229F766A7002AADCD /* GKVideoWorkListView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GKVideoWorkListView.m; sourceTree = "<group>"; };
 		79A5254929D5854E00CFB32F /* GKRotationViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GKRotationViewController.h; sourceTree = "<group>"; };
@@ -328,6 +346,7 @@
 				79A5254829D5851800CFB32F /* Rotation */,
 				79A5257A29DC0CFD00CFB32F /* Douyin */,
 				79CFE0DB29F2682400B6A013 /* Kuaishou */,
+				795240562A3857D1001ED53C /* Test */,
 				793231D429A703ED000A61ED /* Common */,
 				790791BD29BF1762000D70A5 /* GKMainViewController.h */,
 				790791BE29BF1762000D70A5 /* GKMainViewController.m */,
@@ -403,6 +422,25 @@
 				793231D729A7041D000A61ED /* GKBallLoadingView.m */,
 			);
 			path = GKLoadingView;
+			sourceTree = "<group>";
+		};
+		795240562A3857D1001ED53C /* Test */ = {
+			isa = PBXGroup;
+			children = (
+				795240572A3857FF001ED53C /* GKTestViewController.h */,
+				795240582A3857FF001ED53C /* GKTestViewController.m */,
+				7952405A2A3860AF001ED53C /* GKTestCell1.h */,
+				7952405B2A3860AF001ED53C /* GKTestCell1.m */,
+				7952405D2A3860C3001ED53C /* GKTestCell2.h */,
+				7952405E2A3860C3001ED53C /* GKTestCell2.m */,
+				795240602A3860CC001ED53C /* GKTestCell3.h */,
+				795240612A3860CC001ED53C /* GKTestCell3.m */,
+				795240632A3860D2001ED53C /* GKTestCell4.h */,
+				795240642A3860D2001ED53C /* GKTestCell4.m */,
+				795240662A3861A3001ED53C /* GKTestModel.h */,
+				795240672A3861A3001ED53C /* GKTestModel.m */,
+			);
+			path = Test;
 			sourceTree = "<group>";
 		};
 		79A5254829D5851800CFB32F /* Rotation */ = {
@@ -708,10 +746,14 @@
 				790791D329BF1DAF000D70A5 /* GKVideoLandscapeView.m in Sources */,
 				79A5256229D6D00D00CFB32F /* GKRotationManager.m in Sources */,
 				79A5256529D6D02A00CFB32F /* GKRotationManager_iOS_9_15.m in Sources */,
+				7952405C2A3860AF001ED53C /* GKTestCell1.m in Sources */,
 				790791C729BF182D000D70A5 /* GKSJPlayerViewController.m in Sources */,
+				795240592A3857FF001ED53C /* GKTestViewController.m in Sources */,
 				79A5256829D6D03900CFB32F /* GKRotationManager_iOS_16_Later.m in Sources */,
 				790791CA29BF18FF000D70A5 /* GKVideoModel.m in Sources */,
+				795240622A3860CC001ED53C /* GKTestCell3.m in Sources */,
 				79A5254E29D6899D00CFB32F /* GKTestManager.m in Sources */,
+				795240682A3861A3001ED53C /* GKTestModel.m in Sources */,
 				790791DC29C04595000D70A5 /* GKZFLandscapeView.m in Sources */,
 				79A5255E29D6AD9800CFB32F /* GKVideoPortriatCell.m in Sources */,
 				790791EF29C06979000D70A5 /* GKLikeView.m in Sources */,
@@ -733,10 +775,12 @@
 				79CFE0E429F28EE900B6A013 /* GKKuaishouLandscapeView.m in Sources */,
 				790791EE29C06979000D70A5 /* GKDoubleLikeView.m in Sources */,
 				790791E229C05E5F000D70A5 /* GKNavigationController.m in Sources */,
+				7952405F2A3860C3001ED53C /* GKTestCell2.m in Sources */,
 				790791BF29BF1762000D70A5 /* GKMainViewController.m in Sources */,
 				790791F329C16F12000D70A5 /* UIButton+GKEnlarge.m in Sources */,
 				790791E829C06576000D70A5 /* GKSJPortraitView.m in Sources */,
 				6003F59A195388D20070C39A /* main.m in Sources */,
+				795240652A3860D2001ED53C /* GKTestCell4.m in Sources */,
 				79A5256D29D6D21D00CFB32F /* GKLandscapeWindow.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

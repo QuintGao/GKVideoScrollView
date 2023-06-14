@@ -56,6 +56,9 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
 // 记录是否在切换页面
 @property (nonatomic, assign) BOOL isChanging;
 
+// 记录是否正在切换到下一个
+@property (nonatomic, assign) BOOL isChangeToNext;
+
 @property (nonatomic, assign) CGRect lastFrame;
 
 // 存放cell标识和对应的nib
@@ -231,12 +234,18 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
 }
 
 - (void)reloadData {
-    // 获取默认索引
-    NSInteger index = self.defaultIndex;
-    self.defaultIndex = -1;
     // 获取总数
     self.totalCount = [self.dataSource numberOfRowsInScrollView:self];
     
+    // 获取默认索引
+    if (self.defaultIndex < 0 || self.defaultIndex >= self.totalCount) {
+        self.defaultIndex = 0;
+    }
+    
+    NSInteger index = self.defaultIndex;
+    self.defaultIndex = -1;
+    
+    // 特殊场景处理：开始有数据刷新后无数据
     if (self.totalCount == 0) {
         [self saveReusableCell:self.topCell];
         [self saveReusableCell:self.ctrCell];
@@ -317,6 +326,7 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
         self.lastWillDisplayCell = nil;
     }
     
+    self.isChangeToNext = YES;
     // 切换
     CGFloat offsetY = self.contentOffset.y;
     offsetY += self.viewHeight;
@@ -418,10 +428,15 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
     if (self.totalCount >= 3) {
         if (self.currentIndex == 0) {
             type = GKVideoCellUpdateType_Top;
-        }else if ((self.btmCell && self.currentCell == self.btmCell) || (self.currentIndex == self.totalCount - 1)) {
+        }else if (self.currentIndex == self.totalCount - 1) {
             type = GKVideoCellUpdateType_Btm;
         }else {
             type = GKVideoCellUpdateType_Ctr;
+            if (self.currentCell == self.btmCell) {
+                if (self.contentOffset.y > self.viewHeight * 2) return;
+                [self updateContentOffset];
+                [self updateUpScrollCellWithIndex:self.currentIndex];
+            }
         }
     }
     [self createCellWithType:type index:self.currentIndex];
@@ -730,7 +745,8 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
     
     // 判断是从中间视图上滑还是下滑
     if (offsetY >= 2 * viewH) { // 上滑
-        if (self.currentCell != self.btmCell && (self.isDragging || self.isDecelerating)) {
+        if (self.currentCell != self.btmCell && (self.isDragging || self.isDecelerating || self.isChangeToNext)) {
+            if (self.isChangeToNext) self.isChangeToNext = NO;
             [self didEndDisplayingCell:self.currentCell forIndex:self.currentIndex];
         }
         if (self.index == 0) {
@@ -764,7 +780,8 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
             }
         }
     }else if (offsetY <= 0) { // 下滑
-        if (self.currentCell != self.topCell && (self.isDragging || self.isDecelerating)) {
+        if (self.currentCell != self.topCell && (self.isDragging || self.isDecelerating || self.isChangeToNext)) {
+            if (self.isChangeToNext) self.isChangeToNext = NO;
             [self didEndDisplayingCell:self.currentCell forIndex:self.currentIndex];
         }
         self.lastCount = 0;

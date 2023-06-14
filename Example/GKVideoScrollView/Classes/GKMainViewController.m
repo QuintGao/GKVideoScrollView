@@ -13,6 +13,7 @@
 #import "GKRotationViewController.h"
 #import "GKDouyinViewController.h"
 #import "GKKuaishouViewController.h"
+#import "GKTestViewController.h"
 
 @interface GKMainViewController ()<UITableViewDataSource, UITableViewDelegate>
 
@@ -52,7 +53,8 @@
                          @"SJVideoPlayer播放",
                          @"列表旋转",
                          @"抖音",
-                         @"快手"];
+                         @"快手",
+                         @"测试"];
 }
 
 #pragma mark - <UITableViewDataSource, UITableViewDelegate>
@@ -80,6 +82,8 @@
         vc = [[GKDouyinViewController alloc] init];
     }else if (indexPath.row == 4) {
         vc = [[GKKuaishouViewController alloc] init];
+    }else if (indexPath.row == 5) {
+        vc = [[GKTestViewController alloc] init];
     }
     [self.navigationController pushViewController:vc animated:YES];
 }
