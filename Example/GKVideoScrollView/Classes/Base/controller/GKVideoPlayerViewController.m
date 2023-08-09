@@ -69,7 +69,7 @@
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     
     // 好看视频
-    NSString *url = [NSString stringWithFormat:@"https://haokan.baidu.com/web/video/feed?tab=recommend&act=pcFeed&pd=pc&num=%zd", self.pageSize];
+    NSString *url = [NSString stringWithFormat:@"https://haokan.baidu.com/haokan/ui-web/video/rec?tab=recommend&act=pcFeed&pd=pc&num=%zd", self.pageSize];
     
     __weak __typeof(self) weakSelf = self;
     [manager GET:url parameters:nil headers:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {

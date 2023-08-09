@@ -39,6 +39,9 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
 // 内容总数
 @property (nonatomic, assign) NSInteger totalCount;
 
+// 记录是否刷新过
+@property (nonatomic, assign) BOOL isLoaded;
+
 // 是否第一次刷新
 @property (nonatomic, assign) BOOL isFirstLoad;
 
@@ -234,16 +237,8 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
 }
 
 - (void)reloadData {
-    // 获取总数
+    // 总数
     self.totalCount = [self.dataSource numberOfRowsInScrollView:self];
-    
-    // 获取默认索引
-    if (self.defaultIndex < 0 || self.defaultIndex >= self.totalCount) {
-        self.defaultIndex = 0;
-    }
-    
-    NSInteger index = self.defaultIndex;
-    self.defaultIndex = -1;
     
     // 特殊场景处理：开始有数据刷新后无数据
     if (self.totalCount == 0) {
@@ -256,21 +251,30 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
         [self updateContentSize:CGSizeZero];
         [self updateContentOffset:CGPointZero];
         self.defaultIndex = 0;
+        self.isLoaded = NO;
         self.isFirstLoad = NO;
         self.currentIndex = 0;
         self.changeIndex = 0;
         self.index = 0;
     }
     
-    // 容错处理
     if (self.totalCount <= 0) return;
-    if (index > self.totalCount - 1) return;
     
-    if (index == -1) {
+    // 索引
+    if (self.defaultIndex < 0 || self.defaultIndex >= self.totalCount) {
+        @throw [NSException exceptionWithName:NSInternalInconsistencyException
+                                       reason:@"please set defaultIndex correctly"
+                                     userInfo:nil];
+    }
+    NSInteger index = self.defaultIndex;
+    
+    // 加载cell
+    if (self.isLoaded) {
         [self createCellsIfNeeded];
         [self updateContentSize];
         [self updateDisplayCell];
     }else {
+        self.isLoaded = YES;
         self.isFirstLoad = YES;
         self.index = index;
         self.currentIndex = index;
@@ -448,7 +452,10 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
         if (self.totalCount > 1) {
             [self createCtrCellWithIndex:1];
         }
-        if (self.btmCell) self.btmCell = nil;
+        if (self.btmCell) {
+            [self saveReusableCell:self.btmCell];
+            self.btmCell = nil;
+        }
     }else if (type == GKVideoCellUpdateType_Ctr) {
         [self createTopCellWithIndex:index - 1];
         [self createCtrCellWithIndex:index];
