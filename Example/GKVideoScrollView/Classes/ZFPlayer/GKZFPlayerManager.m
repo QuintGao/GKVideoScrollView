@@ -90,6 +90,7 @@
 }
 
 - (void)playVideoWithCell:(GKVideoCell *)cell index:(NSInteger)index {
+    NSLog(@"播放----%zd", index);
     GKVideoModel *model = self.dataSource[index];
     
     [self.landscapeView loadData:model];
@@ -101,6 +102,7 @@
     
     // 设置视频封面图
     id<ZFPlayerMediaPlayback> manager = self.player.currentPlayerManager;
+    manager.view.coverImageView.image = nil;
     [manager.view.coverImageView sd_setImageWithURL:[NSURL URLWithString:model.poster_small]];
     
     // 播放内容一致，不做处理
@@ -112,6 +114,7 @@
 }
 
 - (void)stopVideoWithCell:(GKVideoCell *)cell index:(NSInteger)index {
+    NSLog(@"停止---%zd", index);
     GKVideoModel *model = self.dataSource[index];
     
     // 判断播放内容是否一致

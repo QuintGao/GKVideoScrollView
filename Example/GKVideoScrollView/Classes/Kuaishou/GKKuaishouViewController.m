@@ -29,6 +29,13 @@
     [self.view addGestureRecognizer:self.panGesture];
 }
 
+- (void)initUI {
+    [super initUI];
+    
+    [self.view addSubview:self.manager.workListView];
+    self.manager.workListView.frame = CGRectMake(self.view.bounds.size.width, 80, 62, self.view.bounds.size.height - 160);
+}
+
 #pragma mark - UIGestureRecognizerDelegate
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
     if (gestureRecognizer == self.panGesture) {

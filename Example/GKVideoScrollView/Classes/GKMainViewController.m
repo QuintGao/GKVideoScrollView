@@ -14,6 +14,7 @@
 #import "GKDouyinViewController.h"
 #import "GKKuaishouViewController.h"
 #import "GKTestViewController.h"
+#import "GKTableViewController.h"
 
 @interface GKMainViewController ()<UITableViewDataSource, UITableViewDelegate>
 
@@ -32,6 +33,9 @@
 }
 
 - (void)initUI {
+    
+    self.navigationController.gk_openScrollLeftPush = YES;
+    
     [self.view addSubview:self.tableView];
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.equalTo(self.view);
@@ -84,6 +88,8 @@
         vc = [[GKKuaishouViewController alloc] init];
     }else if (indexPath.row == 5) {
         vc = [[GKTestViewController alloc] init];
+    }else if (indexPath.row == 6) {
+        vc = [[GKTableViewController alloc] init];
     }
     [self.navigationController pushViewController:vc animated:YES];
 }

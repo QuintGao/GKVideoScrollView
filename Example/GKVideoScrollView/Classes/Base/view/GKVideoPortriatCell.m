@@ -29,6 +29,13 @@
 
 @implementation GKVideoPortriatCell
 
+- (void)prepareForReuse {
+    [super prepareForReuse];
+    
+    self.sliderView.value = 0;
+    self.coverImgView.image = nil;
+}
+
 - (void)initUI {
     [super initUI];
     

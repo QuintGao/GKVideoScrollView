@@ -14,6 +14,7 @@ target 'Example' do
   pod 'ZFPlayer/AVPlayer'
   pod 'SJVideoPlayer'
   pod 'GKSliderView'
+  pod 'GKNavigationBar/GestureHandle'
   
 end
 

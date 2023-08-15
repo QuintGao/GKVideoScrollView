@@ -268,6 +268,7 @@ NSString * const MJRefreshHeaderRefreshingBoundsKey = @"MJRefreshHeaderRefreshin
             CGPoint offset = self.scrollView.contentOffset;
             offset.y = -top;
             [self.scrollView setContentOffset:offset animated:NO];
+            NSLog(@"%f", offset.y);
          }
         self.scrollView.userInteractionEnabled = YES;
         [self executeRefreshingCallback];

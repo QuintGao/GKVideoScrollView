@@ -8,8 +8,9 @@
 
 #import "GKDouyinViewController.h"
 #import "GKDouyinManager.h"
+#import "GKDouyinDetailViewController.h"
 
-@interface GKDouyinViewController ()
+@interface GKDouyinViewController ()<GKViewControllerPushDelegate>
 
 @end
 
@@ -21,6 +22,13 @@
     [super viewDidLoad];
     
     self.navigationItem.title = @"抖音";
+    self.gk_pushDelegate = self;
+}
+
+#pragma mark - GKViewControllerPushDelegate
+- (void)pushToNextViewController {
+    GKDouyinDetailViewController *detailVC = [[GKDouyinDetailViewController alloc] init];
+    [self.navigationController pushViewController:detailVC animated:YES];
 }
 
 @end

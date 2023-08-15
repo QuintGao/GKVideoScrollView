@@ -40,10 +40,8 @@
     self.view.backgroundColor = UIColor.blackColor;
     
     [self.view addSubview:self.manager.portraitScrollView];
-    [self.view addSubview:self.manager.workListView];
     
     self.manager.portraitScrollView.frame = self.view.bounds;
-    self.manager.workListView.frame = CGRectMake(self.view.bounds.size.width, 80, 62, self.view.bounds.size.height - 160);
 }
 
 - (void)setupRefresh {

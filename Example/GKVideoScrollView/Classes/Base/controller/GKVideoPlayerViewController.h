@@ -13,6 +13,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface GKVideoPlayerViewController : UIViewController
 
+- (void)initUI;
+
 @property (nonatomic, strong) GKVideoManager *manager;
 
 - (void)likeVideoWithModel:(nullable GKVideoModel *)model;

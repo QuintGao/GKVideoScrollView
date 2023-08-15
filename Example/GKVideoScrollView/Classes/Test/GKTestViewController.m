@@ -91,13 +91,12 @@
     self.pageControl.selectedSegmentIndex = self.pageSize - 1;
     
     // 设置默认索引
-    self.scrollView.defaultIndex = 4;
+    self.scrollView.defaultIndex = 0;
     
     __weak __typeof(self) weakSelf = self;
     self.scrollView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
         __strong __typeof(weakSelf) self = weakSelf;
         self.page = 1;
-        [self.dataSources removeAllObjects];
         [self requestData];
     }];
     
@@ -110,7 +109,11 @@
 
 - (void)requestData {
     // 模拟数据请求
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        if (self.page == 1) {
+            [self.dataSources removeAllObjects]; 
+        }
+        
         for (NSInteger i = 0; i < self.pageSize; i++) {
             GKTestModel *model = [[GKTestModel alloc] init];
             if (self.page == 1) {
@@ -139,6 +142,7 @@
 
 - (void)randomAction {
     NSInteger random = [self randomIndex];
+    random = 2;
     [self.scrollView scrollToPageWithIndex:random];
 }
 
@@ -177,21 +181,21 @@
 
 #pragma mark - GKVideoScrollViewDelegate
 - (void)scrollView:(GKVideoScrollView *)scrollView willDisplayCell:(GKVideoViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSLog(@"即将显示cell-----%zd", indexPath.row);
+    NSLog(@"即将显示cell-----%zd---%@", indexPath.row, cell);
 }
 
 - (void)scrollView:(GKVideoScrollView *)scrollView didEndDisplayingCell:(GKVideoViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSLog(@"结束显示cell-----%zd", indexPath.row);
+    NSLog(@"结束显示cell-----%zd---%@", indexPath.row, cell);
 }
 
 - (void)scrollView:(GKVideoScrollView *)scrollView didEndScrollingCell:(GKVideoViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSLog(@"滑动结束显示-----%zd", indexPath.row);
+    NSLog(@"滑动结束显示-----%zd---%@", indexPath.row, cell);
     
-    // 模拟自动加载
-    if (self.dataSources.count - self.scrollView.currentIndex <= 5) {
-        self.page++;
-        [self requestData];
-    }
+//    // 模拟自动加载
+//    if (self.dataSources.count - self.scrollView.currentIndex <= 5) {
+//        self.page++;
+//        [self requestData];
+//    }
 }
 
 #pragma mark - Lazy

@@ -177,6 +177,7 @@ code_sign_if_enabled() {
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/AFNetworking/AFNetworking.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/GKNavigationBar/GKNavigationBar.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/GKSliderView/GKSliderView.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/GKVideoScrollView/GKVideoScrollView.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/MJExtension/MJExtension.framework"
@@ -190,6 +191,7 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/AFNetworking/AFNetworking.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/GKNavigationBar/GKNavigationBar.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/GKSliderView/GKSliderView.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/GKVideoScrollView/GKVideoScrollView.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/MJExtension/MJExtension.framework"
