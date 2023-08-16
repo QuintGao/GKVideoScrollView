@@ -8,14 +8,17 @@
 
 #import "GKKuaishouViewController.h"
 #import "GKKuaishouManager.h"
+#import "GKKuaishouDetailViewController.h"
 
-@interface GKKuaishouViewController ()<UIGestureRecognizerDelegate>
+@interface GKKuaishouViewController ()<UIGestureRecognizerDelegate, GKViewControllerPushDelegate>
 
 @property (nonatomic, strong) UIPanGestureRecognizer *panGesture;
 
 @property (nonatomic, assign) CGFloat beginX;
 
 @property (nonatomic, assign) CGFloat translationX;
+
+@property (nonatomic, assign) BOOL isWorkListShow;
 
 @end
 
@@ -27,6 +30,7 @@
     
     self.navigationItem.title = @"快手";
     [self.view addGestureRecognizer:self.panGesture];
+    self.gk_pushDelegate = self;
 }
 
 - (void)initUI {
@@ -36,15 +40,36 @@
     self.manager.workListView.frame = CGRectMake(self.view.bounds.size.width, 80, 62, self.view.bounds.size.height - 160);
 }
 
+#pragma mark - GKViewControllerPushDelegate
+- (void)pushToNextViewController {
+    if (!self.isWorkListShow) return;
+    GKKuaishouDetailViewController *vc = [[GKKuaishouDetailViewController alloc] init];
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+#pragma mark - GKGesturePopHandlerProtocol
+- (BOOL)navigationShouldPopOnGesture {
+    return !self.isWorkListShow;
+}
+
+- (BOOL)popGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
+    return YES;
+}
+
 #pragma mark - UIGestureRecognizerDelegate
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
+    NSLog(@"%@", gestureRecognizer);
     if (gestureRecognizer == self.panGesture) {
         UIPanGestureRecognizer *panGesture = (UIPanGestureRecognizer *)gestureRecognizer;
         CGPoint transition = [panGesture translationInView:panGesture.view];
+        NSLog(@"%f", transition.x);
         if (transition.x < 0) {
             
         }else if (transition.x > 0) {
-//            return NO;
+            if (self.isWorkListShow) {
+                return YES;
+            }
+            return NO;
         }else {
             return NO;
         }
@@ -132,9 +157,8 @@
             CGRect frame = self.manager.workListView.frame;
             frame.origin.x = width - maxW;
             self.manager.workListView.frame = frame;
-            
             self.manager.portraitScrollView.frame = CGRectMake(0, (height - frame.size.height) / 2, frame.origin.x, frame.size.height);
-            
+            self.isWorkListShow = YES;
         }];
     }else {
         [UIView animateWithDuration:0.2 animations:^{
@@ -142,6 +166,7 @@
             frame.origin.x = width;
             self.manager.workListView.frame = frame;
             self.manager.portraitScrollView.frame = CGRectMake(0, 0, width, height);
+            self.isWorkListShow = NO;
         }];
     }
 }

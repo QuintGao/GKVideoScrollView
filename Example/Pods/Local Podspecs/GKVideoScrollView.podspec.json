@@ -1,6 +1,6 @@
 {
   "name": "GKVideoScrollView",
-  "version": "1.0.8",
+  "version": "1.0.7",
   "summary": "iOS仿抖音等上下滑动切换内容，使用方便类似UITableView，可支持多种cell切换",
   "homepage": "https://github.com/QuintGao/GKVideoScrollView",
   "license": "MIT",
@@ -13,7 +13,7 @@
   },
   "source": {
     "git": "https://github.com/QuintGao/GKVideoScrollView.git",
-    "tag": "1.0.8"
+    "tag": "1.0.7"
   },
   "source_files": "GKVideoScrollView/*.{h,m}"
 }

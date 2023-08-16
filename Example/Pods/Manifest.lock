@@ -14,15 +14,15 @@ PODS:
   - AFNetworking/Serialization (4.0.1)
   - AFNetworking/UIKit (4.0.1):
     - AFNetworking/NSURLSession
-  - GKNavigationBar/GestureHandle (1.8.6)
-  - GKSliderView (1.0.8)
-  - GKVideoScrollView (1.0.8)
+  - GKNavigationBar/GestureHandle (1.8.7)
+  - GKSliderView (1.1.0)
+  - GKVideoScrollView (1.0.7)
   - Masonry (1.1.0)
   - MJExtension (3.4.1)
   - MJRefresh (3.7.5)
-  - SDWebImage (5.15.5):
-    - SDWebImage/Core (= 5.15.5)
-  - SDWebImage/Core (5.15.5)
+  - SDWebImage (5.17.0):
+    - SDWebImage/Core (= 5.17.0)
+  - SDWebImage/Core (5.17.0)
   - SJBaseVideoPlayer (3.7.6):
     - Masonry
     - SJBaseVideoPlayer/AVPlayer (= 3.7.6)
@@ -120,13 +120,13 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   AFNetworking: 3bd23d814e976cd148d7d44c3ab78017b744cd58
-  GKNavigationBar: 584621aee729a2eb8bd8e6b71909657b484a96f2
-  GKSliderView: 3bd9bac3228a761dca494881fa27327d8ecd4629
-  GKVideoScrollView: e2635dce73eb8cedc71b3f496318a992cd16ead7
+  GKNavigationBar: 4ec3fbe0af0f758c6c53de10da3bc4086801afd2
+  GKSliderView: b5fc3b68bbfdb05ee403303377921d6564de61a9
+  GKVideoScrollView: 2205453bbfd78c440ceb02c954cc9b28e15461df
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   MJExtension: 21c5f6f8c4d5d8844b7ae8fbae08fed0b501f961
   MJRefresh: fdf5e979eb406a0341468932d1dfc8b7f9fce961
-  SDWebImage: fd7e1a22f00303e058058278639bf6196ee431fe
+  SDWebImage: 750adf017a315a280c60fde706ab1e552a3ae4e9
   SJBaseVideoPlayer: f15debaa8c1e27b63bdefc8caeec515e9c71d079
   SJUIKit: a40111941e408cc17d4c1c23495aa92999e814b0
   SJVideoPlayer: 4f09814f58522e0975cb2dccfda925f6c8643467

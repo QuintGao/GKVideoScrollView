@@ -91,7 +91,7 @@
     self.pageControl.selectedSegmentIndex = self.pageSize - 1;
     
     // 设置默认索引
-    self.scrollView.defaultIndex = 0;
+    self.scrollView.defaultIndex = 3;
     
     __weak __typeof(self) weakSelf = self;
     self.scrollView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
@@ -109,9 +109,9 @@
 
 - (void)requestData {
     // 模拟数据请求
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.45f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         if (self.page == 1) {
-            [self.dataSources removeAllObjects]; 
+            [self.dataSources removeAllObjects];
         }
         
         for (NSInteger i = 0; i < self.pageSize; i++) {
@@ -142,7 +142,6 @@
 
 - (void)randomAction {
     NSInteger random = [self randomIndex];
-    random = 2;
     [self.scrollView scrollToPageWithIndex:random];
 }
 

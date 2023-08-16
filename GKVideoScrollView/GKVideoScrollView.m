@@ -323,10 +323,13 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
     self.changeIndex = self.currentIndex + 1;
     // 即将显示
     GKVideoViewCell *cell = nil;
+    CGFloat offsetY = 0;
     if (self.currentCell == self.topCell) {
         cell = self.ctrCell;
+        offsetY = self.viewHeight;
     }else if (self.currentCell == self.ctrCell) {
         cell = self.btmCell;
+        offsetY = self.viewHeight * 2;
     }
     if (cell) {
         [self willDisplayCell:cell forIndex:self.changeIndex];
@@ -334,9 +337,8 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
     }
     
     self.isChangeToNext = YES;
+    
     // 切换
-    CGFloat offsetY = self.contentOffset.y;
-    offsetY += self.viewHeight;
     [self setContentOffset:CGPointMake(0, offsetY) animated:YES];
 }
 
@@ -432,21 +434,22 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
 #pragma mark - create and update cell
 - (void)createCellsIfNeeded {
     GKVideoCellUpdateType type = GKVideoCellUpdateType_Top;
+    NSInteger index = self.changeIndex;
     if (self.totalCount >= 3) {
-        if (self.currentIndex == 0) {
+        if (index == 0) {
             type = GKVideoCellUpdateType_Top;
-        }else if (self.currentIndex == self.totalCount - 1) {
+        }else if (index == self.totalCount - 1) {
             type = GKVideoCellUpdateType_Btm;
         }else {
             type = GKVideoCellUpdateType_Ctr;
-            if (self.currentCell == self.btmCell) {
+            if (self.currentCell && self.currentCell == self.btmCell) {
                 if (self.contentOffset.y > self.viewHeight * 2) return;
                 [self updateContentOffset];
-                [self updateUpScrollCellWithIndex:self.currentIndex];
+                [self updateUpScrollCellWithIndex:index];
             }
         }
     }
-    [self createCellWithType:type index:self.currentIndex];
+    [self createCellWithType:type index:index];
 }
 
 - (void)createCellWithType:(GKVideoCellUpdateType)type index:(NSInteger)index {
@@ -455,14 +458,20 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
         if (self.totalCount > 1) {
             [self createCtrCellWithIndex:1];
         }
-        if (self.btmCell) {
+        if (self.btmCell && self.changeIndex == self.currentIndex) {
             [self saveReusableCell:self.btmCell];
             self.btmCell = nil;
         }
     }else if (type == GKVideoCellUpdateType_Ctr) {
-        [self createTopCellWithIndex:index - 1];
-        [self createCtrCellWithIndex:index];
-        [self createBtmCellWithIndex:index + 1];
+        if (self.contentOffset.y > self.viewHeight * 2) {
+            [self createTopCellWithIndex:index - 2];
+            [self createCtrCellWithIndex:index - 1];
+            [self createBtmCellWithIndex:index];
+        }else {
+            [self createTopCellWithIndex:index - 1];
+            [self createCtrCellWithIndex:index];
+            [self createBtmCellWithIndex:index + 1];
+        }
     }else if (type == GKVideoCellUpdateType_Btm) {
         [self createCtrCellWithIndex:index - 1];
         [self createBtmCellWithIndex:index];
@@ -701,6 +710,16 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
         self.changeIndex = self.totalCount - 1;
     }
     
+    // 快速滑动处理
+    if (cell && self.lastWillDisplayCell) {
+        if (cell != self.lastWillDisplayCell && self.currentIndex != self.changeIndex) {
+            [self willDisplayCell:cell forIndex:self.changeIndex];
+        }
+    }
+    // 清空上一次将要显示的cell，保证下一次正常显示
+    self.lastWillDisplayCell = nil;
+    self.lastEndDisplayCell = nil;
+    
     // 隐藏cell
     if (self.currentIndex != self.changeIndex) {
         if (self.totalCount <= 3 || self.isChanging || self.currentIndex == 0 || self.currentIndex == self.totalCount - 1) {
@@ -902,8 +921,8 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
     CGFloat viewH = self.viewHeight;
     
     if (offsetY > 0 && offsetY < viewH) {
-        [self updateContentOffset:CGPointZero];
-        [self scrollViewDidEndScrollingAnimation:self];
+        [self setContentOffset:CGPointZero animated:YES];
+        return;
     }
     
     if (self.totalCount <= 3) {
@@ -924,20 +943,11 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
             }
         }
         cell = self.ctrCell;
-    }else {
+    }else if (offsetY == 2 * viewH) {
         if (!self.isDelay) {
             cell = self.btmCell;
         }
     }
-    
-    if (cell && self.lastWillDisplayCell) {
-        if (cell != self.lastWillDisplayCell) {
-            [self willDisplayCell:cell forIndex:self.changeIndex];
-        }
-    }
-    // 清空上一次将要显示的cell，保证下一次正常显示
-    self.lastWillDisplayCell = nil;
-    self.lastEndDisplayCell = nil;
     
     if (!cell) return;
     [self didEndScrollingCell:cell];

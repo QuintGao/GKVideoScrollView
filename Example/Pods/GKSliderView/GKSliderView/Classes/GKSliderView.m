@@ -58,17 +58,20 @@
     [self.indicatorView stopAnimating];
 }
 
+- (CGRect)enlargedRect {
+    return CGRectMake(self.bounds.origin.x - self.enlargeEdge.left,
+                      self.bounds.origin.y - self.enlargeEdge.top,
+                      self.bounds.size.width + self.enlargeEdge.left + self.enlargeEdge.right,
+                      self.bounds.size.height + self.enlargeEdge.top + self.enlargeEdge.bottom);
+}
+
 // 重写此方法将按钮的点击范围扩大
 - (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event {
-    CGRect bounds = self.bounds;
-    
-    // 扩大点击区域
-    if (self.enlargeClickRange) {
-        bounds = CGRectInset(bounds, -20, -20);
+    CGRect rect = [self enlargedRect];
+    if (CGRectEqualToRect(rect, self.bounds)) {
+        return [super pointInside:point withEvent:event];
     }
-    
-    // 若点击的点在新的bounds里面。就返回yes
-    return CGRectContainsPoint(bounds, point);
+    return CGRectContainsPoint(rect, point);
 }
 
 @end
@@ -156,7 +159,11 @@
 
 @property (nonatomic, strong) UITapGestureRecognizer *tapGesture;
 
+@property (nonatomic, strong) UIPanGestureRecognizer *panGesture;
+
 @property (nonatomic, assign) CGPoint touchPoint;
+
+@property (nonatomic, assign) BOOL isDragging;
 
 @end
 
@@ -217,11 +224,15 @@
     if ([self.previewDelegate respondsToSelector:@selector(sliderViewPreviewMargin:)]) {
         margin = [self.previewDelegate sliderViewPreviewMargin:self];
     }
+    
     CGPoint point = [self convertPoint:self.sliderBtn.center toView:self.superview];
+    if (!self.isPreviewChangePosition) {
+        point.x = self.superview.frame.size.width * 0.5;
+    }
     
     if (self.preview) {
         self.preview.gk_centerX = point.x;
-        self.preview.gk_centerY = point.y - self.sliderBtn.gk_height * 0.5 - self.preview.gk_height * 0.5 - margin;
+        self.preview.gk_centerY = point.y - self.preview.gk_height - margin;
     }
 }
 
@@ -229,6 +240,12 @@
  添加子视图
  */
 - (void)addSubViews {
+    self.isSliderAllowTapped      = YES;
+    self.isSliderBlockAllowTapped = YES;
+    self.isPreviewChangePosition  = YES;
+    self.sliderBlockEnlargeEdge   = UIEdgeInsetsMake(10, 10, 10, 10);
+    self.sliderBtn.enlargeEdge = self.sliderBlockEnlargeEdge;
+    
     self.backgroundColor = [UIColor clearColor];
     
     [self addSubview:self.bgProgressView];
@@ -241,9 +258,6 @@
     self.bufferProgressView.frame = self.bgProgressView.frame;
     self.sliderProgressView.frame = self.bgProgressView.frame;
     self.sliderBtn.frame          = CGRectMake(0, 0, kSliderBtnWH, kSliderBtnWH);
-    
-    self.isSliderAllowTapped      = YES;
-    self.isSliderBlockAllowTapped = YES;
 }
 
 #pragma mark - Setter
@@ -382,6 +396,22 @@
     }
 }
 
+- (void)setIsSliderAllowDragged:(BOOL)isSliderAllowDragged {
+    _isSliderAllowDragged = isSliderAllowDragged;
+    
+    if (isSliderAllowDragged) {
+        self.sliderBtn.userInteractionEnabled = NO;
+        [self addGestureRecognizer:self.panGesture];
+    }else {
+        if (self.isSliderBlockAllowTapped) {
+            self.sliderBtn.userInteractionEnabled = YES;
+        }
+        if ([self.gestureRecognizers containsObject:self.panGesture]) {
+            [self removeGestureRecognizer:self.panGesture];
+        }
+    }
+}
+
 - (void)setSliderHeight:(CGFloat)sliderHeight {
     _sliderHeight = sliderHeight;
     
@@ -399,7 +429,17 @@
 - (void)setIsSliderBlockAllowTapped:(BOOL)isSliderBlockAllowTapped {
     _isSliderBlockAllowTapped = isSliderBlockAllowTapped;
     
-    self.sliderBtn.userInteractionEnabled = isSliderBlockAllowTapped;
+    if (self.isSliderAllowDragged) {
+        self.sliderBtn.userInteractionEnabled = NO;
+    }else {
+        self.sliderBtn.userInteractionEnabled = isSliderBlockAllowTapped;
+    }
+}
+
+- (void)setSliderBlockEnlargeEdge:(UIEdgeInsets)sliderBlockEnlargeEdge {
+    _sliderBlockEnlargeEdge = sliderBlockEnlargeEdge;
+    
+    self.sliderBtn.enlargeEdge = sliderBlockEnlargeEdge;
 }
 
 - (void)setupBufferRoundCorner {
@@ -450,33 +490,11 @@
 #pragma mark - User Action
 - (void)sliderBtnTouchBegin:(UIButton *)btn event:(UIEvent *)event {
     self.touchPoint = [event.allTouches.anyObject locationInView:self];
-    if (self.preview) {
-        self.preview.hidden = NO;
-    }
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-    if ([self.delegate respondsToSelector:@selector(sliderTouchBegan:)]) {
-        [self.delegate sliderTouchBegan:self.value];
-    }
-#pragma clang diagnostic pop
-    if ([self.delegate respondsToSelector:@selector(sliderView:touchBegan:)]) {
-        [self.delegate sliderView:self touchBegan:self.value];
-    }
+    [self sliderTouchBegin:btn];
 }
 
 - (void)sliderBtnTouchEnded:(UIButton *)btn {
-    if (self.preview) {
-        self.preview.hidden = YES;
-    }
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-    if ([self.delegate respondsToSelector:@selector(sliderTouchEnded:)]) {
-        [self.delegate sliderTouchEnded:self.value];
-    }
-#pragma clang diagnostic pop
-    if ([self.delegate respondsToSelector:@selector(sliderView:touchEnded:)]) {
-        [self.delegate sliderView:self touchEnded:self.value];
-    }
+    [self sliderTouchEnded:btn];
 }
 
 - (void)sliderBtnDragMoving:(UIButton *)btn event:(UIEvent *)event {
@@ -485,29 +503,10 @@
     // 修复真机测试时按下就触发移动方法，导致的bug
     if (CGPointEqualToPoint(self.touchPoint, point)) return;
     
-    // 获取进度值 由于btn是从 0-(self.width - btn.width)
-    float value = (point.x - self.ignoreMargin - btn.gk_width * 0.5) / (self.gk_width - 2 * self.ignoreMargin - btn.gk_width);
-    
-    // value的值需在0-1之间
-    value = value >= 1.0 ? 1.0 : value <= 0.0 ? 0.0 : value;
-    
-    [self setValue:value];
-    
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-    if ([self.delegate respondsToSelector:@selector(sliderValueChanged:)]) {
-        [self.delegate sliderValueChanged:value];
-    }
-#pragma clang diagnostic pop
-    if ([self.delegate respondsToSelector:@selector(sliderView:valueChanged:)]) {
-        [self.delegate sliderView:self valueChanged:value];
-    }
-    if ([self.previewDelegate respondsToSelector:@selector(sliderView:preview:valueChanged:)]) {
-        [self.previewDelegate sliderView:self preview:self.preview valueChanged:value];
-    }
+    [self sliderTouchMoving:btn point:point];
 }
 
-- (void)tapped:(UITapGestureRecognizer *)tap {
+- (void)handleTap:(UITapGestureRecognizer *)tap {
     CGPoint point = [tap locationInView:self];
     if (CGRectContainsPoint(self.sliderBtn.frame, point)) return;
     
@@ -517,14 +516,69 @@
     
     [self setValue:value];
     
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-    if ([self.delegate respondsToSelector:@selector(sliderTapped:)]) {
-        [self.delegate sliderTapped:value];
-    }
-#pragma clang diagnostic pop
     if ([self.delegate respondsToSelector:@selector(sliderView:tapped:)]) {
         [self.delegate sliderView:self tapped:value];
+    }
+}
+
+- (void)handlePan:(UIPanGestureRecognizer *)pan {
+    switch (pan.state) {
+        case UIGestureRecognizerStateBegan:
+            [self sliderTouchBegin:self.sliderBtn];
+            break;
+        case UIGestureRecognizerStateChanged:
+            [self sliderTouchMoving:self.sliderBtn point:[pan locationInView:pan.view]];
+            break;
+        case UIGestureRecognizerStateEnded:
+            [self sliderTouchEnded:self.sliderBtn];
+            break;
+        default:
+            break;
+    }
+}
+
+- (void)sliderTouchBegin:(UIButton *)btn {
+    self.isDragging = YES;
+    
+    if ([self.delegate respondsToSelector:@selector(sliderView:touchBegan:)]) {
+        [self.delegate sliderView:self touchBegan:self.value];
+    }
+    
+    if (self.preview) {
+        self.preview.hidden = NO;
+    }
+}
+
+- (void)sliderTouchMoving:(UIButton *)btn point:(CGPoint)touchPoint {
+    // 点击的位置
+    CGPoint point = touchPoint;
+    
+    // 获取进度值 由于btn是从 0-(self.width - btn.width)
+    float value = (point.x - self.ignoreMargin - btn.gk_width * 0.5) / (self.gk_width - 2 * self.ignoreMargin - btn.gk_width);
+    
+    // value的值需在0-1之间
+    value = value >= 1.0 ? 1.0 : value <= 0.0 ? 0.0 : value;
+    
+    [self setValue:value];
+    
+    if ([self.delegate respondsToSelector:@selector(sliderView:valueChanged:)]) {
+        [self.delegate sliderView:self valueChanged:value];
+    }
+    
+    if ([self.previewDelegate respondsToSelector:@selector(sliderView:preview:valueChanged:)]) {
+        [self.previewDelegate sliderView:self preview:self.preview valueChanged:value];
+    }
+}
+
+- (void)sliderTouchEnded:(UIButton *)btn {
+    self.isDragging = NO;
+    
+    if ([self.delegate respondsToSelector:@selector(sliderView:touchEnded:)]) {
+        [self.delegate sliderView:self touchEnded:self.value];
+    }
+    
+    if (self.preview) {
+        self.preview.hidden = YES;
     }
 }
 
@@ -568,16 +622,22 @@
         [_sliderBtn addTarget:self action:@selector(sliderBtnTouchEnded:) forControlEvents:UIControlEventTouchUpOutside];
         [_sliderBtn addTarget:self action:@selector(sliderBtnDragMoving:event:) forControlEvents:UIControlEventTouchDragInside];
         [_sliderBtn addTarget:self action:@selector(sliderBtnDragMoving:event:) forControlEvents:UIControlEventTouchDragOutside];
-        _sliderBtn.enlargeClickRange = YES;
     }
     return _sliderBtn;
 }
 
 - (UITapGestureRecognizer *)tapGesture {
     if (!_tapGesture) {
-        _tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapped:)];
+        _tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
     }
     return _tapGesture;
+}
+
+- (UIPanGestureRecognizer *)panGesture {
+    if (!_panGesture) {
+        _panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
+    }
+    return _panGesture;
 }
 
 @end
