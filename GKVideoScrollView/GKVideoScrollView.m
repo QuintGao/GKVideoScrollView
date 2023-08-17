@@ -840,6 +840,7 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
                     if (self.lastCount > 0 && self.lastCount < self.totalCount) {
                         [self delayUpdateCellWithIndex:(self.index == 2 ? 2 : self.lastCount - 1)];
                     }else {
+                        if (self.isDelay) return;
                         [self updateContentOffset:CGPointMake(0, viewH)];
                         self.changeIndex = self.index;
                         [self updateUpScrollCellWithIndex:self.index];
@@ -933,7 +934,7 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
     GKVideoViewCell *cell = nil;
     if (offsetY == 0) {
         cell = self.topCell;
-    }else if (offsetY == viewH) {
+    }else if (offsetY >= viewH && offsetY < 2 * viewH) {
         if (self.totalCount > 3) {
             if (self.index == 0) {
                 self.index += 1;
@@ -944,25 +945,10 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
             }
         }
         cell = self.ctrCell;
-    }else if (offsetY == 2 * viewH) {
+    }else if (offsetY >= 2 * viewH) {
         if (!self.isDelay) {
             cell = self.btmCell;
         }
-    }
-    
-    // 修复快速滑动可能导致的偏移
-    if (offsetY > viewH && offsetY < 2 * viewH) {
-        [self setContentOffset:CGPointMake(0, viewH)];
-        if (self.totalCount > 3) {
-            if (self.index == 0) {
-                self.index += 1;
-                self.changeIndex = self.index;
-            }else if (self.index == self.totalCount - 1) {
-                self.index -= 1;
-                self.changeIndex = self.index;
-            }
-        }
-        cell = self.ctrCell;
     }
     
     if (!cell) return;
