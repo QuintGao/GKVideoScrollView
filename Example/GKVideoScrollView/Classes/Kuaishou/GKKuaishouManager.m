@@ -147,7 +147,7 @@
     [manager.view.coverImageView sd_setImageWithURL:[NSURL URLWithString:model.poster_small]];
 
     // 播放内容一致，不做处理
-    NSString *playUrl = self.player.assetURL.absoluteString;
+    NSString *playUrl = manager.assetURL.absoluteString;
     if (playUrl.length > 0 && [playUrl isEqualToString:model.play_url]) return;
 
     self.player.assetURL = [NSURL URLWithString:model.play_url];
@@ -158,7 +158,9 @@
     GKVideoModel *model = self.dataSource[index];
     
     // 判断播放内容是否一致
-    NSString *playUrl = self.player.assetURL.absoluteString;
+    id<ZFPlayerMediaPlayback> manager = self.player.currentPlayerManager;
+    
+    NSString *playUrl = manager.assetURL.absoluteString;
     if (playUrl.length > 0 && ![playUrl isEqualToString:model.play_url]) return;
     
     [self.player stop];

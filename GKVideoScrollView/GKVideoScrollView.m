@@ -63,9 +63,8 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
 // 记录是否正在切换到下一个
 @property (nonatomic, assign) BOOL isChangeToNext;
 
-@property (nonatomic, assign) BOOL isChangeOffsetY;
-
-@property (nonatomic, assign) CGRect lastFrame;
+// 记录是否正在改变位置
+@property (nonatomic, assign) BOOL isChangeOffset;
 
 // 存放cell标识和对应的nib
 @property (nonatomic, strong) NSMutableDictionary<NSString *, UINib *> *cellNibs;
@@ -124,9 +123,7 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
     
     if (CGSizeEqualToSize(self.contentSize, CGSizeZero) || self.contentSize.width != scrollW) {
         [self updateContentSize];
-        self.isChanging = YES;
         [self updateContentOffset];
-        self.isChanging = NO;
     }
 }
 
@@ -136,6 +133,7 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
 
 #pragma mark - Public Methods
 - (NSArray<__kindof UIView *> *)visibleCells {
+    if (!self.currentCell) return nil;
     return @[self.currentCell];
 }
 
@@ -292,6 +290,7 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
 - (void)scrollToPageWithIndex:(NSInteger)index {
     if (self.currentIndex == index) return;
     if (index < 0 || index > self.totalCount - 1) return;
+    if (self.isChanging) return;
     self.isChanging = YES;
     self.index = index;
     self.changeIndex = index;
@@ -319,6 +318,7 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
 - (void)scrollToNextPage {
     // 当前是最后一个，不做处理
     if (self.currentIndex == self.totalCount - 1) return;
+    if (self.isChangeToNext) return;
     
     self.changeIndex = self.currentIndex + 1;
     // 即将显示
@@ -750,12 +750,13 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
 
 - (void)updateContentSize:(CGSize)size {
     if (CGSizeEqualToSize(self.contentSize, size)) return;
+    self.isChangeOffset = YES;
     self.contentSize = size;
 }
 
 - (void)updateContentOffset:(CGPoint)offset {
     if (CGPointEqualToPoint(self.contentOffset, offset)) return;
-    self.isChangeOffsetY = YES;
+    self.isChangeOffset = YES;
     self.contentOffset = offset;
 }
 
@@ -777,8 +778,8 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
         [self.userDelegate scrollViewDidScroll:scrollView];
     }
     if (self.isChanging) return;
-    if (self.isChangeOffsetY) {
-        self.isChangeOffsetY = NO;
+    if (self.isChangeOffset) {
+        self.isChangeOffset = NO;
         return;
     }
     // 处理cell显示
@@ -947,6 +948,21 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
         if (!self.isDelay) {
             cell = self.btmCell;
         }
+    }
+    
+    // 修复快速滑动可能导致的偏移
+    if (offsetY > viewH && offsetY < 2 * viewH) {
+        [self setContentOffset:CGPointMake(0, viewH)];
+        if (self.totalCount > 3) {
+            if (self.index == 0) {
+                self.index += 1;
+                self.changeIndex = self.index;
+            }else if (self.index == self.totalCount - 1) {
+                self.index -= 1;
+                self.changeIndex = self.index;
+            }
+        }
+        cell = self.ctrCell;
     }
     
     if (!cell) return;

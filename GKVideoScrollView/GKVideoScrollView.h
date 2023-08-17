@@ -11,7 +11,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class GKVideoScrollView, GKVideoControlView;
+@class GKVideoScrollView;
 
 @protocol GKVideoScrollViewDataSource <NSObject>
 
@@ -28,6 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
 @optional
 
 // cell即将显示时调用，可用于请求播放信息
+// 注意：1、此时的cell并不一定等于最终显示的cell，慎用 2、在快速滑动时，此方法可能不会回调所有的index
 - (void)scrollView:(GKVideoScrollView *)scrollView willDisplayCell:(GKVideoViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath;
 
 // cell结束显示时调用，可用于结束播放
@@ -41,16 +42,19 @@ NS_ASSUME_NONNULL_BEGIN
 @interface GKVideoScrollView : UIScrollView
 
 // 数据源
-@property (nonatomic, weak) id<GKVideoScrollViewDataSource> dataSource;
+@property (nonatomic, weak, nullable) id<GKVideoScrollViewDataSource> dataSource;
 
 // 代理
-@property (nonatomic, weak) id<GKVideoScrollViewDelegate> delegate;
+@property (nonatomic, weak, nullable) id<GKVideoScrollViewDelegate> delegate;
 
 // 默认索引
 @property (nonatomic, assign) NSInteger defaultIndex;
 
 // 当前索引
 @property (nonatomic, assign, readonly) NSInteger currentIndex;
+
+// 当前显示的cell
+@property (nonatomic, weak, readonly) GKVideoViewCell *currentCell;
 
 // 可视cells
 @property (nonatomic, readonly) NSArray <__kindof UIView *> *visibleCells;
