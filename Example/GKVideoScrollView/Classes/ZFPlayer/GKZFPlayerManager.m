@@ -89,6 +89,10 @@
     };
 }
 
+- (void)preloadVideoWithCell:(GKVideoCell *)cell index:(NSInteger)index {
+    NSLog(@"即将出现---%zd", index);
+}
+
 - (void)playVideoWithCell:(GKVideoCell *)cell index:(NSInteger)index {
     NSLog(@"播放----%zd", index);
     GKVideoModel *model = self.dataSource[index];

@@ -922,7 +922,7 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
     CGFloat offsetY = scrollView.contentOffset.y;
     CGFloat viewH = self.viewHeight;
     
-    if (offsetY > 0 && offsetY < viewH) {
+    if (offsetY > 0 && offsetY < viewH && self.currentCell && self.currentCell == self.topCell) {
         [self setContentOffset:CGPointZero animated:YES];
         return;
     }
@@ -932,7 +932,7 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
     }
     
     GKVideoViewCell *cell = nil;
-    if (offsetY == 0) {
+    if (offsetY <= 0) {
         cell = self.topCell;
     }else if (offsetY >= viewH && offsetY < 2 * viewH) {
         if (self.totalCount > 3) {
@@ -945,6 +945,9 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
             }
         }
         cell = self.ctrCell;
+        if (offsetY != viewH) {
+            [self updateContentOffset:CGPointMake(0, viewH)];
+        }
     }else if (offsetY >= 2 * viewH) {
         if (!self.isDelay) {
             cell = self.btmCell;
