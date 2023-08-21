@@ -233,7 +233,7 @@ API_DEPRECATED("deprecated!", ios(13.0, 16.0)) @implementation GKRotationManager
             NSData *data = [NSData.alloc initWithBase64EncodedString:@"X3NldENvbnRlbnRPdmVybGF5SW5zZXRzOmFuZExlZnRNYXJnaW46cmlnaHRNYXJnaW46" options:kNilOptions];
             NSString *method = [NSString.alloc initWithData:data encoding:NSUTF8StringEncoding];
             SEL originalSelector = NSSelectorFromString(method);
-            SEL swizzledSelector = NSSelectorFromString([@"gk_" stringByAppendingString:method]);
+            SEL swizzledSelector = NSSelectorFromString([@"gk" stringByAppendingString:method]);
             
             Method originalMethod = class_getInstanceMethod(cls, originalSelector);
             Method swizzledMethod = class_getInstanceMethod(cls, swizzledSelector);
