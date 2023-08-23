@@ -33,6 +33,26 @@
     [super viewDidLoad];
     
     self.navigationItem.title = @"ZFPlayer播放";
+    
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"跳转" style:UIBarButtonItemStylePlain target:self action:@selector(jump)];
+}
+
+- (void)jump {
+    UIViewController *vc = [[UIViewController alloc] init];
+    vc.view.backgroundColor = UIColor.redColor;
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    self.navigationController.navigationBar.translucent = YES;
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    
+    self.navigationController.navigationBar.translucent = NO;
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle {

@@ -765,6 +765,28 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
     [self layoutIfNeeded];
 }
 
+- (void)fixContentOffsetY:(CGFloat)offsetY  {
+    CGFloat viewH = self.viewHeight;
+    
+    CGFloat diff = fabs(offsetY - 0);
+    if (diff > 0 && diff < 1) {
+        offsetY = 0;
+        [self updateContentOffset:CGPointMake(0, 0)];
+    }
+    
+    diff = fabs(offsetY - viewH);
+    if (diff > 0 && diff < 1) {
+        offsetY = viewH;
+        [self updateContentOffset:CGPointMake(0, viewH)];
+    }
+    
+    diff = fabs(offsetY - 2 * viewH);
+    if (diff > 0 && diff < 1) {
+        offsetY = 2 * viewH;
+        [self updateContentOffset:CGPointMake(0, 2 * viewH)];
+    }
+}
+
 @end
 
 @interface GKVideoScrollView (UIScrollView)
@@ -922,15 +944,16 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
     CGFloat offsetY = scrollView.contentOffset.y;
     CGFloat viewH = self.viewHeight;
     
-    if (offsetY > 0 && offsetY < viewH && self.currentCell && self.currentCell == self.topCell) {
+    if (offsetY > 0 && offsetY < viewH && self.currentCell && self.currentCell == self.topCell && self.currentIndex == 0) {
         [self setContentOffset:CGPointZero animated:YES];
         return;
     }
     
+    [self fixContentOffsetY:offsetY];
+    
     if (self.totalCount <= 3) {
         self.changeIndex = offsetY / viewH + 0.5;
     }
-    
     GKVideoViewCell *cell = nil;
     if (offsetY <= 0) {
         cell = self.topCell;
