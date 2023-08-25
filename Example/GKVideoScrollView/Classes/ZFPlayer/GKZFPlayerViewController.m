@@ -46,13 +46,13 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    self.navigationController.navigationBar.translucent = YES;
+    [self hideNavBar];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     
-    self.navigationController.navigationBar.translucent = NO;
+    [self showNavBar];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
@@ -61,6 +61,44 @@
 
 - (void)dealloc {
     
+}
+
+- (void)showNavBar {
+    NSDictionary *dic = @{NSForegroundColorAttributeName: UIColor.grayColor, NSFontAttributeName: [UIFont boldSystemFontOfSize:18]};
+    if (@available(iOS 15.0, *)) {
+        UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
+        appearance.backgroundColor = UIColor.whiteColor;
+        appearance.shadowColor = UIColor.whiteColor;
+        appearance.titleTextAttributes = dic;
+        self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
+        self.navigationController.navigationBar.standardAppearance = appearance;
+        self.navigationController.navigationBar.translucent = NO;
+    }else {
+        [self.navigationController.navigationBar setBackgroundImage:[UIImage new] forBarMetrics:UIBarMetricsDefault];
+        [self.navigationController.navigationBar setTitleTextAttributes:dic];
+    }
+}
+
+- (void)hideNavBar {
+    NSDictionary *dic = @{NSForegroundColorAttributeName : [UIColor whiteColor], NSFontAttributeName : [UIFont boldSystemFontOfSize:18]};
+    if (@available(iOS 15.0, *)) {
+        //navigation标题文字颜色
+        UINavigationBarAppearance *barApp = [UINavigationBarAppearance new];
+        barApp.backgroundColor = UIColor.clearColor;
+        barApp.shadowColor = nil;
+        barApp.backgroundEffect = nil;
+        barApp.titleTextAttributes = dic;
+        self.navigationController.navigationBar.scrollEdgeAppearance = nil;
+        self.navigationController.navigationBar.standardAppearance = barApp;
+        self.navigationController.navigationBar.translucent = YES;
+    }else{
+        //背景色
+//        UIImage *image = [TCTools imageWithColor:UIColorBaseRGBA(0xffffff, 0)];
+        [self.navigationController.navigationBar setBackgroundImage:[UIImage new] forBarMetrics:UIBarMetricsDefault];
+        
+        // 导航条title 字体 颜色
+        [self.navigationController.navigationBar setTitleTextAttributes:dic];
+    }
 }
 
 @end

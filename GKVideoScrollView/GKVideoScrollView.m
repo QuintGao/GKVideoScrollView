@@ -765,24 +765,24 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
     [self layoutIfNeeded];
 }
 
-- (void)fixContentOffsetY:(CGFloat)offsetY  {
+- (void)fixContentOffsetY:(CGFloat *)offsetY  {
     CGFloat viewH = self.viewHeight;
     
-    CGFloat diff = fabs(offsetY - 0);
+    CGFloat diff = fabs(*offsetY - 0);
     if (diff > 0 && diff < 1) {
         offsetY = 0;
         [self updateContentOffset:CGPointMake(0, 0)];
     }
     
-    diff = fabs(offsetY - viewH);
+    diff = fabs(*offsetY - viewH);
     if (diff > 0 && diff < 1) {
-        offsetY = viewH;
+        *offsetY = viewH;
         [self updateContentOffset:CGPointMake(0, viewH)];
     }
     
-    diff = fabs(offsetY - 2 * viewH);
+    diff = fabs(*offsetY - 2 * viewH);
     if (diff > 0 && diff < 1) {
-        offsetY = 2 * viewH;
+        *offsetY = 2 * viewH;
         [self updateContentOffset:CGPointMake(0, 2 * viewH)];
     }
 }
@@ -949,7 +949,7 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
         return;
     }
     
-    [self fixContentOffsetY:offsetY];
+    [self fixContentOffsetY:&offsetY];
     
     if (self.totalCount <= 3) {
         self.changeIndex = offsetY / viewH + 0.5;

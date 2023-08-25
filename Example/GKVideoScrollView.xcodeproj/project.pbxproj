@@ -59,7 +59,6 @@
 		79A5256D29D6D21D00CFB32F /* GKLandscapeWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 79A5256C29D6D21D00CFB32F /* GKLandscapeWindow.m */; };
 		79A5257029D6D45A00CFB32F /* GKLandscapeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 79A5256F29D6D45A00CFB32F /* GKLandscapeViewController.m */; };
 		79A5257329D6D5B500CFB32F /* GKLandscapeNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 79A5257229D6D5B500CFB32F /* GKLandscapeNavigationController.m */; };
-		79A5257929DA642D00CFB32F /* GKTimerControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 79A5257829DA642D00CFB32F /* GKTimerControl.m */; };
 		79A5257D29DC0D1A00CFB32F /* GKDouyinViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 79A5257C29DC0D1A00CFB32F /* GKDouyinViewController.m */; };
 		79A5258029DC0D2600CFB32F /* GKDouyinManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 79A5257F29DC0D2600CFB32F /* GKDouyinManager.m */; };
 		79CFE0D729F1296300B6A013 /* GKDouyinPortraitView.m in Sources */ = {isa = PBXBuildFile; fileRef = 79CFE0D629F1296300B6A013 /* GKDouyinPortraitView.m */; };
@@ -184,8 +183,6 @@
 		79A5256F29D6D45A00CFB32F /* GKLandscapeViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GKLandscapeViewController.m; sourceTree = "<group>"; };
 		79A5257129D6D5B500CFB32F /* GKLandscapeNavigationController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GKLandscapeNavigationController.h; sourceTree = "<group>"; };
 		79A5257229D6D5B500CFB32F /* GKLandscapeNavigationController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GKLandscapeNavigationController.m; sourceTree = "<group>"; };
-		79A5257729DA642D00CFB32F /* GKTimerControl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GKTimerControl.h; sourceTree = "<group>"; };
-		79A5257829DA642D00CFB32F /* GKTimerControl.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GKTimerControl.m; sourceTree = "<group>"; };
 		79A5257B29DC0D1A00CFB32F /* GKDouyinViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GKDouyinViewController.h; sourceTree = "<group>"; };
 		79A5257C29DC0D1A00CFB32F /* GKDouyinViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GKDouyinViewController.m; sourceTree = "<group>"; };
 		79A5257E29DC0D2600CFB32F /* GKDouyinManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GKDouyinManager.h; sourceTree = "<group>"; };
@@ -488,8 +485,6 @@
 				79A5256F29D6D45A00CFB32F /* GKLandscapeViewController.m */,
 				79A5257129D6D5B500CFB32F /* GKLandscapeNavigationController.h */,
 				79A5257229D6D5B500CFB32F /* GKLandscapeNavigationController.m */,
-				79A5257729DA642D00CFB32F /* GKTimerControl.h */,
-				79A5257829DA642D00CFB32F /* GKTimerControl.m */,
 			);
 			path = GKRotationManager;
 			sourceTree = "<group>";
@@ -791,7 +786,6 @@
 				79A5258029DC0D2600CFB32F /* GKDouyinManager.m in Sources */,
 				790791C429BF1825000D70A5 /* GKZFPlayerViewController.m in Sources */,
 				790791CD29BF1937000D70A5 /* GKVideoCell.m in Sources */,
-				79A5257929DA642D00CFB32F /* GKTimerControl.m in Sources */,
 				79CFE0E129F26B7400B6A013 /* GKKuaishouManager.m in Sources */,
 				79A5255429D68ABD00CFB32F /* GKZFPlayerManager.m in Sources */,
 				79EB4B412A8B6B97005B4EC7 /* GKKuaishouDetailViewController.m in Sources */,

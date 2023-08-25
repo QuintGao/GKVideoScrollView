@@ -41,6 +41,19 @@
         make.edges.equalTo(self.view);
     }];
     
+    self.navigationItem.title = @"GKVideoScrollView";
+    
+    self.dataSources = @[@"ZFPlayer播放",
+                         @"SJVideoPlayer播放",
+                         @"列表旋转",
+                         @"抖音",
+                         @"快手",
+                         @"测试"];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
     if (@available(iOS 13.0, *)) {
         UINavigationBarAppearance *appearance = self.navigationController.navigationBar.standardAppearance;
         [appearance configureWithTransparentBackground];
@@ -50,15 +63,6 @@
         self.navigationController.navigationBar.standardAppearance = appearance;
         self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
     }
-    
-    self.navigationItem.title = @"GKVideoScrollView";
-    
-    self.dataSources = @[@"ZFPlayer播放",
-                         @"SJVideoPlayer播放",
-                         @"列表旋转",
-                         @"抖音",
-                         @"快手",
-                         @"测试"];
 }
 
 #pragma mark - <UITableViewDataSource, UITableViewDelegate>
