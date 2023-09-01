@@ -14,6 +14,7 @@
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
+        self.frame = UIScreen.mainScreen.bounds;
         self.windowLevel = UIWindowLevelStatusBar - 1;
         if (@available(iOS 13.0, *)) {
             if (self.windowScene == nil) {

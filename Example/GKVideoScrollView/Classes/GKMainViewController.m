@@ -48,7 +48,8 @@
                          @"列表旋转",
                          @"抖音",
                          @"快手",
-                         @"测试"];
+                         @"测试",
+                         @"旋转测试"];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -62,6 +63,7 @@
         appearance.titleTextAttributes = @{NSForegroundColorAttributeName: UIColor.redColor};
         self.navigationController.navigationBar.standardAppearance = appearance;
         self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
+        self.navigationController.navigationBar.translucent = YES;
     }
 }
 

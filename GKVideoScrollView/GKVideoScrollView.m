@@ -109,6 +109,31 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
     self.cellNibs = [NSMutableDictionary dictionary];
     self.cellClasses = [NSMutableDictionary dictionary];
     self.reusableCells = [NSMutableDictionary dictionary];
+    
+    [self initValue];
+}
+
+- (void)initValue {
+    [self saveReusableCell:self.topCell];
+    [self saveReusableCell:self.ctrCell];
+    [self saveReusableCell:self.btmCell];
+    self.topCell = nil;
+    self.ctrCell = nil;
+    self.btmCell = nil;
+    self.updateCell = nil;
+    self.lastWillDisplayCell = nil;
+    self.lastEndDisplayCell = nil;
+    [self updateContentSize:CGSizeZero];
+    [self updateContentOffset:CGPointZero];
+    self.defaultIndex = 0;
+    self.isLoaded = NO;
+    self.isFirstLoad = NO;
+    self.currentIndex = 0;
+    self.changeIndex = 0;
+    self.index = 0;
+    self.isChanging = NO;
+    self.isChangeOffset = NO;
+    self.isChangeToNext = NO;
 }
 
 - (void)layoutSubviews {
@@ -242,24 +267,10 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
     self.totalCount = [self.dataSource numberOfRowsInScrollView:self];
     
     // 特殊场景处理：开始有数据刷新后无数据
-    if (self.totalCount == 0) {
-        [self saveReusableCell:self.topCell];
-        [self saveReusableCell:self.ctrCell];
-        [self saveReusableCell:self.btmCell];
-        self.topCell = nil;
-        self.ctrCell = nil;
-        self.btmCell = nil;
-        [self updateContentSize:CGSizeZero];
-        [self updateContentOffset:CGPointZero];
-        self.defaultIndex = 0;
-        self.isLoaded = NO;
-        self.isFirstLoad = NO;
-        self.currentIndex = 0;
-        self.changeIndex = 0;
-        self.index = 0;
+    if (self.totalCount <= 0) {
+        [self initValue];
+        return;
     }
-    
-    if (self.totalCount <= 0) return;
     
     // 索引
     if (self.defaultIndex < 0 || self.defaultIndex >= self.totalCount) {
@@ -268,6 +279,7 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
                                      userInfo:nil];
     }
     NSInteger index = self.defaultIndex;
+    self.defaultIndex = 0;
     
     // 加载cell
     if (self.isLoaded) {
@@ -288,8 +300,8 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
 }
 
 - (void)scrollToPageWithIndex:(NSInteger)index {
-    if (self.currentIndex == index) return;
     if (index < 0 || index > self.totalCount - 1) return;
+    if (self.currentIndex == index) return;
     if (self.isChanging) return;
     self.isChanging = YES;
     self.index = index;
@@ -543,6 +555,7 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
 }
 
 - (void)updateContentSize {
+    if (self.totalCount == 0) return;
     CGFloat height = self.viewHeight * (self.totalCount >= 3 ? 3 : self.totalCount);
     [self updateContentSize:CGSizeMake(self.viewWidth, height)];
 }
@@ -632,6 +645,7 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
 }
 
 - (GKVideoViewCell *)cellForIndex:(NSInteger)index {
+    if (index < 0 || index >= self.totalCount) return nil;
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
     return [self.dataSource scrollView:self cellForRowAtIndexPath:indexPath];
 }
@@ -770,7 +784,7 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
     
     CGFloat diff = fabs(*offsetY - 0);
     if (diff > 0 && diff < 1) {
-        offsetY = 0;
+        *offsetY = 0;
         [self updateContentOffset:CGPointMake(0, 0)];
     }
     
@@ -939,7 +953,11 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
     if ([self.userDelegate respondsToSelector:@selector(scrollViewDidEndScrollingAnimation:)]) {
         [self.userDelegate scrollViewDidEndScrollingAnimation:scrollView];
     }
+    
     if (self.totalCount <= 0) return;
+    self.isChanging = NO;
+    self.isChangeOffset = NO;
+    self.isChangeToNext = NO;
     
     CGFloat offsetY = scrollView.contentOffset.y;
     CGFloat viewH = self.viewHeight;

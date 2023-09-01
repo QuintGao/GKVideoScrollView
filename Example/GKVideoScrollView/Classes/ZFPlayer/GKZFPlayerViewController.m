@@ -22,6 +22,8 @@
 
 @property (nonatomic, strong) GKZFLandscapeView *landscapeView;
 
+@property (nonatomic, assign) UIStatusBarStyle statusBarStyle;
+
 @end
 
 @implementation GKZFPlayerViewController
@@ -56,7 +58,8 @@
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
-    return UIStatusBarStyleLightContent;
+//    return UIStatusBarStyleLightContent;
+    return self.statusBarStyle;
 }
 
 - (void)dealloc {
@@ -77,6 +80,7 @@
         [self.navigationController.navigationBar setBackgroundImage:[UIImage new] forBarMetrics:UIBarMetricsDefault];
         [self.navigationController.navigationBar setTitleTextAttributes:dic];
     }
+    self.statusBarStyle = UIStatusBarStyleLightContent;
 }
 
 - (void)hideNavBar {
@@ -99,6 +103,7 @@
         // 导航条title 字体 颜色
         [self.navigationController.navigationBar setTitleTextAttributes:dic];
     }
+    self.statusBarStyle = UIStatusBarStyleDefault;
 }
 
 @end

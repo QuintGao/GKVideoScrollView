@@ -59,13 +59,17 @@
             [self.window makeKeyAndVisible];
         }
     }else if (toOrientation == UIInterfaceOrientationPortrait) {
+        [self.contentView removeFromSuperview];
         self.contentView.bounds = CGRectMake(0, 0, maxSize, minSize);
         self.contentView.center = CGPointMake(minSize * 0.5, maxSize * 0.5);
         self.contentView.transform = [self getRotationTransform:fromOrientation];
         [sourceWindow addSubview:self.contentView];
-        [sourceWindow makeKeyAndVisible];
         [self.contentView layoutIfNeeded];
-        self.window.hidden = YES;
+        [self.contentView snapshotViewAfterScreenUpdates:YES];
+        [UIView performWithoutAnimation:^{
+            [sourceWindow makeKeyAndVisible];
+            self.window.hidden = YES;
+        }];
     }
     [self setNeedsUpdateOfSupportedInterfaceOrientations];
     
