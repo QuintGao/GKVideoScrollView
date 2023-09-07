@@ -12,6 +12,8 @@
 #import "GKVideoLandscapeCell.h"
 #import "GKVideoWorkListView.h"
 
+@class GKVideoPlayerViewController;
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface GKVideoManager : NSObject
@@ -24,14 +26,21 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, weak) GKVideoCell *currentCell;
 
+@property (nonatomic, assign) NSInteger currentIndex;
+
 @property (nonatomic, weak) GKVideoLandscapeCell *landscapeCell;
 
 @property (nonatomic, assign) BOOL isFullScreen;
 
 @property (nonatomic, strong) NSMutableArray *dataSource;
 
+@property (nonatomic, weak) GKVideoPlayerViewController *viewController;
+
 /// 初始化播放器
 - (void)initPlayer;
+
+/// 销毁播放器
+- (void)destoryPlayer;
 
 - (void)initLandscapeView;
 
@@ -52,8 +61,11 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)enterFullScreen;
 
 - (void)reloadData;
+- (void)reloadDataWithIndex:(NSInteger)index;
 
 - (void)likeVideoWithModel:(GKVideoModel *_Nullable)model;
+
+- (void)removeCurrent;
 
 @end
 

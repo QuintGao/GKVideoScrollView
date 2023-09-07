@@ -126,6 +126,11 @@ static SJControlLayerIdentifier GKControlLayerLandscapeIdentifier = 102;
     };
 }
 
+- (void)destoryPlayer {
+    [self.player stop];
+    self.player = nil;
+}
+
 #pragma mark - Player
 - (void)playVideoWithCell:(GKVideoCell *)cell index:(NSInteger)index {
     GKVideoModel *model = self.dataSource[index];

@@ -13,6 +13,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface GKZFPortraitView : GKVideoPortraitView<ZFPlayerMediaControl>
 
+@property (nonatomic, copy) void(^longBlock)(void);
+
 @end
 
 NS_ASSUME_NONNULL_END

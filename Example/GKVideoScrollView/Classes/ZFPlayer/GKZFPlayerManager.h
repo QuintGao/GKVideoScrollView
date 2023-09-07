@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface GKZFPlayerManager : GKVideoManager
 
-@property (nonatomic, strong) ZFPlayerController *player;
+@property (nonatomic, strong, nullable) ZFPlayerController *player;
 
 @end
 

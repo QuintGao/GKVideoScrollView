@@ -37,6 +37,9 @@ NS_ASSUME_NONNULL_BEGIN
 // 结束滑动时显示的cell，可在这里开始播放
 - (void)scrollView:(GKVideoScrollView *)scrollView didEndScrollingCell:(GKVideoViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath;
 
+// 移除cell回调，须在此回调中删除对应index的数据
+- (void)scrollView:(GKVideoScrollView *)scrollView didRemoveCell:(GKVideoViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath;
+
 @end
 
 @interface GKVideoScrollView : UIScrollView
@@ -78,11 +81,20 @@ NS_ASSUME_NONNULL_BEGIN
 // 刷新数据
 - (void)reloadData;
 
+// 根据指定index刷新数据，刷新后将显示对应index的页面
+- (void)reloadDataWithIndex:(NSInteger)index;
+
 // 切换到指定索引页面，无动画
 - (void)scrollToPageWithIndex:(NSInteger)index;
 
+// 切换到上个页面，有动画
+- (void)scrollToLastPage;
+
 // 切换到下个页面，有动画
 - (void)scrollToNextPage;
+
+// 移除当前页面，切换到下一个页面，如果当前是最后一个，则切换到上一个页面
+- (void)removeCurrentPageAnimated:(BOOL)animated;
 
 @end
 

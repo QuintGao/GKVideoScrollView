@@ -10,6 +10,7 @@
 #import "GKZFPortraitView.h"
 #import "GKZFLandscapeView.h"
 #import <SDWebImage/SDWebImage.h>
+#import "GKVideoPlayerViewController.h"
 
 @interface GKZFPlayerManager()
 
@@ -89,6 +90,11 @@
     };
 }
 
+- (void)destoryPlayer {
+    [self.player stop];
+    self.player = nil;
+}
+
 - (void)preloadVideoWithCell:(GKVideoCell *)cell index:(NSInteger)index {
     NSLog(@"即将出现---%zd", index);
 }
@@ -135,6 +141,34 @@
     [self.player enterFullScreen:YES animated:YES];
 }
 
+- (void)longAction {
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"测试" message:@"" preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    [alertVC addAction:[UIAlertAction actionWithTitle:@"不感兴趣(有动画)" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self.portraitScrollView removeCurrentPageAnimated:YES];
+    }]];
+    
+    [alertVC addAction:[UIAlertAction actionWithTitle:@"不感兴趣(无动画)" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self.portraitScrollView removeCurrentPageAnimated:NO];
+    }]];
+    
+    [alertVC addAction:[UIAlertAction actionWithTitle:@"清空后切换索引" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self.dataSource removeAllObjects];
+        [self.portraitScrollView reloadData];
+        
+        self.portraitScrollView.defaultIndex = self.currentIndex;
+        [self.viewController requestNewData];
+    }]];
+    
+    [alertVC addAction:[UIAlertAction actionWithTitle:@"顶部插入数据" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self.viewController requestNewDataInsertFront];
+    }]];
+    
+    [alertVC addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];
+    
+    [self.viewController presentViewController:alertVC animated:YES completion:nil];
+}
+
 #pragma mark - Lazy
 - (GKZFPortraitView *)portraitView {
     if (!_portraitView) {
@@ -144,6 +178,11 @@
         _portraitView.likeBlock = ^{
             __strong __typeof(weakSelf) self = weakSelf;
             [self likeVideoWithModel:nil];
+        };
+        
+        _portraitView.longBlock = ^{
+            __strong __typeof(weakSelf) self = weakSelf;
+            [self longAction];
         };
     }
     return _portraitView;

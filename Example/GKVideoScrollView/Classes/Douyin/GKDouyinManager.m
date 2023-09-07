@@ -156,6 +156,11 @@ static SJControlLayerIdentifier GKControlLayerLandscapeIdentifier = 102;
     };
 }
 
+- (void)destoryPlayer {
+    [self.player stop];
+    self.player = nil;
+}
+
 - (void)prepareCell:(GKVideoCell *)cell index:(NSInteger)index {
     if ([cell isKindOfClass:GKVideoLandscapeCell.class]) {
         GKVideoLandscapeCell *videoCell = (GKVideoLandscapeCell *)cell;

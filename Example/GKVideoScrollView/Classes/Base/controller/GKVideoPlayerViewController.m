@@ -20,6 +20,8 @@
 @property (nonatomic, assign) NSInteger total;
 @property (nonatomic, assign) NSInteger pageSize;
 
+@property (nonatomic, assign) BOOL isInsertFront;
+ 
 @end
 
 @implementation GKVideoPlayerViewController
@@ -30,6 +32,10 @@
     [self initUI];
     [self setupRefresh];
     [self requestData];
+}
+
+- (void)dealloc {
+    [self.manager destoryPlayer];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
@@ -62,11 +68,23 @@
         [self requestData];
     }];
     
-    self.manager.portraitScrollView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
+    MJRefreshAutoNormalFooter *footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
         __strong __typeof(weakSelf) self = weakSelf;
         self.page++;
         [self requestData];
     }];
+    footer.automaticallyRefresh = NO;
+    self.manager.portraitScrollView.mj_footer = footer;
+}
+
+- (void)requestNewData {
+    self.page = 1;
+    [self requestData];
+}
+
+- (void)requestNewDataInsertFront {
+    self.isInsertFront = YES;
+    [self requestData];
 }
 
 - (void)requestData {
@@ -80,16 +98,31 @@
         __strong __typeof(weakSelf) self = weakSelf;
         if ([responseObject[@"errno"] integerValue] == 0) {
             NSArray *list = [GKVideoModel mj_objectArrayWithKeyValuesArray:responseObject[@"data"][@"response"][@"videos"]];
-            if (self.page == 1) {
-                [self.manager.dataSource removeAllObjects];
+            if (self.isInsertFront) {
+                self.isInsertFront = NO;
+                NSIndexSet *indexSet = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, list.count)];
+                [self.manager.dataSource insertObjects:list atIndexes:indexSet];
+                
+                [self.manager.portraitScrollView.mj_header endRefreshing];
+                [self.manager.portraitScrollView.mj_footer endRefreshing];
+                if (self.page >= self.total) {
+                    [self.manager.portraitScrollView.mj_footer endRefreshingWithNoMoreData];
+                }
+                
+                NSInteger index = list.count + self.manager.currentIndex;
+                [self.manager reloadDataWithIndex:index];
+            }else {
+                if (self.page == 1) {
+                    [self.manager.dataSource removeAllObjects];
+                }
+                [self.manager.dataSource addObjectsFromArray:list];
+                [self.manager.portraitScrollView.mj_header endRefreshing];
+                [self.manager.portraitScrollView.mj_footer endRefreshing];
+                if (self.page >= self.total) {
+                    [self.manager.portraitScrollView.mj_footer endRefreshingWithNoMoreData];
+                }
+                [self.manager reloadData];
             }
-            [self.manager.dataSource addObjectsFromArray:list];
-            [self.manager.portraitScrollView.mj_header endRefreshing];
-            [self.manager.portraitScrollView.mj_footer endRefreshing];
-            if (self.page >= self.total) {
-                [self.manager.portraitScrollView.mj_footer endRefreshingWithNoMoreData];
-            }
-            [self.manager reloadData];
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         __strong __typeof(weakSelf) self = weakSelf;

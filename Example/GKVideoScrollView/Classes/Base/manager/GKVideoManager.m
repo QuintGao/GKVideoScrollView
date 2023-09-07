@@ -36,6 +36,10 @@
     // subclass implementation
 }
 
+- (void)destoryPlayer {
+    // subclass implementation
+}
+
 - (void)prepareCell:(GKVideoCell *)cell index:(NSInteger)index {
     // subclass implementation
 }
@@ -65,6 +69,11 @@
     [self.landscapeScrollView reloadData];
 }
 
+- (void)reloadDataWithIndex:(NSInteger)index {
+    [self.portraitScrollView reloadDataWithIndex:index];
+    [self.landscapeScrollView reloadDataWithIndex:index];
+}
+
 - (void)likeVideoWithModel:(GKVideoModel *)model {
     if (model == nil) {
         model = self.dataSource[self.portraitScrollView.currentIndex];
@@ -72,6 +81,13 @@
     }
     [self.portraitScrollView reloadData];
     [self.landscapeScrollView reloadData];
+}
+
+- (void)removeCurrent {
+//    [self.portraitScrollView removeCurrentPage];
+//    [self.dataSource removeObjectAtIndex:self.portraitScrollView.currentIndex];
+//    [self.portraitScrollView reloadData];
+    [self.portraitScrollView removeCurrentPageAnimated:YES];
 }
 
 #pragma mark - GKVideoScrollViewDataSource
@@ -111,10 +127,17 @@
 - (void)scrollView:(GKVideoScrollView *)scrollView didEndScrollingCell:(GKVideoViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (scrollView == self.portraitScrollView) {
         self.currentCell = (GKVideoCell *)cell;
+        self.currentIndex = indexPath.row;
     }else if (scrollView == self.landscapeScrollView) {
         self.landscapeCell = (GKVideoLandscapeCell *)cell;
     }
     [self playVideoWithCell:(GKVideoCell *)cell index:indexPath.row];
+}
+
+- (void)scrollView:(GKVideoScrollView *)scrollView didRemoveCell:(GKVideoViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.row >= 0 && indexPath.row < self.dataSource.count) {
+        [self.dataSource removeObjectAtIndex:indexPath.row];
+    }
 }
 
 #pragma mark - GKVideoCellDelegate

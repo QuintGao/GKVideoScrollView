@@ -117,6 +117,11 @@
     };
 }
 
+- (void)destoryPlayer {
+    [self.player stop];
+    self.player = nil;
+}
+
 - (void)prepareCell:(GKVideoCell *)cell index:(NSInteger)index {
     if ([cell isKindOfClass:GKVideoLandscapeCell.class]) {
         [(GKVideoLandscapeCell *)cell showTopView];

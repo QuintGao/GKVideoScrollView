@@ -31,6 +31,7 @@
 - (void)viewDidLoad {
     
     self.manager = [[GKZFPlayerManager alloc] init];
+    self.manager.viewController = self;
     
     [super viewDidLoad];
     
@@ -60,10 +61,6 @@
 - (UIStatusBarStyle)preferredStatusBarStyle {
 //    return UIStatusBarStyleLightContent;
     return self.statusBarStyle;
-}
-
-- (void)dealloc {
-    
 }
 
 - (void)showNavBar {

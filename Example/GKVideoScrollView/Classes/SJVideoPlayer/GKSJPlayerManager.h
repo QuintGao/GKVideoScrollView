@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface GKSJPlayerManager : GKVideoManager
 
-@property (nonatomic, strong) SJVideoPlayer *player;
+@property (nonatomic, strong, nullable) SJVideoPlayer *player;
 
 @end
 

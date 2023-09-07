@@ -19,6 +19,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)likeVideoWithModel:(nullable GKVideoModel *)model;
 
+- (void)requestNewData;
+
+- (void)requestNewDataInsertFront;
+
 @end
 
 NS_ASSUME_NONNULL_END

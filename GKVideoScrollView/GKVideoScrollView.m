@@ -42,9 +42,6 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
 // 记录是否刷新过
 @property (nonatomic, assign) BOOL isLoaded;
 
-// 是否第一次刷新
-@property (nonatomic, assign) BOOL isFirstLoad;
-
 // 处理上拉加载回弹问题
 @property (nonatomic, assign) NSInteger lastCount;
 @property (nonatomic, assign) BOOL isDelay;
@@ -65,6 +62,10 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
 
 // 记录是否正在改变位置
 @property (nonatomic, assign) BOOL isChangeOffset;
+
+// 移除cell
+@property (nonatomic, weak) GKVideoViewCell *willRemoveCell;
+@property (nonatomic, assign) NSInteger willRemoveIndex;
 
 // 存放cell标识和对应的nib
 @property (nonatomic, strong) NSMutableDictionary<NSString *, UINib *> *cellNibs;
@@ -127,13 +128,14 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
     [self updateContentOffset:CGPointZero];
     self.defaultIndex = 0;
     self.isLoaded = NO;
-    self.isFirstLoad = NO;
     self.currentIndex = 0;
     self.changeIndex = 0;
     self.index = 0;
     self.isChanging = NO;
     self.isChangeOffset = NO;
     self.isChangeToNext = NO;
+    self.willRemoveCell = nil;
+    self.willRemoveIndex = 0;
 }
 
 - (void)layoutSubviews {
@@ -285,18 +287,37 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
     if (self.isLoaded) {
         [self createCellsIfNeeded];
         [self updateContentSize];
-        [self updateDisplayCell];
+        [self updateDisplayCell:NO];
     }else {
         self.isLoaded = YES;
-        self.isFirstLoad = YES;
         self.index = index;
         self.currentIndex = index;
         self.changeIndex = index;
         [self createCellsIfNeeded];
         [self updateContentSize];
         [self updateContentOffset];
-        [self updateDisplayCell];
+        [self updateDisplayCell:YES];
     }
+}
+
+- (void)reloadDataWithIndex:(NSInteger)index {
+    // 总数
+    self.totalCount = [self.dataSource numberOfRowsInScrollView:self];
+    
+    // 特殊场景处理：开始有数据刷新后无数据
+    if (self.totalCount <= 0) {
+        [self initValue];
+        return;
+    }
+    
+    self.index = index;
+    self.currentIndex = index;
+    self.changeIndex = index;
+    
+    [self createCellsIfNeeded];
+    [self updateContentSize];
+    [self updateContentOffset];
+    [self updateDisplayCell:YES];
 }
 
 - (void)scrollToPageWithIndex:(NSInteger)index {
@@ -327,6 +348,31 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
     self.isChanging = NO;
 }
 
+- (void)scrollToLastPage {
+    // 当前是第一个，不做处理
+    if (self.currentIndex == 0) return;
+    if (self.isChangeToNext) return;
+    self.changeIndex = self.currentIndex - 1;
+    // 即将显示
+    GKVideoViewCell *cell = nil;
+    CGFloat offsetY = 0;
+    if (self.currentCell == self.ctrCell) {
+        cell = self.topCell;
+        offsetY = 0;
+    }else if (self.currentCell == self.btmCell) {
+        cell = self.ctrCell;
+        offsetY = self.viewHeight;
+    }
+    if (cell && !self.willRemoveCell) {
+        [self willDisplayCell:cell forIndex:self.changeIndex];
+        self.lastWillDisplayCell = nil;
+    }
+    
+    self.isChangeToNext = YES;
+    // 切换
+    [self setContentOffset:CGPointMake(0, offsetY) animated:YES];
+}
+
 - (void)scrollToNextPage {
     // 当前是最后一个，不做处理
     if (self.currentIndex == self.totalCount - 1) return;
@@ -343,7 +389,7 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
         cell = self.btmCell;
         offsetY = self.viewHeight * 2;
     }
-    if (cell) {
+    if (cell && !self.willRemoveCell) {
         [self willDisplayCell:cell forIndex:self.changeIndex];
         self.lastWillDisplayCell = nil;
     }
@@ -352,6 +398,55 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
     
     // 切换
     [self setContentOffset:CGPointMake(0, offsetY) animated:YES];
+}
+
+- (void)removeCurrentPageAnimated:(BOOL)animated {
+    // 记录即将移除的cell和index
+    self.willRemoveCell = self.currentCell;
+    self.willRemoveIndex = self.currentIndex;
+    
+    // 结束显示
+    [self didEndDisplayingCell:self.willRemoveCell forIndex:self.willRemoveIndex];
+    
+    if (animated) {
+        if (self.totalCount == 1) {
+            [self removeCurrentPage];
+        }else {
+            if (self.currentIndex == self.totalCount - 1) {
+                [self scrollToLastPage];
+            }else {
+                [self scrollToNextPage];
+            }
+        }
+    }else {
+        [self removeCurrentPage];
+    }
+}
+
+- (void)removeCurrentPage {
+    // 移除
+    if ([self.userDelegate respondsToSelector:@selector(scrollView:didRemoveCell:forRowAtIndexPath:)]) {
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:self.currentIndex inSection:0];
+        [self.userDelegate scrollView:self didRemoveCell:self.currentCell forRowAtIndexPath:indexPath];
+    }else {
+        [NSException exceptionWithName:NSInternalInconsistencyException
+                                reason:@"when using the `removeCurrentPageAnimated` method，you must implement the `scrollView:didRemoveCell:forRowAtIndexPath` protocol and remove the data for index"
+                              userInfo:nil];
+    }
+    
+    // 刷新
+    self.totalCount = [self.dataSource numberOfRowsInScrollView:self];
+    if (self.totalCount <= 0) {
+        [self initValue];
+        return;
+    }
+    
+    if (self.currentIndex == self.totalCount) {
+        self.currentIndex = self.totalCount - 1;
+    }
+    self.changeIndex = self.currentIndex;
+    [self reloadData];
+    [self updateContentOffset];
 }
 
 #pragma mark - Private Methods
@@ -438,7 +533,16 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
     if (!cell) return;
     NSString *identifier = cell.reuseIdentifier;
     NSMutableSet *cells = self.reusableCells[identifier];
-    [cells addObject:cell];
+    __block BOOL exist = NO;
+    [cells enumerateObjectsUsingBlock:^(id  _Nonnull obj, BOOL * _Nonnull stop) {
+        if (obj == cell) {
+            exist = YES;
+            *stop = YES;
+        }
+    }];
+    if (!exist) {
+        [cells addObject:cell];
+    }
     [cell removeFromSuperview];
     [self.reusableCells setValue:cells forKey:identifier];
 }
@@ -491,7 +595,7 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
     [self updateLayout];
 }
 
-- (void)updateDisplayCell {
+- (void)updateDisplayCell:(BOOL)isFirstLoad {
     GKVideoViewCell *cell = nil;
     if (self.totalCount == 1) {
         cell = self.topCell;
@@ -507,12 +611,15 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
         }
     }
     
-    if (self.isFirstLoad) {
+    if (isFirstLoad || self.willRemoveCell) {
+        [self saveReusableCell:self.willRemoveCell];
+        self.willRemoveCell = nil;
+        self.willRemoveIndex = 0;
+        
         [self willDisplayCell:cell forIndex:self.currentIndex];
         self.lastWillDisplayCell = nil;
         
         [self didEndScrollingCell:cell];
-        self.isFirstLoad = NO;
     }else {
         if (self.isDecelerating) return;
         if (self.contentOffset.y > 0 && self.contentOffset.y != self.viewHeight * 2) return;
@@ -565,7 +672,7 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
     CGFloat offsetY = 0;
     if (self.totalCount == 0) {
         offsetY = 0;
-    }else if (self.totalCount == 1) {
+    }else if (self.totalCount == 1 || self.totalCount == 2) {
         offsetY = self.currentIndex == 0 ? 0 : viewH;
     }else {
         if (self.currentIndex == 0) {
@@ -671,6 +778,7 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
 
 - (void)handleWillDisplayCell {
     if (!self.isDragging) return;
+    if (self.willRemoveCell) return;
 
     CGFloat offsetY = self.contentOffset.y;
     if (offsetY < self.lastOffsetY) { // 下拉
@@ -717,6 +825,15 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
     }
 }
 
+- (void)didEndScrollingCell:(GKVideoViewCell *)cell forIndex:(NSInteger)index {
+    if (index < 0 || index >= self.totalCount) return;
+    if (!cell) return;
+    if ([self.userDelegate respondsToSelector:@selector(scrollView:didEndScrollingCell:forRowAtIndexPath:)]) {
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
+        [self.userDelegate scrollView:self didEndScrollingCell:cell forRowAtIndexPath:indexPath];
+    }
+}
+
 - (void)didEndScrollingCell:(GKVideoViewCell *)cell {
     if (self.changeIndex < 0) {
         self.changeIndex = 0;
@@ -725,7 +842,7 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
     }
     
     // 快速滑动处理
-    if (cell && self.lastWillDisplayCell) {
+    if (cell && self.lastWillDisplayCell && !self.willRemoveCell) {
         if (cell != self.lastWillDisplayCell && self.currentIndex != self.changeIndex) {
             [self willDisplayCell:cell forIndex:self.changeIndex];
         }
@@ -735,7 +852,7 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
     self.lastEndDisplayCell = nil;
     
     // 隐藏cell
-    if (self.currentIndex != self.changeIndex) {
+    if (self.currentIndex != self.changeIndex && !self.willRemoveCell) {
         if (self.totalCount <= 3 || self.isChanging || self.currentIndex == 0 || self.currentIndex == self.totalCount - 1) {
             [self didEndDisplayingCell:self.currentCell forIndex:self.currentIndex];
             self.lastEndDisplayCell = nil;
@@ -746,11 +863,96 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
     self.currentCell = cell;
     self.currentIndex = self.changeIndex;
     
-    // 更新滑动结束时显示的cell
-    if ([self.userDelegate respondsToSelector:@selector(scrollView:didEndScrollingCell:forRowAtIndexPath:)]) {
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:self.currentIndex inSection:0];
-        [self.userDelegate scrollView:self didEndScrollingCell:cell forRowAtIndexPath:indexPath];
+    if (self.willRemoveCell) {
+        [self handleRemovePage];
     }
+    
+    // 更新滑动结束时显示的cell
+    [self didEndScrollingCell:cell forIndex:self.currentIndex];
+}
+
+- (void)handleRemovePage {
+    // 移除代理
+    if ([self.userDelegate respondsToSelector:@selector(scrollView:didRemoveCell:forRowAtIndexPath:)]) {
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:self.willRemoveIndex inSection:0];
+        [self.userDelegate scrollView:self didRemoveCell:self.willRemoveCell forRowAtIndexPath:indexPath];
+    }else {
+        [NSException exceptionWithName:NSInternalInconsistencyException
+                                reason:@"when using the `removeCurrentPageAnimated` method，you must implement the `scrollView:didRemoveCell:forRowAtIndexPath` protocol and remove the data for index"
+                              userInfo:nil];
+    }
+    
+    // 重新获取
+    self.totalCount = [self.dataSource numberOfRowsInScrollView:self];
+    if (self.totalCount <= 0) {
+        [self initValue];
+        return;
+    }
+    
+    // 显示cell
+    if (self.currentIndex == self.totalCount) {
+        self.currentIndex = self.totalCount - 1;
+    }else {
+        self.currentIndex = self.willRemoveIndex;
+    }
+    self.changeIndex = self.currentIndex;
+    
+    [self saveReusableCell:self.willRemoveCell];
+    self.willRemoveCell = nil;
+    self.willRemoveIndex = 0;
+    
+    // 即将显示
+    [self willDisplayCell:self.currentCell forIndex:self.currentIndex];
+    
+    if (self.topCell != self.currentCell) {
+        [self saveReusableCell:self.topCell];
+        self.topCell = nil;
+    }else {
+        self.topCell = nil;
+    }
+    if (self.ctrCell != self.currentCell) {
+        [self saveReusableCell:self.ctrCell];
+        self.ctrCell = nil;
+    }else {
+        self.ctrCell = nil;
+    }
+    if (self.btmCell != self.currentCell) {
+        [self saveReusableCell:self.btmCell];
+        self.btmCell = nil;
+    }else {
+        self.btmCell = nil;
+    }
+    if (self.totalCount == 1) {
+        self.topCell = self.currentCell;
+        self.index = 0;
+    }else if (self.totalCount == 2) {
+        if (self.currentIndex == 0) {
+            self.topCell = self.currentCell;
+            [self createCtrCellWithIndex:self.currentIndex+1];
+            self.index = 0;
+        }else {
+            self.ctrCell = self.currentCell;
+            [self createTopCellWithIndex:self.currentIndex-1];
+        }
+    }else {
+        if (self.currentIndex == 0) {
+            self.topCell = self.currentCell;
+            [self createCtrCellWithIndex:self.currentIndex+1];
+            [self createBtmCellWithIndex:self.currentIndex+2];
+            self.index = 0;
+        }else if (self.currentIndex == self.totalCount - 1) {
+            self.btmCell = self.currentCell;
+            [self createTopCellWithIndex:self.currentIndex-2];
+            [self createCtrCellWithIndex:self.currentIndex-1];
+        }else {
+            self.ctrCell = self.currentCell;
+            [self createTopCellWithIndex:self.currentIndex-1];
+            [self createBtmCellWithIndex:self.currentIndex+1];
+        }
+    }
+    [self updateLayout];
+    [self updateContentSize];
+    [self updateContentOffset];
 }
 
 #pragma mark - update view
