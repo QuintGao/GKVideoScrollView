@@ -121,6 +121,11 @@
                 if (self.page >= self.total) {
                     [self.manager.portraitScrollView.mj_footer endRefreshingWithNoMoreData];
                 }
+                
+                // 解决先顶部插入数据后清空后切换索引引起的崩溃问题
+                if (self.manager.portraitScrollView.defaultIndex < 0 || self.manager.portraitScrollView.defaultIndex >= self.manager.dataSource.count) {
+                    self.manager.portraitScrollView.defaultIndex = 0;
+                }
                 [self.manager reloadData];
             }
         }

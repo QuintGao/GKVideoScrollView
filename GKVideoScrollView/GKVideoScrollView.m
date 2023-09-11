@@ -118,6 +118,7 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
     [self saveReusableCell:self.topCell];
     [self saveReusableCell:self.ctrCell];
     [self saveReusableCell:self.btmCell];
+    [self saveReusableCell:self.willRemoveCell];
     self.topCell = nil;
     self.ctrCell = nil;
     self.btmCell = nil;
@@ -433,6 +434,9 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
                                 reason:@"when using the `removeCurrentPageAnimated` method，you must implement the `scrollView:didRemoveCell:forRowAtIndexPath` protocol and remove the data for index"
                               userInfo:nil];
     }
+    if (self.topCell == self.willRemoveCell) self.topCell = nil;
+    if (self.ctrCell == self.willRemoveCell) self.ctrCell = nil;
+    if (self.btmCell == self.willRemoveCell) self.btmCell = nil;
     
     // 刷新
     self.totalCount = [self.dataSource numberOfRowsInScrollView:self];
