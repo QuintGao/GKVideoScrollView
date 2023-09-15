@@ -100,6 +100,12 @@
 }
 
 - (void)playVideoWithCell:(GKVideoCell *)cell index:(NSInteger)index {
+//    // 预加载下一页数据
+//    if (index == self.dataSource.count - 1) {
+//        NSLog(@"预加载下一个页");
+//        [self.viewController requestMoreData];
+//    }
+    
     NSLog(@"播放----%zd", index);
     GKVideoModel *model = self.dataSource[index];
     
@@ -162,6 +168,10 @@
     
     [alertVC addAction:[UIAlertAction actionWithTitle:@"顶部插入数据" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [self.viewController requestNewDataInsertFront];
+    }]];
+    
+    [alertVC addAction:[UIAlertAction actionWithTitle:@"加载下一页" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self.viewController requestMoreData];
     }]];
     
     [alertVC addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];

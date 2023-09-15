@@ -64,14 +64,12 @@
     __weak __typeof(self) weakSelf = self;
     self.manager.portraitScrollView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
         __strong __typeof(weakSelf) self = weakSelf;
-        self.page = 1;
-        [self requestData];
+        [self requestNewData];
     }];
     
     MJRefreshAutoNormalFooter *footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
         __strong __typeof(weakSelf) self = weakSelf;
-        self.page++;
-        [self requestData];
+        [self requestMoreData];
     }];
     footer.automaticallyRefresh = NO;
     self.manager.portraitScrollView.mj_footer = footer;
@@ -84,6 +82,11 @@
 
 - (void)requestNewDataInsertFront {
     self.isInsertFront = YES;
+    [self requestData];
+}
+
+- (void)requestMoreData {
+    self.page++;
     [self requestData];
 }
 
