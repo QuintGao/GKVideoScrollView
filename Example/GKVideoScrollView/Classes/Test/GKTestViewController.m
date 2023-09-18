@@ -141,7 +141,8 @@
 }
 
 - (void)randomAction {
-    NSInteger random = [self randomIndex];
+//    NSInteger random = [self randomIndex];
+    NSInteger random = self.dataSources.count - 1;
     [self.scrollView scrollToPageWithIndex:random];
 }
 

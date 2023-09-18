@@ -267,7 +267,11 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
 
 - (void)reloadData {
     // 总数
-    self.totalCount = [self.dataSource numberOfRowsInScrollView:self];
+    NSInteger totalCount = [self.dataSource numberOfRowsInScrollView:self];
+    if (totalCount > self.totalCount && self.lastCount > 0) {
+        self.lastCount = 0;
+    }
+    self.totalCount = totalCount;
     
     // 特殊场景处理：开始有数据刷新后无数据
     if (self.totalCount <= 0) {
@@ -336,7 +340,6 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
             type = GKVideoCellUpdateType_Top;
         }else if (index == self.totalCount - 1) {
             type = GKVideoCellUpdateType_Btm;
-            self.index = index - 1; // 特殊处理
         }else {
             type = GKVideoCellUpdateType_Ctr;
         }

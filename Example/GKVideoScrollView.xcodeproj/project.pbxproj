@@ -966,7 +966,7 @@
 				GCC_PREFIX_HEADER = "GKVideoScrollView/GKVideoScrollView-Prefix.pch";
 				INFOPLIST_FILE = "GKVideoScrollView/GKVideoScrollView-Info.plist";
 				MODULE_NAME = ExampleApp;
-				PRODUCT_BUNDLE_IDENTIFIER = com.quintgao.dyvideo;
+				PRODUCT_BUNDLE_IDENTIFIER = com.quintgao.dy;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				WRAPPER_EXTENSION = app;
@@ -983,7 +983,7 @@
 				GCC_PREFIX_HEADER = "GKVideoScrollView/GKVideoScrollView-Prefix.pch";
 				INFOPLIST_FILE = "GKVideoScrollView/GKVideoScrollView-Info.plist";
 				MODULE_NAME = ExampleApp;
-				PRODUCT_BUNDLE_IDENTIFIER = com.quintgao.dyvideo;
+				PRODUCT_BUNDLE_IDENTIFIER = com.quintgao.dy;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				WRAPPER_EXTENSION = app;
