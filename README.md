@@ -36,6 +36,7 @@ GKVideoScrollView is available under the MIT license. See the LICENSE file for m
 
 ## 更新记录
 
+* 2023.09.19 - 1.2.0 新增移除cell方法及根据索引刷新cell的方法，部分问题优化
 * 2023.09.01 - 1.1.0 修复滑动结束后可能位置不准确的问题
 * 2023.08.22 - 1.0.9 修复快速切换时的问题
 * 2023.08.16 - 1.0.8 1、修复快速滑动刷新后显示错乱的问题 2、切换到下一页功能优化
