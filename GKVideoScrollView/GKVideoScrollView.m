@@ -268,7 +268,10 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
 - (void)reloadData {
     // 总数
     NSInteger totalCount = [self.dataSource numberOfRowsInScrollView:self];
-    if (totalCount > self.totalCount && self.lastCount > 0) {
+    
+    // 修复自动刷新时的bug
+    CGFloat offsetY = self.contentOffset.y;
+    if (totalCount > self.totalCount && self.lastCount > 0 && (offsetY == 0 || offsetY == self.viewHeight || offsetY == self.viewHeight * 2)) {
         self.lastCount = 0;
     }
     self.totalCount = totalCount;
