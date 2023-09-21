@@ -131,6 +131,7 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
     self.isLoaded = NO;
     self.currentIndex = 0;
     self.changeIndex = 0;
+    self.lastCount = 0;
     self.index = 0;
     self.isChanging = NO;
     self.isChangeOffset = NO;
