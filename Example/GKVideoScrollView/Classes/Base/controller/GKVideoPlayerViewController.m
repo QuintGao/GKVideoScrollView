@@ -42,11 +42,11 @@
     return UIStatusBarStyleLightContent;
 }
 
-- (void)viewWillLayoutSubviews {
-    [super viewWillLayoutSubviews];
-    
-    self.manager.portraitScrollView.frame = self.view.bounds;
-}
+//- (void)viewWillLayoutSubviews {
+//    [super viewWillLayoutSubviews];
+//    
+//    self.manager.portraitScrollView.frame = self.view.bounds;
+//}
 
 - (void)initUI {
     self.view.backgroundColor = UIColor.blackColor;

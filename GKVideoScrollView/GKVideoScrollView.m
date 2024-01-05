@@ -279,6 +279,7 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
     
     // 特殊场景处理：开始有数据刷新后无数据
     if (self.totalCount <= 0) {
+        [self didEndDisplayingCell:self.currentCell forIndex:self.currentIndex];
         [self initValue];
         return;
     }
@@ -315,6 +316,7 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
     
     // 特殊场景处理：开始有数据刷新后无数据
     if (self.totalCount <= 0) {
+        [self didEndDisplayingCell:self.currentCell forIndex:self.currentIndex];
         [self initValue];
         return;
     }
@@ -448,6 +450,7 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
     // 刷新
     self.totalCount = [self.dataSource numberOfRowsInScrollView:self];
     if (self.totalCount <= 0) {
+        [self didEndDisplayingCell:self.currentCell forIndex:self.currentIndex];
         [self initValue];
         return;
     }
@@ -600,6 +603,10 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
             [self createBtmCellWithIndex:index + 1];
         }
     }else if (type == GKVideoCellUpdateType_Btm) {
+        if (self.topCell) {
+            [self saveReusableCell:self.topCell];
+            self.topCell = nil;
+        }
         [self createCtrCellWithIndex:index - 1];
         [self createBtmCellWithIndex:index];
     }
@@ -896,6 +903,7 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
     // 重新获取
     self.totalCount = [self.dataSource numberOfRowsInScrollView:self];
     if (self.totalCount <= 0) {
+        [self didEndDisplayingCell:self.currentCell forIndex:self.currentIndex];
         [self initValue];
         return;
     }
