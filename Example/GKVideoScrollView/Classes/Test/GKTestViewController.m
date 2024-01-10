@@ -207,7 +207,8 @@
         [_scrollView registerClass:GKTestCell1.class forCellReuseIdentifier:@"GKTestCell1"];
         [_scrollView registerClass:GKTestCell2.class forCellReuseIdentifier:@"GKTestCell2"];
         [_scrollView registerClass:GKTestCell3.class forCellReuseIdentifier:@"GKTestCell3"];
-        [_scrollView registerClass:GKTestCell4.class forCellReuseIdentifier:@"GKTestCell4"];
+//        [_scrollView registerClass:GKTestCell4.class forCellReuseIdentifier:@"GKTestCell4"];
+        [_scrollView registerNib:[UINib nibWithNibName:@"GKTestCell4" bundle:nil] forCellReuseIdentifier:@"GKTestCell4"];
     }
     return _scrollView;
 }

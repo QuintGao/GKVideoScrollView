@@ -18,6 +18,13 @@
     return self;
 }
 
+- (instancetype)initWithCoder:(NSCoder *)coder {
+    if (self = [super initWithCoder:coder]) {
+        [self initUI];
+    }
+    return self;
+}
+
 - (void)initUI {
     [self addSubview:self.textLabel];
     [self.textLabel mas_makeConstraints:^(MASConstraintMaker *make) {
