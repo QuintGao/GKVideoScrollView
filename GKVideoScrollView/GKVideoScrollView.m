@@ -1057,6 +1057,7 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
     
     // 下滑到第一个
     if (self.index == 0 && offsetY <= viewH) {
+        self.changeIndex = 0;
         return;
     }
     
