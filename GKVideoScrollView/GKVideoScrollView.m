@@ -268,27 +268,16 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
 
 - (void)reloadData {
     // 总数
-    NSInteger totalCount = [self.dataSource numberOfRowsInScrollView:self];
-    
-    // 修复自动刷新时的bug
-    CGFloat offsetY = self.contentOffset.y;
-    if (totalCount > self.totalCount && self.lastCount > 0 && (offsetY == 0 || offsetY == self.viewHeight || offsetY == self.viewHeight * 2)) {
-        self.lastCount = 0;
-    }
-    self.totalCount = totalCount;
-    
-    // 特殊场景处理：开始有数据刷新后无数据
-    if (self.totalCount <= 0) {
-        [self didEndDisplayingCell:self.currentCell forIndex:self.currentIndex];
-        [self initValue];
-        return;
-    }
+    self.totalCount = [self getTotalCount];
+    if (self.totalCount <= 0) return;
     
     // 索引
     if (self.defaultIndex < 0 || self.defaultIndex >= self.totalCount) {
-        @throw [NSException exceptionWithName:NSInternalInconsistencyException
-                                       reason:@"please set defaultIndex correctly"
-                                     userInfo:nil];
+        if (!self.isLoaded) {
+            @throw [NSException exceptionWithName:NSInternalInconsistencyException
+                                           reason:@"please set defaultIndex correctly"
+                                         userInfo:nil];
+        }
     }
     NSInteger index = self.defaultIndex;
     self.defaultIndex = 0;
@@ -312,14 +301,8 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
 
 - (void)reloadDataWithIndex:(NSInteger)index {
     // 总数
-    self.totalCount = [self.dataSource numberOfRowsInScrollView:self];
-    
-    // 特殊场景处理：开始有数据刷新后无数据
-    if (self.totalCount <= 0) {
-        [self didEndDisplayingCell:self.currentCell forIndex:self.currentIndex];
-        [self initValue];
-        return;
-    }
+    self.totalCount = [self getTotalCount];
+    if (self.totalCount <= 0) return;
     
     self.index = index;
     self.currentIndex = index;
@@ -448,12 +431,8 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
     if (self.btmCell == self.willRemoveCell) self.btmCell = nil;
     
     // 刷新
-    self.totalCount = [self.dataSource numberOfRowsInScrollView:self];
-    if (self.totalCount <= 0) {
-        [self didEndDisplayingCell:self.currentCell forIndex:self.currentIndex];
-        [self initValue];
-        return;
-    }
+    self.totalCount = [self getTotalCount];
+    if (self.totalCount <= 0) return;
     
     if (self.currentIndex == self.totalCount) {
         self.currentIndex = self.totalCount - 1;
@@ -464,6 +443,25 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
 }
 
 #pragma mark - Private Methods
+- (NSInteger)getTotalCount {
+    // 总数
+    NSInteger totalCount = [self.dataSource numberOfRowsInScrollView:self];
+    
+    // 修复刷新时可能出现的bug
+    CGFloat offsetY = self.contentOffset.y;
+    if (totalCount > self.totalCount && self.lastCount > 0 && (offsetY == 0 || offsetY == self.viewHeight || offsetY == self.viewHeight * 2)) {
+        self.lastCount = 0;
+    }
+    
+    // 清空数据处理
+    if (self.totalCount <= 0) {
+        [self didEndDisplayingCell:self.currentCell forIndex:self.currentIndex];
+        [self initValue];
+    }
+    
+    return totalCount;
+}
+
 - (void)clearWithIdentifier:(NSString *)identifier {
     if ([self.cellNibs.allKeys containsObject:identifier]) {
         [self.cellNibs removeObjectForKey:identifier];
@@ -900,13 +898,9 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
                               userInfo:nil];
     }
     
-    // 重新获取
-    self.totalCount = [self.dataSource numberOfRowsInScrollView:self];
-    if (self.totalCount <= 0) {
-        [self didEndDisplayingCell:self.currentCell forIndex:self.currentIndex];
-        [self initValue];
-        return;
-    }
+    // 重新获取总数
+    self.totalCount = [self getTotalCount];
+    if (self.totalCount <= 0) return;
     
     // 显示cell
     if (self.currentIndex == self.totalCount) {
