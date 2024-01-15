@@ -16,7 +16,7 @@
 @implementation GKVideoViewCell
 
 - (instancetype)initWithReuseIdentifier:(NSString *)reuseIdentifier {
-    if (self = [super initWithFrame:CGRectMake(0, 0, 320, 44)]) {
+    if (self = [super initWithFrame:UIScreen.mainScreen.bounds]) {
         self.reuseIdentifier = reuseIdentifier;
     }
     return self;
