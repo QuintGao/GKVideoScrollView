@@ -36,6 +36,7 @@ GKVideoScrollView is available under the MIT license. See the LICENSE file for m
 
 ## 更新记录
 
+* 2024.04.25 - 1.3.4 修复defaultIndex失效的问题 #8
 * 2024.01.15 - 1.3.3 修复reloadDataWithIndex:方法引起的错乱问题
 * 2024.01.10 - 1.3.2 修复可能出现的播放错乱问题
 * 2024.01.05 - 1.3.1 1、清空数据后增加结束显示回调 2、cell创建逻辑优化
