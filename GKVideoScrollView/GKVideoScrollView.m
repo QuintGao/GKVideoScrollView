@@ -454,7 +454,7 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
     }
     
     // 清空数据处理
-    if (self.totalCount <= 0) {
+    if (self.totalCount <= 0 && self.isLoaded) {
         [self didEndDisplayingCell:self.currentCell forIndex:self.currentIndex];
         [self initValue];
     }
