@@ -9,4 +9,5 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = "9.0"
   s.source       = { :git => "https://github.com/QuintGao/GKVideoScrollView.git", :tag => s.version.to_s }
   s.source_files = 'GKVideoScrollView/*.{h,m}'
+  s.resource_bundles = {'GKVideoScrollView' => 'GKVideoScrollView/PrivacyInfo.xcprivacy'}
 end

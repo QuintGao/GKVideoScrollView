@@ -16,7 +16,7 @@ PODS:
     - AFNetworking/NSURLSession
   - GKNavigationBar/GestureHandle (1.8.7)
   - GKSliderView (1.1.0)
-  - GKVideoScrollView (1.0.7)
+  - GKVideoScrollView (1.3.3)
   - Masonry (1.1.0)
   - MJExtension (3.4.1)
   - MJRefresh (3.7.5)
@@ -122,7 +122,7 @@ SPEC CHECKSUMS:
   AFNetworking: 3bd23d814e976cd148d7d44c3ab78017b744cd58
   GKNavigationBar: 4ec3fbe0af0f758c6c53de10da3bc4086801afd2
   GKSliderView: b5fc3b68bbfdb05ee403303377921d6564de61a9
-  GKVideoScrollView: 2205453bbfd78c440ceb02c954cc9b28e15461df
+  GKVideoScrollView: 8bf597a9792f32ee53debb7d3c2d88e00d143027
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   MJExtension: 21c5f6f8c4d5d8844b7ae8fbae08fed0b501f961
   MJRefresh: fdf5e979eb406a0341468932d1dfc8b7f9fce961
@@ -135,4 +135,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 9038bdcff1d5da4b194938ddef74d244d7c574ed
 
-COCOAPODS: 1.12.1
+COCOAPODS: 1.15.2
