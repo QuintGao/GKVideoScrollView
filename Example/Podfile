@@ -16,6 +16,9 @@ target 'Example' do
   pod 'GKSliderView'
   pod 'GKNavigationBar/GestureHandle'
   
+  # 腾讯云播放器
+  pod 'TXLiteAVSDK_Player'
+  
 end
 
 post_install do |installer|

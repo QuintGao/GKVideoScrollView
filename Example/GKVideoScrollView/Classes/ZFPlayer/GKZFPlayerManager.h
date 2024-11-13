@@ -14,6 +14,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface GKZFPlayerManager : GKVideoManager
 
+- (instancetype)initWithPlayManager:(id<ZFPlayerMediaPlayback>)playManager;
+
 @property (nonatomic, strong, nullable) ZFPlayerController *player;
 
 @end

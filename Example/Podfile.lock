@@ -82,6 +82,7 @@ PODS:
     - SJVideoPlayer/Common
   - SJVideoPlayer/ResourceLoader (3.4.3):
     - SJBaseVideoPlayer (>= 3.7.5)
+  - TXLiteAVSDK_Player (12.1.16597)
   - YYModel (1.0.4)
   - ZFPlayer/AVPlayer (4.1.4):
     - ZFPlayer/Core
@@ -97,6 +98,7 @@ DEPENDENCIES:
   - MJRefresh
   - SDWebImage
   - SJVideoPlayer
+  - TXLiteAVSDK_Player
   - ZFPlayer/AVPlayer
 
 SPEC REPOS:
@@ -111,6 +113,7 @@ SPEC REPOS:
     - SJBaseVideoPlayer
     - SJUIKit
     - SJVideoPlayer
+    - TXLiteAVSDK_Player
     - YYModel
     - ZFPlayer
 
@@ -130,9 +133,10 @@ SPEC CHECKSUMS:
   SJBaseVideoPlayer: f15debaa8c1e27b63bdefc8caeec515e9c71d079
   SJUIKit: a40111941e408cc17d4c1c23495aa92999e814b0
   SJVideoPlayer: 4f09814f58522e0975cb2dccfda925f6c8643467
+  TXLiteAVSDK_Player: 8fd735c06a8f1922e555fbdf5f6ae14ff54e8da2
   YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
   ZFPlayer: 5cf39e8d9f0c2394a014b0db4767b5b5a6bffe13
 
-PODFILE CHECKSUM: 9038bdcff1d5da4b194938ddef74d244d7c574ed
+PODFILE CHECKSUM: 4fa9ee6a7edb62449d455b88b9a0d8bf890b5e86
 
-COCOAPODS: 1.15.2
+COCOAPODS: 1.16.1

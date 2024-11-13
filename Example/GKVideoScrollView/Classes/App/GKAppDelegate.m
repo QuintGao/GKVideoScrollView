@@ -12,10 +12,15 @@
 #import <SJBaseVideoPlayer/SJRotationManagerInternal.h>
 #import "GKRotationManager.h"
 #import "GKLandscapeWindow.h"
+#import <TXLiteAVSDK_Player/TXLiveBase.h>
 
 @implementation GKAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    
+    // 认证
+    [TXLiveBase setLicenceURL:@"https://license.vod2.myqcloud.com/license/v2/1253412039_1/v_cube.license" key:@"942300ccddf6bf452abb0d091c941678"];
+    [TXLiveBase setLogLevel:LOGLEVEL_ERROR];
     
     return YES;
 }

@@ -18,9 +18,16 @@
 
 @property (nonatomic, strong) GKZFLandscapeView *landscapeView;
 
+@property (nonatomic, strong) id<ZFPlayerMediaPlayback> playManager;
+
 @end
 
 @implementation GKZFPlayerManager
+
+- (instancetype)initWithPlayManager:(id<ZFPlayerMediaPlayback>)playManager {
+    self.playManager = playManager;
+    return [super init];
+}
 
 - (void)dealloc {
 #ifdef DEBUG
@@ -30,7 +37,10 @@
 
 - (void)initPlayer {
     // 初始化播放器
-    ZFAVPlayerManager *manager = [[ZFAVPlayerManager alloc] init];
+    id<ZFPlayerMediaPlayback> manager = self.playManager;
+    if (!manager) {
+        manager = [[ZFAVPlayerManager alloc] init];
+    }
     manager.shouldAutoPlay = YES; // 自动播放
     
     ZFPlayerController *player = [[ZFPlayerController alloc] init];
@@ -87,6 +97,10 @@
             self.portraitView.hidden = NO;
             self.player.controlView = self.portraitView;
         }
+    };
+    
+    player.playerPlayFailed = ^(id<ZFPlayerMediaPlayback>  _Nonnull asset, id  _Nonnull error) {
+        NSLog(@"播放失败---%@", error);
     };
 }
 

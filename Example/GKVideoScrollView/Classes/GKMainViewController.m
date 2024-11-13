@@ -15,6 +15,7 @@
 #import "GKKuaishouViewController.h"
 #import "GKTestViewController.h"
 #import "GKTableViewController.h"
+#import "GKTXPlayerViewController.h"
 
 @interface GKMainViewController ()<UITableViewDataSource, UITableViewDelegate>
 
@@ -45,6 +46,7 @@
     
     self.dataSources = @[@"ZFPlayer播放",
                          @"SJVideoPlayer播放",
+                         @"腾讯云视频播放",
                          @"列表旋转",
                          @"抖音",
                          @"快手",
@@ -87,14 +89,16 @@
     }else if (indexPath.row == 1) {
         vc = [[GKSJPlayerViewController alloc] init];
     }else if (indexPath.row == 2) {
-        vc = [[GKRotationViewController alloc] init];
+        vc = [[GKTXPlayerViewController alloc] init];
     }else if (indexPath.row == 3) {
-        vc = [[GKDouyinViewController alloc] init];
+        vc = [[GKRotationViewController alloc] init];
     }else if (indexPath.row == 4) {
-        vc = [[GKKuaishouViewController alloc] init];
+        vc = [[GKDouyinViewController alloc] init];
     }else if (indexPath.row == 5) {
-        vc = [[GKTestViewController alloc] init];
+        vc = [[GKKuaishouViewController alloc] init];
     }else if (indexPath.row == 6) {
+        vc = [[GKTestViewController alloc] init];
+    }else if (indexPath.row == 7) {
         vc = [[GKTableViewController alloc] init];
     }
     [self.navigationController pushViewController:vc animated:YES];

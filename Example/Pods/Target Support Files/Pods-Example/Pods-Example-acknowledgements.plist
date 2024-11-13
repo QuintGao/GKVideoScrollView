@@ -339,6 +339,17 @@ SOFTWARE.
 		</dict>
 		<dict>
 			<key>FooterText</key>
+			<string>copyright 2017 tencent Ltd. All rights reserved.
+</string>
+			<key>License</key>
+			<string>Proprietary</string>
+			<key>Title</key>
+			<string>TXLiteAVSDK_Player</string>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+		</dict>
+		<dict>
+			<key>FooterText</key>
 			<string>The MIT License (MIT)
 
 Copyright (c) 2015 ibireme &lt;ibireme@gmail.com&gt;

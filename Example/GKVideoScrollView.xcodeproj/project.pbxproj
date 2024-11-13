@@ -46,6 +46,8 @@
 		795240622A3860CC001ED53C /* GKTestCell3.m in Sources */ = {isa = PBXBuildFile; fileRef = 795240612A3860CC001ED53C /* GKTestCell3.m */; };
 		795240652A3860D2001ED53C /* GKTestCell4.m in Sources */ = {isa = PBXBuildFile; fileRef = 795240642A3860D2001ED53C /* GKTestCell4.m */; };
 		795240682A3861A3001ED53C /* GKTestModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 795240672A3861A3001ED53C /* GKTestModel.m */; };
+		796B01482CE431210053427A /* GKTXPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 796B01462CE431210053427A /* GKTXPlayerViewController.m */; };
+		796B01492CE431210053427A /* GKTXPlayerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 796B01442CE431210053427A /* GKTXPlayerManager.m */; };
 		7991D49329F766A7002AADCD /* GKVideoWorkListView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7991D49229F766A7002AADCD /* GKVideoWorkListView.m */; };
 		79A5254B29D5854E00CFB32F /* GKRotationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 79A5254A29D5854E00CFB32F /* GKRotationViewController.m */; };
 		79A5254E29D6899D00CFB32F /* GKTestManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 79A5254D29D6899D00CFB32F /* GKTestManager.m */; };
@@ -157,6 +159,10 @@
 		795240642A3860D2001ED53C /* GKTestCell4.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GKTestCell4.m; sourceTree = "<group>"; };
 		795240662A3861A3001ED53C /* GKTestModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GKTestModel.h; sourceTree = "<group>"; };
 		795240672A3861A3001ED53C /* GKTestModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GKTestModel.m; sourceTree = "<group>"; };
+		796B01432CE431210053427A /* GKTXPlayerManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GKTXPlayerManager.h; sourceTree = "<group>"; };
+		796B01442CE431210053427A /* GKTXPlayerManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GKTXPlayerManager.m; sourceTree = "<group>"; };
+		796B01452CE431210053427A /* GKTXPlayerViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GKTXPlayerViewController.h; sourceTree = "<group>"; };
+		796B01462CE431210053427A /* GKTXPlayerViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GKTXPlayerViewController.m; sourceTree = "<group>"; };
 		7991D49129F766A7002AADCD /* GKVideoWorkListView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GKVideoWorkListView.h; sourceTree = "<group>"; };
 		7991D49229F766A7002AADCD /* GKVideoWorkListView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GKVideoWorkListView.m; sourceTree = "<group>"; };
 		79A5254929D5854E00CFB32F /* GKRotationViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GKRotationViewController.h; sourceTree = "<group>"; };
@@ -351,6 +357,7 @@
 				79C4207429C3F75D00A0AB84 /* Base */,
 				790791C029BF176D000D70A5 /* ZFPlayer */,
 				790791C129BF1773000D70A5 /* SJVideoPlayer */,
+				796B01472CE431210053427A /* TXPlayer */,
 				79A5254829D5851800CFB32F /* Rotation */,
 				79A5257A29DC0CFD00CFB32F /* Douyin */,
 				79CFE0DB29F2682400B6A013 /* Kuaishou */,
@@ -451,6 +458,17 @@
 				795240672A3861A3001ED53C /* GKTestModel.m */,
 			);
 			path = Test;
+			sourceTree = "<group>";
+		};
+		796B01472CE431210053427A /* TXPlayer */ = {
+			isa = PBXGroup;
+			children = (
+				796B01452CE431210053427A /* GKTXPlayerViewController.h */,
+				796B01462CE431210053427A /* GKTXPlayerViewController.m */,
+				796B01432CE431210053427A /* GKTXPlayerManager.h */,
+				796B01442CE431210053427A /* GKTXPlayerManager.m */,
+			);
+			path = TXPlayer;
 			sourceTree = "<group>";
 		};
 		79A5254829D5851800CFB32F /* Rotation */ = {
@@ -599,6 +617,7 @@
 				6003F587195388D20070C39A /* Frameworks */,
 				6003F588195388D20070C39A /* Resources */,
 				22B1FE836214467991C5F736 /* [CP] Embed Pods Frameworks */,
+				4A8A7C94FEA314F403E671EE /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -638,7 +657,7 @@
 				ORGANIZATIONNAME = QuintGao;
 				TargetAttributes = {
 					6003F589195388D20070C39A = {
-						DevelopmentTeam = JWMR39G949;
+						DevelopmentTeam = RY7LMS5KN7;
 					};
 					6003F5AD195388D20070C39A = {
 						TestTargetID = 6003F589195388D20070C39A;
@@ -729,6 +748,8 @@
 				"${BUILT_PRODUCTS_DIR}/SJUIKit/SJUIKit.framework",
 				"${BUILT_PRODUCTS_DIR}/SJVideoPlayer/SJVideoPlayer.framework",
 				"${BUILT_PRODUCTS_DIR}/YYModel/YYModel.framework",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/TXLiteAVSDK_Player/TXSoundTouch.framework/TXSoundTouch",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/TXLiteAVSDK_Player/TXFFmpeg.framework/TXFFmpeg",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
@@ -744,10 +765,30 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SJUIKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SJVideoPlayer.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YYModel.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TXSoundTouch.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TXFFmpeg.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Example/Pods-Example-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		4A8A7C94FEA314F403E671EE /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Example/Pods-Example-resources.sh",
+				"${PODS_ROOT}/TXLiteAVSDK_Player/TXLiteAVSDK_Player/TXLiteAVSDK_Player.xcframework/ios-arm64_armv7/TXLiteAVSDK_Player.framework/TXLiteAVSDK_Player.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/TXLiteAVSDK_Player.bundle",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Example/Pods-Example-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -764,6 +805,8 @@
 				79CFE0E729F2904000B6A013 /* GKKuaishouPortraitView.m in Sources */,
 				79A5257029D6D45A00CFB32F /* GKLandscapeViewController.m in Sources */,
 				79CFE0DE29F26B6200B6A013 /* GKKuaishouViewController.m in Sources */,
+				796B01482CE431210053427A /* GKTXPlayerViewController.m in Sources */,
+				796B01492CE431210053427A /* GKTXPlayerManager.m in Sources */,
 				790791DF29C0469E000D70A5 /* GKSJLandscapeView.m in Sources */,
 				79A5255829D6981D00CFB32F /* GKVideoManager.m in Sources */,
 				6003F59E195388D20070C39A /* GKAppDelegate.m in Sources */,
@@ -965,12 +1008,12 @@
 			baseConfigurationReference = 676372B12D9368CE48799D73 /* Pods-Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = JWMR39G949;
+				DEVELOPMENT_TEAM = RY7LMS5KN7;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "GKVideoScrollView/GKVideoScrollView-Prefix.pch";
 				INFOPLIST_FILE = "GKVideoScrollView/GKVideoScrollView-Info.plist";
 				MODULE_NAME = ExampleApp;
-				PRODUCT_BUNDLE_IDENTIFIER = com.quintgao.dy;
+				PRODUCT_BUNDLE_IDENTIFIER = com.demo.dyvideo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				WRAPPER_EXTENSION = app;
@@ -982,12 +1025,12 @@
 			baseConfigurationReference = FCC59FA72D521B74EA49A5CD /* Pods-Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = JWMR39G949;
+				DEVELOPMENT_TEAM = RY7LMS5KN7;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "GKVideoScrollView/GKVideoScrollView-Prefix.pch";
 				INFOPLIST_FILE = "GKVideoScrollView/GKVideoScrollView-Info.plist";
 				MODULE_NAME = ExampleApp;
-				PRODUCT_BUNDLE_IDENTIFIER = com.quintgao.dy;
+				PRODUCT_BUNDLE_IDENTIFIER = com.demo.dyvideo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				WRAPPER_EXTENSION = app;

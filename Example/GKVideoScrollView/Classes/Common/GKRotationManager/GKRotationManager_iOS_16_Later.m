@@ -1,21 +1,42 @@
 //
 //  GKRotationManager_iOS_16_Later.m
-//  Example
+//  GKRotationManager
 //
-//  Created by QuintGao on 2023/3/31.
-//  Copyright © 2023 QuintGao. All rights reserved.
+//  Created by QuintGao on 2024/11/11.
 //
 
 #import "GKRotationManager_iOS_16_Later.h"
-#import "GKLandscapeViewController.h"
+
+@interface GKLandscapeViewController_iOS_16_Later : UIViewController
+
+@end
+
+@implementation GKLandscapeViewController_iOS_16_Later
+
+- (BOOL)prefersStatusBarHidden {
+    return YES;
+}
+
+- (BOOL)prefersHomeIndicatorAutoHidden {
+    return YES;
+}
+
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
+    return UIInterfaceOrientationMaskAllButUpsideDown;
+}
+
+@end
 
 @interface GKRotationManager_iOS_16_Later()
 
+//@property (nonatomic, strong) GKLandscapeViewController_iOS_16_Later *landscapeVC;
 @property (nonatomic, strong, readonly) GKLandscapeViewController *landscapeViewController;
+
 
 @end
 
 @implementation GKRotationManager_iOS_16_Later
+
 @synthesize landscapeViewController = _landscapeViewController;
 - (__kindof GKLandscapeViewController *)landscapeViewController {
     if (!_landscapeViewController) {
@@ -26,13 +47,8 @@
 
 - (void)setNeedsUpdateOfSupportedInterfaceOrientations {
     if (@available(iOS 16.0, *)) {
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 160000
         [UIApplication.sharedApplication.keyWindow.rootViewController setNeedsUpdateOfSupportedInterfaceOrientations];
         [self.window.rootViewController setNeedsUpdateOfSupportedInterfaceOrientations];
-#else
-        [(id)UIApplication.sharedApplication.keyWindow.rootViewController setNeedsUpdateOfSupportedInterfaceOrientations];
-        [(id)self.window.rootViewController setNeedsUpdateOfSupportedInterfaceOrientations];
-#endif
     }
 }
 
@@ -54,24 +70,28 @@
         self.contentView.frame = sourceFrame;
         [sourceWindow addSubview:self.contentView];
         [self.contentView layoutIfNeeded];
-        if (!self.window.isKeyWindow) {
-            self.window.hidden = NO;
-            [self.window makeKeyAndVisible];
-        }
+        [UIView performWithoutAnimation:^{
+            if (self.window.isHidden) {
+                self.window.hidden = NO;
+//                self.window.rootViewController = self.landscapeVC;
+                [self.window makeKeyAndVisible];
+            }
+            [self setNeedsUpdateOfSupportedInterfaceOrientations];
+        }];
     }else if (toOrientation == UIInterfaceOrientationPortrait) {
-        [self.contentView removeFromSuperview];
         self.contentView.bounds = CGRectMake(0, 0, maxSize, minSize);
         self.contentView.center = CGPointMake(minSize * 0.5, maxSize * 0.5);
         self.contentView.transform = [self getRotationTransform:fromOrientation];
         [sourceWindow addSubview:self.contentView];
-        [self.contentView layoutIfNeeded];
-        [self.contentView snapshotViewAfterScreenUpdates:YES];
         [UIView performWithoutAnimation:^{
             [sourceWindow makeKeyAndVisible];
+            [self.contentView layoutIfNeeded];
+            [self.window resignKeyWindow];
             self.window.hidden = YES;
+            self.window = nil;
+            [self setNeedsUpdateOfSupportedInterfaceOrientations];
         }];
     }
-    [self setNeedsUpdateOfSupportedInterfaceOrientations];
     
     CGRect rotationBounds = CGRectZero;
     CGPoint rotationCenter = CGPointZero;
@@ -85,24 +105,20 @@
         rotationTransform = [self getRotationTransform:toOrientation];
     }
     
-    if (self.disableAnimations) {
-        [CATransaction begin];
-        [CATransaction setDisableActions:YES];
-    }
-    [UIView animateWithDuration:0.3 animations:^{
+    // 动画block
+    void (^animationsBlock)(void) = ^(void) {
+        self.contentView.transform = rotationTransform;
         if (toOrientation == UIInterfaceOrientationPortrait) {
-            self.contentView.transform = rotationTransform;
             self.contentView.frame = sourceFrame;
         }else {
-            self.contentView.transform = rotationTransform;
             self.contentView.bounds = rotationBounds;
             self.contentView.center = rotationCenter;
         }
         [self.contentView layoutIfNeeded];
-    } completion:^(BOOL finished) {
-        if (self.disableAnimations) {
-            [CATransaction commit];
-        }
+    };
+    
+    // 动画完成block
+    void (^completionBlock)(void) = ^(void) {
         self.contentView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         if (toOrientation == UIInterfaceOrientationPortrait) {
             [self.containerView addSubview:self.contentView];
@@ -116,14 +132,18 @@
         }
         !completion ?: completion();
         [self didChangeOrientation:toOrientation];
-    }];
-}
-
-- (UIInterfaceOrientationMask)supportedInterfaceOrientationsForWindow:(nullable UIWindow *)window {
-    if (window == self.window) {
-        return 1 << self.currentOrientation;
+    };
+    
+    if (self.disableAnimations) {
+        animationsBlock();
+        completionBlock();
+    }else {
+        [UIView animateWithDuration:0.3 animations:^{
+            animationsBlock();
+        } completion:^(BOOL finished) {
+            completionBlock();
+        }];
     }
-    return UIInterfaceOrientationMaskPortrait;
 }
 
 - (CGAffineTransform)getRotationTransform:(UIInterfaceOrientation)orientation {
@@ -134,6 +154,13 @@
         rotationTransform = CGAffineTransformMakeRotation(M_PI_2);
     }
     return rotationTransform;
+}
+
+- (UIInterfaceOrientationMask)supportedInterfaceOrientationsForWindow:(UIWindow *)window {
+    if (window == self.window) {
+        return 1 << self.currentOrientation;
+    }
+    return UIInterfaceOrientationMaskPortrait;
 }
 
 @end
