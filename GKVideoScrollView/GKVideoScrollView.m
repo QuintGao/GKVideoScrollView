@@ -678,9 +678,9 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
 }
 
 - (void)updateContentSize {
-    if (self.totalCount == 0) return;
-    CGFloat height = self.viewHeight * (self.totalCount >= 3 ? 3 : self.totalCount);
-    [self updateContentSize:CGSizeMake(self.viewWidth, height)];
+    NSInteger count = (self.totalCount >= 3 ? 3 : self.totalCount);
+    if (count == 0) count = 1;
+    [self updateContentSize:CGSizeMake(self.viewWidth, self.viewHeight * count)];
 }
 
 - (void)updateContentOffset {
