@@ -56,6 +56,11 @@
     return self;
 }
 
+- (void)dealloc {
+    NSLog(@"GKTXPlayerManager dealloc");
+    [self stop];
+}
+
 - (void)prepareToPlay {
     if (!_assetURL) return;
     _isPreparedToPlay = YES;
@@ -108,7 +113,6 @@
     self->_currentTime = 0;
     self->_totalTime = 0;
     self->_bufferTime = 0;
-//    self.isReadyToPlay = NO;
     self.isSetUrl = NO;
 }
 
