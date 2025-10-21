@@ -96,6 +96,9 @@ NS_ASSUME_NONNULL_BEGIN
 // 移除当前页面，切换到下一个页面，如果当前是最后一个，则切换到上一个页面
 - (void)removeCurrentPageAnimated:(BOOL)animated;
 
+// 根据索引移除指定页面，animated属性只在指定索引是当前页面时有效
+- (void)removePageWithIndex:(NSInteger)index animated:(BOOL)animated;
+
 @end
 
 NS_ASSUME_NONNULL_END

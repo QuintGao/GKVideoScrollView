@@ -11,12 +11,17 @@
 #import "GKZFLandscapeView.h"
 #import <SDWebImage/SDWebImage.h>
 #import "GKVideoPlayerViewController.h"
+//#import <KTVHTTPCache/KTVHTTPCache.h>
+#import <SJMediaCacheServer/SJMediaCacheServer.h>
 
 @interface GKZFPlayerManager()
 
 @property (nonatomic, strong) GKZFPortraitView *portraitView;
 
 @property (nonatomic, strong) GKZFLandscapeView *landscapeView;
+
+@property (nonatomic, strong) id<MCSPrefetchTask> lastPrefetchTask;
+@property (nonatomic, strong) id<MCSPrefetchTask> nextPrefetchTask;
 
 @end
 
@@ -90,13 +95,61 @@
     };
 }
 
+- (void)mediaCacheServer {
+    // 开启控制台log
+    [SJMediaCacheServer shared].enabledConsoleLog = YES;
+//    [SJMediaCacheServer shared].resolveAssetIdentifier = ^NSString * _Nonnull(NSURL * _Nonnull URL) {
+//        return [URL.absoluteString stringByDeletingPathExtension];
+//    };
+}
+
+#pragma mark -
+
+//- (void)ktv_loaderDidFinish:(KTVHCDataLoader *)loader {
+//    NSLog(@"预加载完成---");
+//}
+//
+//- (void)ktv_loader:(KTVHCDataLoader *)loader didFailWithError:(NSError *)error {
+//    NSLog(@"预加载失败---%@", error);
+//    
+//}
+//- (void)ktv_loader:(KTVHCDataLoader *)loader didChangeProgress:(double)progress {
+//    NSLog(@"预加载进度更新---%f", progress);
+//}
+
 - (void)destoryPlayer {
     [self.player stop];
     self.player = nil;
 }
 
+// 预加载指定url的`1M`的内容
+- (nullable id<MCSPrefetchTask>)_prefetchTaskWithIndex:(NSInteger)index {
+    if (index < 0 || index > self.dataSource.count) {
+        return nil;
+    }
+    GKVideoModel *model = self.dataSource[index];
+    
+    return [[SJMediaCacheServer shared] prefetchWithURL:[NSURL URLWithString:model.play_url] preloadSize:1 * 1024 * 1024];
+}
+
 - (void)preloadVideoWithCell:(GKVideoCell *)cell index:(NSInteger)index {
     NSLog(@"即将出现---%zd", index);
+    
+//    // 根据索引获取url
+//    GKVideoModel *model = self.dataSource[index];
+//    NSLog(@"播放url===%@", model.url);
+//    
+//    if (model.play_url) {
+//        NSURL *url = [NSURL URLWithString:model.play_url];
+//        KTVHCDataRequest *request = [[KTVHCDataRequest alloc] initWithURL:url headers:nil];
+//        KTVHCDataLoader *loader = [KTVHTTPCache cacheLoaderWithRequest:request];
+//        loader.delegate = self;
+//        [loader prepare];
+//    }
+    [self.lastPrefetchTask cancel];
+    [self.nextPrefetchTask cancel];
+    self.lastPrefetchTask = [self _prefetchTaskWithIndex:index - 1];
+    self.nextPrefetchTask = [self _prefetchTaskWithIndex:index + 1];
 }
 
 - (void)playVideoWithCell:(GKVideoCell *)cell index:(NSInteger)index {
@@ -106,7 +159,7 @@
 //        [self.viewController requestMoreData];
 //    }
     
-    NSLog(@"播放----%zd", index);
+//    NSLog(@"播放----%zd", index);
     GKVideoModel *model = self.dataSource[index];
     
     [self.landscapeView loadData:model];
@@ -125,12 +178,20 @@
     NSString *playUrl = manager.assetURL.absoluteString;
     if (playUrl.length > 0 && [playUrl isEqualToString:model.play_url]) return;
     
-    self.player.assetURL = [NSURL URLWithString:model.play_url];
+    NSURL *url = [NSURL URLWithString:model.play_url];
+    
+//    NSURL *proxyURL = [KTVHTTPCache proxyURLWithOriginalURL:url];
+    NSURL *proxyURL = [[SJMediaCacheServer shared] playbackURLWithURL:url];
+    
+//    self.player.assetURL = [NSURL URLWithString:model.play_url];
+    self.player.assetURL = proxyURL;
     self.portraitView.playBtn.hidden = YES;
+    
+    
 }
 
 - (void)stopVideoWithCell:(GKVideoCell *)cell index:(NSInteger)index {
-    NSLog(@"停止---%zd", index);
+//    NSLog(@"停止---%zd", index);
     GKVideoModel *model = self.dataSource[index];
     
     // 判断播放内容是否一致

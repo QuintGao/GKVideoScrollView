@@ -99,7 +99,7 @@
     __weak __typeof(self) weakSelf = self;
     [manager GET:url parameters:nil headers:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         __strong __typeof(weakSelf) self = weakSelf;
-        if ([responseObject[@"errno"] integerValue] == 0) {
+        if ([responseObject[@"status"] integerValue] == 0) {
             NSArray *list = [GKVideoModel mj_objectArrayWithKeyValuesArray:responseObject[@"data"][@"response"][@"videos"]];
             if (self.isInsertFront) {
                 self.isInsertFront = NO;

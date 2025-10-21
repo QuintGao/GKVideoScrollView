@@ -101,6 +101,7 @@
     [cell loadData:self.dataSource[indexPath.row]];
     cell.delegate = self;
     [self prepareCell:cell index:indexPath.row];
+    NSLog(@"更新数据--------%zd", indexPath.row);
     return cell;
 }
 
@@ -116,11 +117,15 @@
 // 即将显示
 - (void)scrollView:(GKVideoScrollView *)scrollView willDisplayCell:(GKVideoViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     [self preloadVideoWithCell:(GKVideoCell *)cell index:indexPath.row];
+    
+    NSLog(@"即将显示----------%zd", indexPath.row);
 }
 
 // 结束显示
 - (void)scrollView:(GKVideoScrollView *)scrollView didEndDisplayingCell:(GKVideoViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     [self stopVideoWithCell:(GKVideoCell *)cell index:indexPath.row];
+    
+    NSLog(@"结束显示----------%zd", indexPath.row);
 }
 
 // 滑动结束显示
@@ -132,11 +137,15 @@
         self.landscapeCell = (GKVideoLandscapeCell *)cell;
     }
     [self playVideoWithCell:(GKVideoCell *)cell index:indexPath.row];
+    
+    NSLog(@"滑动结束显示-----------%zd", indexPath.row);
 }
 
 - (void)scrollView:(GKVideoScrollView *)scrollView didRemoveCell:(GKVideoViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.row >= 0 && indexPath.row < self.dataSource.count) {
         [self.dataSource removeObjectAtIndex:indexPath.row];
+        
+        NSLog(@"移除显示------------%zd", indexPath.row);
     }
 }
 

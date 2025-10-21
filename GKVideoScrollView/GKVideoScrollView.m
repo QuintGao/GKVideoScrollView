@@ -416,6 +416,16 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
     }
 }
 
+- (void)removePageWithIndex:(NSInteger)index animated:(BOOL)animated {
+    if (self.currentIndex == index) {
+        [self removeCurrentPageAnimated:animated];
+    }else {
+        self.willRemoveCell = [self cellForRowAtIndexPath:[NSIndexPath indexPathForRow:index inSection:0]];
+        self.willRemoveIndex = index;
+        
+    }
+}
+
 - (void)removeCurrentPage {
     // 移除
     if ([self.userDelegate respondsToSelector:@selector(scrollView:didRemoveCell:forRowAtIndexPath:)]) {
@@ -909,6 +919,7 @@ typedef NS_ENUM(NSUInteger, GKVideoCellUpdateType) {
         self.currentIndex = self.willRemoveIndex;
     }
     self.changeIndex = self.currentIndex;
+    self.index = self.currentIndex;
     
     [self saveReusableCell:self.willRemoveCell];
     self.willRemoveCell = nil;

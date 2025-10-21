@@ -12,10 +12,18 @@
 #import <SJBaseVideoPlayer/SJRotationManagerInternal.h>
 #import "GKRotationManager.h"
 #import "GKLandscapeWindow.h"
+//#import <KTVHTTPCache/KTVHTTPCache.h>
 
 @implementation GKAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    
+//    NSError *error = nil;
+//    [KTVHTTPCache proxyStart:&error];
+//    if (error) {
+//        NSLog(@"KTVHTTPCache开启失败--%@", error);
+//    }
+//    [KTVHTTPCache downloadSetTimeoutInterval:30];
     
     return YES;
 }
